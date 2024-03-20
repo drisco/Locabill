@@ -1,0 +1,77 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="NotificationApp" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+         <item name="colorPrimary">@color/blue</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="colorPrimaryVariant">#6BA3B5</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#11D2D6</item>
+        <item name="colorSecondaryVariant">#4884AC</item>
+        <item name="colorOnSecondary">#754848</item>
+        <!-- Couleur principale de l'application -->
+
+        <!-- Couleur de l'arrière-plan de la barre de statut (status bar) -->
+        <item name="android:statusBarColor">#5BC0EB</item>
+
+        <!-- Couleur de la barre de navigation (navigation bar) -->
+        <item name="android:navigationBarColor">#ffff</item>
+        <!--<color name="my_primary_color">#FF5722</color>
+        <color name="my_primary_variant_color">#E64A19</color>
+        <color name="my_secondary_color">#03A9F4</color>
+        <color name="my_secondary_variant_color">#0288D1</color>-->
+    </style>
+
+    <style name="Theme.NotificationApp" parent="NotificationApp" />
+    <style name="NumberInPasscode">
+        <item name="android:layout_width">75dp</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="android:background">@drawable/layout_selector_tran</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+    <style name="ButtonAdd">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:background">@drawable/border_image_click</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+    <style name="IconDash">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/layout_selector_tran</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+    <style name="imageShow">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:background">@drawable/border_image_click</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#296D98</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+    <style name="RoundedCorner" parent="">
+        <item name="cornerSize">16dp</item> <!-- Taille des coins arrondis -->
+    </style>
+    <style name="PopupMenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+    </style>
+</resources>

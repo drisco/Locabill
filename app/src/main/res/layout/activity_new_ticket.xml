@@ -1,0 +1,346 @@
+<!-- receipt_layout.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <RelativeLayout
+        android:id="@+id/yout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/retour1"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            style="@style/imageShow"
+            android:src="@drawable/back"/>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_below="@+id/yout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recuId"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:background="@drawable/border_black"
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="0dp"
+                android:layout_marginTop="16dp">
+                <TextView
+                    android:id="@+id/titre"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"
+                    android:text="Réçu : "
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/titre"
+                    android:layout_marginStart="50sp"
+                    android:layout_marginEnd="50sp"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/black" />
+                <LinearLayout
+                    android:id="@+id/l1"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="30sp"
+
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/titre"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/ll2"
+                    android:orientation="vertical">
+                    <!-- TextViews pour le nom, prénom, numéro -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nom : "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Prénom : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Numéro : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Montant : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Type de maison : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Début de l'usage : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Avance : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Caution : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll2"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="30sp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/titre"
+                    android:layout_marginEnd="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="vertical">
+                    <!-- TextViews pour l'adresse, le type, la date -->
+                    <TextView
+                        android:id="@+id/userNom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bamba  "
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userPrenom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Drissa  "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+2250504389406  "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/montant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="90000 FCFA  "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Studio "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/debut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05/12/2023 "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/avance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="180000 FCFA "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/caution"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="180000 FCFA "
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/s_chiffre"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_below="@+id/l1"
+                    android:textStyle="bold"
+                    android:layout_marginStart="25dp"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:text="Somme en chiffre : " />
+
+                <TextView
+                    android:id="@+id/textViewPaymentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/s_chiffre"
+                    android:text="Fait à Abidjan le :" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/s_chiffre"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toEndOf="@+id/textViewPaymentDate"
+                    android:text="25/05/2024"
+                    android:textStyle="bold"
+                    tools:ignore="DuplicateIds" />
+                <TextView
+                    android:id="@+id/textViewAmountPaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewPaymentDate"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:text="Signature" />
+
+                <ImageView
+                    android:id="@+id/qrImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewPaymentDate"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@android:color/transparent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/iv_open" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/re1"
+                android:layout_below="@+id/detailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/payer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_toStartOf="@+id/plus"
+                    android:text="Payer avance" />
+
+                <ImageView
+                    android:id="@+id/plus"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/add"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_below="@+id/re1"
+                android:id="@+id/show"
+                android:visibility="gone"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_toStartOf="@+id/buttonPrintReceipt"
+                    android:layout_toEndOf="@+id/tt"
+                    android:background="@drawable/border_black"
+                    android:gravity="center"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/buttonPrintReceipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/green"
+                    android:background="@drawable/bg_rect"
+                    android:layout_alignParentEnd="true"
+                    android:text="Actualiser"
+                     />
+                <TextView
+                    android:id="@+id/tt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saisisser le montant : "
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/buttonPrint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actualiser"
+            android:layout_marginRight="8dp" />
+
+        <Button
+            android:id="@+id/buttonSendReceipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Envoyer le reçu"
+            android:layout_marginLeft="8dp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

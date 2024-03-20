@@ -1,0 +1,20 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:enterFadeDuration="100"
+    android:exitFadeDuration="100">
+    <!-- État pressé -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <!-- Fond coloré lorsque l'icône est pressée #1175AA -->
+            <solid android:color="#1175AA" />
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+    <!-- État non pressé (par défaut) -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Fond coloré lorsque l'icône est pressée #009688 -->
+            <solid android:color="#009688"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+</selector>

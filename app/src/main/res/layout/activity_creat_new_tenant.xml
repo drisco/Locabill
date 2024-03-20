@@ -1,0 +1,253 @@
+<!-- activity_main.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Creat_new_tenant">
+
+    <RelativeLayout
+        android:id="@+id/yout1"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/retour3"
+            style="@style/imageShow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/back"
+            app:tint="@color/blue" />
+
+        <TextView
+            android:id="@+id/locataireTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:layout_toEndOf="@+id/retour3"
+            android:text="Enregistrement du Nouveau Locataire"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_below="@+id/yout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+
+            <TextView
+                android:id="@+id/textViewNom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="16dp"
+                android:text="Nom"/>
+
+            <EditText
+                android:id="@+id/editTextNom"
+                android:layout_width="match_parent"
+                android:background="@drawable/border_black"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewNom"
+                android:inputType="text"/>
+
+            <!-- Prenom -->
+            <TextView
+                android:id="@+id/textViewPrenom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextNom"
+                android:text="Prenom"/>
+
+            <EditText
+                android:id="@+id/editTextPrenom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewPrenom"
+                android:inputType="text"/>
+
+            <!-- Prix -->
+            <TextView
+                android:id="@+id/textViewPrix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextPrenom"
+                android:text="Prix"/>
+
+            <!-- Numero -->
+            <EditText
+                android:id="@+id/editTextPrix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewPrix"
+                android:gravity="end"
+                android:background="@drawable/border_black"
+                android:inputType="numberDecimal"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/textViewNumero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextPrix"
+                android:text="Numero"/>
+
+            <EditText
+                android:id="@+id/editTextNumero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewNumero"
+                android:inputType="phone"/>
+
+            <!-- Ville ou commune -->
+            <TextView
+                android:id="@+id/textViewCommune"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextNumero"
+                android:text="Ville/Commune"/>
+            <RelativeLayout
+                android:id="@+id/r1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_below="@id/textViewCommune"
+                >
+                <TextView
+                    android:id="@+id/TextCommune"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    android:inputType="text"/>
+                <Spinner
+                    android:id="@+id/spinnerSites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    tools:ignore="SpeakableTextPresentCheck"
+                    android:layout_marginTop="16dp"/>
+            </RelativeLayout>
+
+            <!-- Type de maison -->
+            <TextView
+                android:id="@+id/textViewTypeMaison"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/r1"
+                android:text="Type de maison"/>
+
+            <EditText
+                android:id="@+id/editTextTypeMaison"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewTypeMaison"
+                android:inputType="text"/>
+
+            <!-- Debut de loca -->
+            <TextView
+                android:id="@+id/textViewDebutLoca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextTypeMaison"
+                android:text="Debut de loca"/>
+
+            <EditText
+                android:id="@+id/editTextDebutLoca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewDebutLoca"
+                android:inputType="date"/>
+
+            <!-- Caution -->
+            <TextView
+                android:id="@+id/textViewCaution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextDebutLoca"
+                android:text="Caution"/>
+
+            <EditText
+                android:id="@+id/editTextCaution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:padding="8dp"
+                android:gravity="end"
+                android:layout_below="@id/textViewCaution"
+                android:inputType="numberDecimal"/>
+
+            <!-- Avance -->
+            <TextView
+                android:id="@+id/textViewAvance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_below="@id/editTextCaution"
+                android:text="Avance"/>
+
+            <EditText
+                android:id="@+id/editTextAvance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:gravity="end"
+                android:background="@drawable/border_black"
+                android:layout_below="@id/textViewAvance"
+                android:inputType="numberDecimal"/>
+
+
+            <!-- Bouton de validation -->
+            <Button
+                android:id="@+id/btnValider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextAvance"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="25dp"
+                android:padding="10dp"
+                android:elevation="2dp"
+                android:background="@drawable/select_icon_botton"
+                android:text="Enregistrer"
+                android:backgroundTint="@color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

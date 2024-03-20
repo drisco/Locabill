@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "271255780420",
+    "project_id": "locabill-855d7",
+    "storage_bucket": "locabill-855d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271255780420:android:3370176ea09ea1dcb59011",
+        "android_client_info": {
+          "package_name": "com.example.notificationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVMDieZyMneOGzo3jRt3YCS9XCyQmBxao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ll1"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:id="@+id/rlt"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/bg_rect"
+        android:layout_marginTop="-20dp"
+        android:backgroundTint="#03A9F4">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profil"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingTop="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/account"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="true"
+            app:civ_border_width="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:layout_centerVertical="true"
+            android:text="LOCABILL"
+            android:textColor="@color/white"
+            android:textSize="45dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/yout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_above="@+id/foot"
+        android:layout_below="@+id/rlt">
+        <LinearLayout
+            android:id="@+id/rlt1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="-100dp"
+            android:layout_marginEnd="25dp"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="25dp">
+
+            <RelativeLayout
+                android:id="@+id/rl1"
+                style="@style/IconDash"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/new_border"
+                android:backgroundTint="#59D8D8"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="La liste des locataires"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/img1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@+id/tv1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/list" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl2"
+                style="@style/IconDash"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/new_border"
+                android:backgroundTint="#59D8D8"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="historique des reçus"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@+id/tv2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/history" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/rlt1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rect"
+            android:backgroundTint="#03A9F4"
+            android:layout_marginTop="-120dp"
+            android:layout_marginStart="30dp"
+            android:paddingBottom="10dp"
+            android:layout_marginEnd="30dp"
+            android:id="@+id/very">
+            <RelativeLayout
+                android:id="@+id/rlt2"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:elevation="1dp"
+                style="@style/ButtonAdd"
+                android:layout_marginTop="100dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/border_oval"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/r2"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    style="@style/ButtonAdd"
+                    android:src="@drawable/plus"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_below="@+id/rlt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="Ajouter nouveau locataire"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/foot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textColor="#8B8F8B"
+        android:text="Locabill-App"/>
+</RelativeLayout>

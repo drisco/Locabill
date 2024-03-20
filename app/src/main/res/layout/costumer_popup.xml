@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/new_border"
+        android:layout_marginStart="15dp"
+        android:elevation="10dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/green"
+            android:layout_marginStart="0dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textSize="16dp"
+            android:text="Enregistrement" />
+
+        <TextView
+            android:id="@+id/textView_nom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="0dp"
+            android:gravity="center"
+            android:layout_marginEnd="0dp"
+            android:layout_gravity="center"
+            android:text="Êtes vous sûr de vouloir enregistrer cet \n l ? vous ne pourrez plus \n revenir en arrière. Êtes vous sur ?"
+            android:textSize="16dp"
+            android:textColor="@color/white"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+
+            <Button
+                android:id="@+id/retour"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="12dp"
+                android:layout_margin="5dp"
+                android:text="retour"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/conf"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                android:layout_margin="5dp"
+                android:textSize="12dp"
+                android:text="comfirmer"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
