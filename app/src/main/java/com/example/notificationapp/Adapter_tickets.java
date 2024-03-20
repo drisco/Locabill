@@ -1,5 +1,7 @@
 package com.example.notificationapp;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.notificationapp.models.Model_ticket;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 import java.util.List;
 
 public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHolder>{
@@ -16,88 +24,51 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     Context context;
-    TextView empty;
 
-    Adapter_tickets(Context context, List<Model_ticket> data, TextView empty) {
+    Adapter_tickets(Context context, List<Model_ticket> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
-        this.empty=empty;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.adapter_view_ticket, parent, false);
+        View view = mInflater.inflate(R.layout.recu_tenant_history_view, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Model_ticket animal = mData.get(position);
+        Model_ticket ticket = mData.get(position);
+        holder.date2.setText(ticket.getDate());
+        holder.userNom1.setText(ticket.getNom());
+        holder.userPrenom1.setText(ticket.getPrenom());
+        holder.number1.setText(ticket.getNumero());
+        holder.type1.setText(ticket.getType());
+        holder.date1.setText(ticket.getDate());
+        holder.debut1.setText(ticket.getDebutLoca());
+        holder.caution1.setText(ticket.getCaution());
+        holder.avance1.setText(ticket.getAvance());
+        holder.s_chiffre1.setText("Montant en chiffre : "+ticket.getMontantChiffre());
 
-/*
+        String qrContent="\nNom: " + ticket.getNom() + "\nPrénom: " + ticket.getPrenom() + "\nPrix: " + ticket.getMontant() +
+                "\nNuméro: " + ticket.getNumero() + "\nType de maison: " + ticket.getType() + "\nDébut de location: " + ticket.getDebutLoca() +
+                "\nCaution: " + ticket.getCaution() + "\nAvance: " + ticket.getAvance() + "\nDate: " + ticket.getDate();
 
-        if(animal.getImage() == null){
-            holder.image_profil.setImageResource(R.drawable.ima);
-        }else{
-            byte [] encodeByte = Base64.decode(animal.getImage(),Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,encodeByte.length);
-            holder.image_profil.setImageBitmap(bitmap);
+        try {
+            MultiFormatWriter formatWriter = new MultiFormatWriter();
+            BitMatrix matrix = formatWriter.encode(qrContent, BarcodeFormat.QR_CODE, 500, 500);
+            BarcodeEncoder barcode = new BarcodeEncoder();
+            Bitmap bitmap = barcode.createBitmap(matrix);
+            holder.qrImageView1.setImageBitmap(bitmap);
+            // Vous pouvez ajouter ici d'autres actions si nécessaire
+        } catch (WriterException e) {
+            e.printStackTrace();
+            // Gérez les exceptions ici
         }
-        holder.myTextView1.setText(animal.getCartes().getType_register());
-        if(animal.getFirst_name().length()>8){
-            holder.myTextView.setText(animal.getFirst_name().substring(0,animal.getFirst_name().offsetByCodePoints(0,8))+"...");
-        }else{
-            holder.myTextView.setText(animal.getFirst_name());
-        }
-
-        if (animal.getLast_name().length()>8){
-            holder.myTextView2.setText(animal.getLast_name().substring(0,animal.getLast_name().offsetByCodePoints(0,8))+"...");
-        }else{
-            holder.myTextView2.setText(animal.getLast_name());
-        }
-
-        if (animal.getCartes().getType_carte().equals("Carte residence")){
-            holder.myTextView4.setText("Carte.R");
-        }else{holder.myTextView4.setText(animal.getCartes().getType_carte()); }
-
-        if(animal.getFonction().equals("Visite")){
-            holder.myTextView5.setText("Visiteur");
-        }else{
-            holder.myTextView5.setText(animal.getFonction());
-            holder.myTextView5.setText("Employé");
-            holder.myTextView5.setTextColor(context.getResources().getColor(R.color.blue));
-        }
-
-        holder.myTextView0.setText(animal.getPassage().getDate_entrer());
-        holder.myTextView6.setText(animal.getPassage().getDate_sortir());
-
-
-
-        holder.myTextView7.setText("Motif: "+animal.getFonction());
-        holder.myTextView8.setText(animal.getPassage().getNumber_visite());*/
-        holder.relative_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ((listView)context).other();
-                /*Intent intent = new Intent(context,UserView.class);
-                intent.putExtra("name",animal.getFirst_name());
-                intent.putExtra("im",animal.getImage());
-                intent.putExtra("user",animal.getLast_name());
-                intent.putExtra("fonction",animal.getFonction());
-                intent.putExtra("piece",animal.getCartes().getType_carte());
-                intent.putExtra("num",animal.getNum_tel());
-                intent.putExtra("number",animal.getPassage().getNumber_visite());
-                context.startActivity(intent);
-                ((Activity)context).finish();*/
-            }
-
-
-        });
-
-
 
     }
 
@@ -109,34 +80,22 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
-        TextView myTextView2;
-        ImageView myTextView3;
-        RelativeLayout relative_view;
-        ImageView image_profil;
-        TextView myTextView4;
-        TextView myTextView5;
-        TextView myTextView6;
-        TextView myTextView7;
-        TextView myTextView8;
-        TextView myTextView0;
-        TextView myTextView1;
+        TextView  date1,s_chiffre1,caution1,avance1,debut1,type1,montant1,number1,userPrenom1,userNom1,date2;
+        ImageView qrImageView1;
         ViewHolder(View itemView) {
             super(itemView);
-            /*myTextView = itemView.findViewById(R.id.list_person);
-            myTextView2 = itemView.findViewById(R.id.list_persone);
-            myTextView3 = itemView.findViewById(R.id.show);
-            image_profil = itemView.findViewById(R.id.image_profil);
-            relative_view=itemView.findViewById(R.id.relative_view);
-            myTextView4 = itemView.findViewById(R.id.piece);
-            myTextView5 = itemView.findViewById(R.id.statut);
-            myTextView6 = itemView.findViewById(R.id.heure_sortie);
-            myTextView7 = itemView.findViewById(R.id.motif);
-            myTextView8 = itemView.findViewById(R.id.visited);
-            myTextView0 = itemView.findViewById(R.id.heure_entrer);
-            myTextView1 = itemView.findViewById(R.id.mode_enregist);
-            myTextView3.setOnClickListener(this);*/
-            //image_profil.setOnClickListener(this);
+            date1 = itemView.findViewById(R.id.date1);
+            s_chiffre1 = itemView.findViewById(R.id.s_chiffre1);
+            caution1 = itemView.findViewById(R.id.caution1);
+            avance1 = itemView.findViewById(R.id.avance1);
+            debut1=itemView.findViewById(R.id.debut1);
+            type1 = itemView.findViewById(R.id.type1);
+            montant1 = itemView.findViewById(R.id.montant1);
+            number1 = itemView.findViewById(R.id.number1);
+            userPrenom1 = itemView.findViewById(R.id.userPrenom1);
+            userNom1 = itemView.findViewById(R.id.userNom1);
+            qrImageView1 = itemView.findViewById(R.id.qrImageView1);
+            date2 = itemView.findViewById(R.id.date2);
 
 
         }
@@ -146,11 +105,6 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
 
-    }
-
-    // convenience method for getting data at click position
-    Model_ticket getItem(int id) {
-        return mData.get(id);
     }
 
     // allows clicks events to be caught

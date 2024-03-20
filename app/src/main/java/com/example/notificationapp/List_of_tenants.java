@@ -170,7 +170,10 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             finish();
 
         }else if (item.getItemId()==R.id.historique){
-            startActivity(new Intent(List_of_tenants.this, Historique.class));
+            Intent intent =new Intent(List_of_tenants.this,HistoriqueListeRecuGeneree.class);
+            intent.putExtra("id", user.getId());
+            intent.putExtra("nom", user.getNom());
+            startActivity(intent);
             finish();
 
         }

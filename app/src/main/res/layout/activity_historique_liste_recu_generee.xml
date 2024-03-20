@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".HistoriqueListeRecuGeneree">
+    <RelativeLayout
+        android:id="@+id/log"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/yout1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_below="@+id/vide"
+            android:textStyle="bold"
+            android:text="Liste vide"/>
+        <ImageView
+            android:id="@+id/vide"
+            android:layout_width="180dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="180dp"
+            android:src="@drawable/vide"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/yout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/retour2"
+            style="@style/imageShow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/back"/>
+        <TextView
+            android:id="@+id/locataireTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Réçus generés"
+            android:layout_centerHorizontal="true"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/yout1"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

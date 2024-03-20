@@ -230,14 +230,7 @@
                     android:text="25/05/2024"
                     android:textStyle="bold"
                     tools:ignore="DuplicateIds" />
-                <TextView
-                    android:id="@+id/textViewAmountPaid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewPaymentDate"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="10dp"
-                    android:text="Signature" />
+
 
                 <ImageView
                     android:id="@+id/qrImageView"

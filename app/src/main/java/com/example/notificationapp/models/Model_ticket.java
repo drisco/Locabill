@@ -12,6 +12,7 @@ public class Model_ticket {
     private String debutLoca;
     private String caution;
     private String avance;
+    private String montantChiffre;
     private String date;
 
     // Constructeur par défaut nécessaire pour Firebase
@@ -19,7 +20,7 @@ public class Model_ticket {
     }
 
     // Constructeur avec tous les champs
-    public Model_ticket(String id, String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
+    public Model_ticket(String id, String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance,String montantChiffre, String date) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -29,6 +30,7 @@ public class Model_ticket {
         this.debutLoca = debutLoca;
         this.caution = caution;
         this.avance = avance;
+        this.montantChiffre = montantChiffre;
         this.date = date;
     }
 
@@ -105,6 +107,13 @@ public class Model_ticket {
         this.avance = avance;
     }
 
+    public String getMontantChiffre() {
+        return montantChiffre;
+    }
+
+    public void setMontantChiffre(String montantChiffre) {
+        this.montantChiffre = montantChiffre;
+    }
     public String getDate() {
         return date;
     }

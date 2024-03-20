@@ -62,7 +62,7 @@ public class New_ticket extends AppCompatActivity {
     TextView buttonPrintReceipt;
     Button buttonSendReceipt;
     TextView userNom,userPrenom,number,caution,montant,type,date,avance,debut,s_chiffre,payer;
-    int count = 0;String qrContent,idAdmin;
+    int count = 0;String qrContent,idAdmin,montantChiffre;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -72,7 +72,6 @@ public class New_ticket extends AppCompatActivity {
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("recu");
-        System.out.println("HJEFFGIFGUHRFJRHREJOFRPIPRJOITJOMJOG3LOBJOI3R "+idAdmin);
         plus = findViewById(R.id.plus);
         edit = findViewById(R.id.edit);
         retour1 = findViewById(R.id.retour1);
@@ -124,7 +123,6 @@ public class New_ticket extends AppCompatActivity {
         Intent intent = getIntent();
         id_2 = intent.getStringExtra("id");
         String nom = intent.getStringExtra("nom");
-        System.out.println("HJEFFGIFGUHRFJRHREJOFRPIPRJOITJOMJOG3LOBJOI3R IDIDDIIDID"+nom);
 
         String prenom = intent.getStringExtra("prenom");
         String prix = intent.getStringExtra("prix");
@@ -137,6 +135,7 @@ public class New_ticket extends AppCompatActivity {
         String numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
 
         s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
+        montantChiffre=s_chiffre.getText().toString();
         userNom.setText(nom);
         userPrenom.setText(prenom);
         number.setText(numero);
@@ -185,7 +184,9 @@ public class New_ticket extends AppCompatActivity {
                 }else{
                     montant.setText(prix+" FCFA");
                     s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
-                  }
+                    montantChiffre=s_chiffre.getText().toString();
+
+                }
             }
         });
         buttonPrintReceipt.setOnClickListener(new View.OnClickListener() {
@@ -203,7 +204,7 @@ public class New_ticket extends AppCompatActivity {
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
         System.out.println("FJGKJGHFDHGFEJNGEKHGEHGREJPOJKJZHµPJHIOTJOUZH%JGJ%HGJM5GMJOJHEGJOIGEJOIJGEKJKJKJJKKKLLK?JB"+nom);
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, avance, date);
+        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, avance,montantChiffre, date);
         localiteReference.setValue(nouveauLocataire);
     }
 
