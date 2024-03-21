@@ -26,18 +26,14 @@
             android:src="@drawable/account"
             app:civ_border_color="@color/white"
             app:civ_border_overlay="true"
-            app:civ_border_width="5dp" />
+            app:civ_border_width="1dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:layout_centerVertical="true"
-            android:text="LOCABILL"
-            android:textColor="@color/white"
-            android:textSize="45dp"
-            android:textStyle="bold" />
+            android:src="@drawable/locabill" />
     </RelativeLayout>
 
     <RelativeLayout

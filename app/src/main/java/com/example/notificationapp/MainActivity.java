@@ -70,11 +70,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
 
-        foot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                convertToPdfAndSend();            }
-        });
         profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

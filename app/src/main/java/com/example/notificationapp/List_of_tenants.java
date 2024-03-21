@@ -38,6 +38,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     public List<CityItem> cityItems;
     public RecyclerView recyclerView;
     PopupRegister popusCostum;
+    PopupRegister popup;
 
     public Adapter_tenants tenantAdapter;
     public ListeTenantAdapter listAdapter;
@@ -47,6 +48,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     TextView empty;
     ImageView retour2;
     RelativeLayout log;
+    DatabaseReference databaseReference;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -55,6 +57,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         setContentView(R.layout.activity_list_of_tenants);
         retour2 =findViewById(R.id.retour2);
         log =findViewById(R.id.log);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
 
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
@@ -66,6 +69,10 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                 finish();
             }
         });
+        popusCostum = new PopupRegister(List_of_tenants.this);
+        popusCostum.setCancelable(false);
+        popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popusCostum.show();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
 
         // Écouteur d'événements pour lire les données depuis Firebase
@@ -73,6 +80,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                  cityItems = new ArrayList<>();
+                popusCostum.cancel();
 
                 for (DataSnapshot citySnapshot : dataSnapshot.getChildren()) {
                     String cityName = citySnapshot.getKey();
@@ -88,20 +96,18 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                     cityItems.add(cityItem);
 
                 }
-                popusCostum = new PopupRegister(List_of_tenants.this);
-                popusCostum.setCancelable(false);
-                popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                popusCostum.show();
+
                 // Mettez à jour l'adaptateur avec les données
                 if (cityItems.isEmpty()){
                     popusCostum.cancel();
                     log.setVisibility(View.VISIBLE);
 
                 }else {
-                    popusCostum.cancel();
+
                     log.setVisibility(View.GONE);
                     listAdapter.setCityItems(cityItems);
                     listAdapter.notifyDataSetChanged();
+                    popusCostum.cancel();
                 }
 
             }
@@ -111,11 +117,13 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                 // Gérer les erreurs
             }
         });
+
         listAdapter = new ListeTenantAdapter(new ArrayList<>());
             RecyclerView nestedRecyclerView = findViewById(R.id.recyclerView);
             nestedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             nestedRecyclerView.setAdapter(listAdapter);
             listAdapter.setClickListener(this);
+
     }
 
 
@@ -123,13 +131,20 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId()==R.id.supprimer){
-            Toast.makeText(this, "supprimer", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder pop=new AlertDialog.Builder(this);
-            pop.setMessage("Voulez-vous vraiment supprimer cet utilisateur?");
+            pop.setMessage("Voulez-vous vraiment supprimer?");
             pop.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    popup = new PopupRegister(List_of_tenants.this);
+                    popup.setCancelable(false);
+                    popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popup.show();
+                    DatabaseReference localiteReference = databaseReference.child(idAdmin).child(user.getLocalite());
+                    localiteReference.removeValue();
+                    startActivity(new Intent(List_of_tenants.this,MainActivity.class));
+                    finish();
                 }
             });
             pop.setNegativeButton("Non", new DialogInterface.OnClickListener() {
@@ -184,7 +199,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     public void onItemClick(View view, int cityItemPosition, int tenantPosition) {
         CityItem clickedCityItem = cityItems.get(cityItemPosition);
         user = clickedCityItem.getTenantList().get(tenantPosition);
-        System.out.println("GLKOUKHOPH "+user.getNom());
 
         PopupMenu popupMenu = new PopupMenu(view.getContext(),view, Gravity.END, 0, R.style.PopupMenuStyle);
         popupMenu.inflate(R.menu.menu_tenants);

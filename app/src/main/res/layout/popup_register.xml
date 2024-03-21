@@ -7,26 +7,17 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:background="@drawable/new_border"
         android:backgroundTint="@color/white"
         android:layout_marginStart="15dp"
         android:gravity="center"
+        android:layout_gravity="center"
         android:elevation="10dp"
         android:layout_marginEnd="15dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/vvb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/idPBLoading"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:text="Veuillez Patienter la creation est en\n cours de traitement"
-            android:textStyle="bold" />
         <ProgressBar
             android:id="@+id/idPBLoading"
             android:layout_width="wrap_content"

@@ -36,7 +36,7 @@
             android:gravity="center"
             android:layout_marginEnd="0dp"
             android:layout_gravity="center"
-            android:text="Êtes vous sûr de vouloir enregistrer cet \n l ? vous ne pourrez plus \n revenir en arrière. Êtes vous sur ?"
+            android:text="Êtes vous sûr de vouloir enregistrer ?\n vous ne pourrez plus \n revenir en arrière. Êtes vous sur ?"
             android:textSize="16dp"
             android:textColor="@color/white"/>
         <LinearLayout
@@ -49,24 +49,32 @@
 
 
 
-            <Button
+            <TextView
                 android:id="@+id/retour"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/red"
-                android:textSize="12dp"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:gravity="center"
                 android:layout_margin="5dp"
-                android:text="retour"
+                android:text="Annuler"
+                android:padding="10dp"
+                android:background="@drawable/bg_rect"
+                android:backgroundTint="@color/red"
                 android:textStyle="bold"/>
 
-            <Button
+            <TextView
                 android:id="@+id/conf"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/green"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:gravity="center"
                 android:layout_margin="5dp"
-                android:textSize="12dp"
-                android:text="comfirmer"
+                android:text="Comfirmer"
+                android:padding="10dp"
+                android:background="@drawable/bg_rect"
+                android:backgroundTint="#2D9E32"
                 android:textStyle="bold"/>
 
 

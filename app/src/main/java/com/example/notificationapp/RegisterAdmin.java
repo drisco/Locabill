@@ -34,6 +34,7 @@ public class RegisterAdmin extends AppCompatActivity {
     private TextView registerBtn;
     int incr;
     PopusCostum popusCostum;
+    PopupRegister popup;
     DatabaseReference databaseReference;
 
     SharedPreferences sharedPreferences;
@@ -83,11 +84,29 @@ public class RegisterAdmin extends AppCompatActivity {
                         // checking if the text fields are empty or not.
                         Toast.makeText(RegisterAdmin.this, "Veuillez saisir vos identifiants..", Toast.LENGTH_SHORT).show();
                     }else {
+
                         popusCostum = new PopusCostum(RegisterAdmin.this);
                         popusCostum.setCancelable(false);
                         popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         popusCostum.show();
-                        addAdmin(userNames,userPrenom,numeros,pwd);
+                        popusCostum.getComf().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                popusCostum.cancel();
+                                popup = new PopupRegister(RegisterAdmin.this);
+                                popup.setCancelable(false);
+                                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                popup.show();
+                                addAdmin(userNames,userPrenom,numeros,pwd);
+                            }
+                        });
+
+                        popusCostum.getRetour().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                popusCostum.cancel();
+                            }
+                        });
                     }
             }
             }
@@ -113,7 +132,7 @@ public class RegisterAdmin extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Vérifiez si dataSnapshot contient des données
                 if (dataSnapshot.exists()) {
-                    popusCostum.cancel();
+                    popup.cancel();
                     // L'utilisateur existe déjà avec ce numéro de téléphone, affichez un message d'erreur
                     Toast.makeText(getApplicationContext(), "Ce numéro de téléphone est déjà associé à un compte.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -127,7 +146,7 @@ public class RegisterAdmin extends AppCompatActivity {
                     editor.apply();
                     Admin nouveauAdmin =new Admin(nouvelId,userNames,userPrenom,numeros,pwd, finalFormattedDate);
                     localiteReference.setValue(nouveauAdmin);
-                    popusCostum.cancel();
+                    popup.cancel();
                     startActivity(new Intent(RegisterAdmin.this,MainActivity.class));
                     finish();
                 }
@@ -135,7 +154,7 @@ public class RegisterAdmin extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                popup.cancel();
             }
         });
     }

@@ -34,6 +34,7 @@ public class Creat_new_tenant extends AppCompatActivity {
     DatabaseReference databaseReference;
     Spinner spinnerSites;
     PopusCostum popusCostum;
+    PopupRegister popup;
     ImageView retour3;
     int incr;
     String idAdmin;
@@ -143,6 +144,13 @@ public class Creat_new_tenant extends AppCompatActivity {
         popusCostum.getComf().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popusCostum.cancel();
+
+                popup = new PopupRegister(Creat_new_tenant.this);
+                popup.setCancelable(false);
+                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popup.show();
+
                 localiteReference.setValue(nouveauLocataire);
                 startActivity(new Intent(Creat_new_tenant.this,List_of_tenants.class));
                 finish();
