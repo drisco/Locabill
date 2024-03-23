@@ -35,7 +35,7 @@ public class RegisterAdmin extends AppCompatActivity {
     int incr;
     PopusCostum popusCostum;
     PopupRegister popup;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference ;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;

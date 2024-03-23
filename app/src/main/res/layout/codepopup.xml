@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/lock"/>
+        <TextView
+            android:id="@+id/textViewNom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:textSize="16dp"
+            android:text="Saisisser le code pin"/>
+
+        <EditText
+            android:id="@+id/editTex"
+            android:layout_width="match_parent"
+            android:background="@drawable/border_black"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="end"
+            android:layout_below="@id/textViewNom"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/textViewNom1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="16dp"
+            android:text="Comfirmer le code pin"/>
+
+        <EditText
+            android:id="@+id/editTex1"
+            android:layout_width="match_parent"
+            android:background="@drawable/border_black"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="end"
+            android:layout_below="@id/textViewNom"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/btnVal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextAvance"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:background="@drawable/select_icon_botton"
+            android:text="Comfirmer"
+            android:backgroundTint="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

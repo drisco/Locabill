@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notificationapp.models.Admin;
+import com.example.notificationapp.models.Model_code_pin;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +30,8 @@ public class LoginAdmin extends AppCompatActivity {
     SharedPreferences.Editor editor;
     int incr;
     ProgressBar idPBLoading;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, databaseReference1;
+    String codePinValue;
     @Override
     @SuppressLint("MissingInflatedId")
 
@@ -41,10 +43,19 @@ public class LoginAdmin extends AppCompatActivity {
         String idAdmin = donnes.getString("id", "");
         String nom = donnes.getString("nom", "");
         String numeroAd = donnes.getString("numero", "");
+        String codepin = donnes.getString("codepin", "");
+        System.out.println("HJEBRJIHRGJNGTENIJTREJGIERIGOI 0001 "+codepin);
 
         if (!idAdmin.isEmpty() || !nom.isEmpty()||!numeroAd.isEmpty()){
-            startActivity(new Intent(LoginAdmin.this,MainActivity.class));
-            finish();
+
+            if (!codepin.isEmpty()){
+                startActivity(new Intent(LoginAdmin.this,Login.class));
+                finish();
+            }else{
+                startActivity(new Intent(LoginAdmin.this,MainActivity.class));
+                finish();
+            }
+
         }
         passwordEdt = findViewById(R.id.idEdtPassword);
         numero = findViewById(R.id.idEdtUserNumero);
@@ -52,6 +63,7 @@ public class LoginAdmin extends AppCompatActivity {
         register = findViewById(R.id.idTVNewUser);
         btnlogin = findViewById(R.id.idBtnLogin);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("codepin");
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         register.setOnClickListener(new View.OnClickListener() {
@@ -87,14 +99,37 @@ public class LoginAdmin extends AppCompatActivity {
                     // L'utilisateur existe, parcourir les données pour vérifier le mot de passe
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Admin user = userSnapshot.getValue(Admin.class);
+
+                        databaseReference1.child(user.getId()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                    Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
+                                    if (codePin != null) {
+                                        System.out.println("HRGHGRKJHGIUREGJHUERGHJGRJVBGEGRVBFKDBGRJFGKVREJVB 222 "+codePin.getCode());
+                                        codePinValue = codePin.getCode();
+                                        editor.putString("codepin", codePinValue);
+                                        editor.apply();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                System.out.println("Erreur : " + databaseError.getMessage());
+                            }
+                        });
+
                         // Vérifiez si le mot de passe correspond
                         if (user != null && user.getPwd().equals(password)) {
                             idPBLoading.setVisibility(View.GONE);
+                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+codePinValue);
+
                             editor.putString("id", user.getId());
                             editor.putString("nom", user.getUserName());
                             editor.putString("prenom", user.getUserPrenom());
                             editor.putString("numero", user.getNumeros());
                             editor.putString("mdp", user.getPwd());
+                            //editor.putString("codepin", codePinValue);
                             editor.apply();
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                             finish();

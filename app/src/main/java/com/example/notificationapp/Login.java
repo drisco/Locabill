@@ -8,9 +8,12 @@ import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.biometric.BiometricPrompt;
+
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -20,22 +23,43 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notificationapp.models.Model_code_pin;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.concurrent.Executor;
 
 public class Login extends AppCompatActivity {
     TextView tvInputTip;
     ImageView iv_lock,iv_ok,iv_error,biometric;
     LinearLayout ll;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    DatabaseReference databaseReference;
+    String idAdmin;
     int incr;
     private StringBuilder passwordBuilder = new StringBuilder();
      BiometricPrompt biometricPrompt;
      androidx.biometric.BiometricPrompt.PromptInfo promptInfo;
+     String codePinValue;
      Executor executor;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        idAdmin = sharedPreferences.getString("id", "");
+        codePinValue = sharedPreferences.getString("codepin", "");
+
+
         tvInputTip = findViewById(R.id.tv_input_tip);
         iv_lock = findViewById(R.id.iv_lock);
         iv_ok = findViewById(R.id.iv_ok);
@@ -115,23 +139,6 @@ public class Login extends AppCompatActivity {
         }
     }
 
-/*
-    private void scheduleSmsReminder() {
-        Intent intent = new Intent(this, SmsReminderService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis(),
-                2 * 60 * 1000,
-                pendingIntent
-        );
-    }
-*/
-
-
     private void appendToPassword(String digit) {
         // Ajoutez le chiffre cliqué à la saisie du mot de passe
         passwordBuilder.append(digit);
@@ -141,7 +148,7 @@ public class Login extends AppCompatActivity {
         // Vérifiez si la longueur de la saisie du mot de passe correspond à la longueur du mot de passe attendu
         if (passwordBuilder.length() == 4) {
             // Vérifiez si la saisie correspond au mot de passe attendu
-            if (passwordBuilder.toString().equals("5556")) {
+            if (passwordBuilder.toString().equals(codePinValue)) {
                 iv_lock.setVisibility(View.GONE);
                 iv_error.setVisibility(View.GONE);
                 iv_ok.setVisibility(View.VISIBLE);
