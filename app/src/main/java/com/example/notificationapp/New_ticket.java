@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -46,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 public class New_ticket extends AppCompatActivity {
@@ -55,13 +58,16 @@ public class New_ticket extends AppCompatActivity {
     DatabaseReference databaseReference;
     int incr;String id_2;
 
-    ImageView plus,moins;
+    ImageView plus,moins,pick;
     EditText edit;
     RelativeLayout show,recuId;
     ImageView qrImageView,retour1;
-    TextView buttonPrintReceipt;
+    TextView buttonPrintReceipt,date0;
     Button buttonSendReceipt;
-    TextView userNom,userPrenom,number,caution,montant,type,date,avance,debut,s_chiffre,payer;
+
+    private DatePickerDialog datePickerDialog;
+    private SimpleDateFormat monthYearFormat;
+    TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer;
     int count = 0;String qrContent,idAdmin,montantChiffre;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
@@ -78,10 +84,23 @@ public class New_ticket extends AppCompatActivity {
         show = findViewById(R.id.show);
         recuId = findViewById(R.id.recuId);
         payer = findViewById(R.id.payer);
+        pick = findViewById(R.id.pick);
+        date0 = findViewById(R.id.date0);
         buttonPrintReceipt = findViewById(R.id.buttonPrintReceipt);
         buttonSendReceipt = findViewById(R.id.buttonSendReceipt);
         qrImageView = findViewById(R.id.qrImageView);
 
+        userNom = findViewById(R.id.userNom);
+        userPrenom = findViewById(R.id.userPrenom);
+        number = findViewById(R.id.number);
+        montant = findViewById(R.id.montant);
+        type = findViewById(R.id.type);
+        date = findViewById(R.id.date);
+        s_chiffre = findViewById(R.id.s_chiffre);
+        debut = findViewById(R.id.debut);
+
+        monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault()); // Format "Février 2024" pour la France
+        setupDatePicker();
         if (checkPermissionBoolean()) {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         } else {
@@ -110,16 +129,12 @@ public class New_ticket extends AppCompatActivity {
             }
         });
 
-        userNom = findViewById(R.id.userNom);
-        userPrenom = findViewById(R.id.userPrenom);
-        number = findViewById(R.id.number);
-        caution = findViewById(R.id.caution);
-        montant = findViewById(R.id.montant);
-        type = findViewById(R.id.type);
-        date = findViewById(R.id.date);
-        s_chiffre = findViewById(R.id.s_chiffre);
-        avance = findViewById(R.id.avance);
-        debut = findViewById(R.id.debut);
+        pick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
         Intent intent = getIntent();
         id_2 = intent.getStringExtra("id");
         String nom = intent.getStringExtra("nom");
@@ -139,8 +154,6 @@ public class New_ticket extends AppCompatActivity {
         userNom.setText(nom);
         userPrenom.setText(prenom);
         number.setText(numero);
-        caution.setText(cautions+" FCFA");
-        avance.setText(avances+ " FCFA");
         montant.setText(prix+ " FCFA");
         type.setText(type_de_maison);
         debut.setText(debut_de_loca);
@@ -153,13 +166,13 @@ public class New_ticket extends AppCompatActivity {
 
          // Générez le code QR à partir du contenu
         generateQRCode(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                type.getText().toString(),debut.getText().toString(),caution.getText().toString(),avance.getText().toString(),date.getText().toString());
+                type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
 
         buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                        type.getText().toString(),debut.getText().toString(),caution.getText().toString(),avance.getText().toString(),date.getText().toString());
+                        type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
                 convertToPdfAndSend();
                 checkPermissions();
             }
@@ -193,17 +206,37 @@ public class New_ticket extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 generateQRCode(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                        type.getText().toString(),debut.getText().toString(),caution.getText().toString(),avance.getText().toString(),date.getText().toString());
+                        type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
 
             }
         });
+    }
+
+    private void setupDatePicker() {
+        // Créez une instance de DatePickerDialog
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // Créer un objet Calendar et le définir sur la date sélectionnée
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, monthOfYear, dayOfMonth);
+
+                // Formater la date sélectionnée en utilisant le format du mois et de l'année
+                String mattedDate = monthYearFormat.format(selectedDate.getTime());
+                debut.setText(mattedDate);
+                date0.setText(mattedDate);
+            }
+        }, year, month, dayOfMonth);
     }
 
 
     private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
-        System.out.println("FJGKJGHFDHGFEJNGEKHGEHGREJPOJKJZHµPJHIOTJOUZH%JGJ%HGJM5GMJOJHEGJOIGEJOIJGEKJKJKJJKKKLLK?JB"+nom);
         Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, avance,montantChiffre, date);
         localiteReference.setValue(nouveauLocataire);
     }
@@ -221,7 +254,6 @@ public class New_ticket extends AppCompatActivity {
     }
 
     private void generateQRCode(String toString, String toString1, String toString2, String toString3, String toString4, String toString5, String toString6, String toString7, String toString8) {
-        System.out.println("GFVHHJDG 99999999 TRUE TRUE AVANT= "+qrContent);
 
         qrContent ="\nNom: " + toString + "\nPrénom: " + toString1 + "\nPrix: " + toString2 +
                 "\nNuméro: " + toString3 + "\nType de maison: " + toString4 + "\nDébut de location: " + toString5 +
@@ -274,12 +306,30 @@ public class New_ticket extends AppCompatActivity {
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
-        // Dessiner la vue de connexion sur le canvas
-        View view = findViewById(R.id.recuId);
+// Obtenir la vue à dessiner
+        View view = findViewById(R.id.detailsLayout);
+
+// Mesurer la vue
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(canvas.getWidth(), View.MeasureSpec.EXACTLY);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(canvas.getHeight(), View.MeasureSpec.EXACTLY);
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        int marginLeft = 50; // Marge à gauche
+        int marginTop = 10; // Marge en haut
+
+// Calculer la position horizontale pour centrer la vue avec marges
+        int centerX = (canvas.getWidth() - view.getMeasuredWidth()) / 2 + marginLeft;
+        int centerY = (canvas.getHeight() - view.getMeasuredHeight()) / 2 + marginTop;
+
+
+// Définir les limites de dessin pour la vue centrée
+        view.layout(centerX, centerY, centerX + view.getMeasuredWidth(), centerY + view.getMeasuredHeight());
+
+// Dessiner la vue sur le canvas
         view.draw(canvas);
 
-        // Terminer la page
+// Terminer la page
         document.finishPage(page);
+
 
         // Enregistrer le document PDF localement
         String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Reçus/";
@@ -317,7 +367,6 @@ public class New_ticket extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("application/pdf");
 
-
             Uri uri = FileProvider.getUriForFile(this,"com.example.notificationapp.provider", pdfFile);
 
             intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -325,6 +374,7 @@ public class New_ticket extends AppCompatActivity {
             intent.setPackage("com.whatsapp");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
         } else {
             // Afficher un message d'erreur si le fichier PDF n'existe pas
             Toast.makeText(this, "Fichier PDF introuvable", Toast.LENGTH_SHORT).show();

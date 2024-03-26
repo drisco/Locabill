@@ -31,8 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class List_of_tenants extends AppCompatActivity implements ListeTenantAdapter.ItemClickListener, PopupMenu.OnMenuItemClickListener {
     public List<CityItem> cityItems;
@@ -170,6 +173,11 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             startActivity(intent);
             finish();
         }else if(item.getItemId()==R.id.creer){
+            Date dates = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+            String dateFormatted = sdf.format(dates);
+
+
             Intent intent =new Intent(List_of_tenants.this,New_ticket.class);
             intent.putExtra("id", user.getId());
             intent.putExtra("nom", user.getNom());
@@ -177,7 +185,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             intent.putExtra("prix", user.getPrix());
             intent.putExtra("numero", user.getNumero());
             intent.putExtra("type_de_maison", user.getType_de_maison());
-            intent.putExtra("debut_de_loca", user.getDebut_de_loca());
+            intent.putExtra("debut_de_loca", dateFormatted);
             intent.putExtra("caution", user.getCaution());
             intent.putExtra("avance", user.getAvance());
             intent.putExtra("date", user.getDate());

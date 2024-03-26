@@ -3,7 +3,9 @@ package com.example.notificationapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,8 +30,11 @@ public class UpdateTenant extends AppCompatActivity {
     private TextView TextCommune;
     String id;
     DatabaseReference databaseReference;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     Spinner spinnerSites;
     ImageView retour4;
+    String idAdmin;
     private Button btnValider;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,7 +42,11 @@ public class UpdateTenant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_tenant);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
+        sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        idAdmin = sharedPreferences.getString("id", "");
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
 
         spinnerSites = findViewById(R.id.spinnerSites1);
         editTextNom = findViewById(R.id.editTextNom);
@@ -125,8 +134,9 @@ public class UpdateTenant extends AppCompatActivity {
         DatabaseReference locataireReference = databaseReference.child(commune).child(id);
 
         Model_tenant locataireMaj = new Model_tenant(id, nom, prenom,prix, numero, commune, typeMaison, debutLoca, caution, avance, finalFormattedDate);
-        System.out.println("RTHJHGTHIGJJUGHTJMJKTGJGT JFLKJGREJ "+commune+id);
         locataireReference.setValue(locataireMaj);
+        startActivity(new Intent(UpdateTenant.this, List_of_tenants.class));
+        finish();
     }
 
     @Override
