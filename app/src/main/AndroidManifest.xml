@@ -87,6 +87,8 @@
         </provider>
 
         <service android:name=".SmsReminderService" />
+        <receiver android:name=".AlarmReceiver" />
+
     </application>
 
 </manifest>

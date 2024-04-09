@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+
     tools:context=".MainActivity">
     <RelativeLayout
         android:id="@+id/log"
@@ -32,6 +32,7 @@
     <RelativeLayout
         android:id="@+id/yout1"
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/retour2"
@@ -52,7 +53,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_below="@+id/yout1"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

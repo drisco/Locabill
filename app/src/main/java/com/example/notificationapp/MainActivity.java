@@ -7,39 +7,27 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.telephony.SmsManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
     int incr;
     private Handler handler;
     RelativeLayout rl1,rl2,rlt2;
+    SharedPreferences sharedPreferences1;
     CircleImageView profil;
     ImageView r2;
     String idAdmin;
     EditText etToken;
+    List<String> recipients = new ArrayList<>();
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +57,32 @@ public class MainActivity extends AppCompatActivity {
         rlt2=findViewById(R.id.rlt2);
         r2=findViewById(R.id.r2);
         TextView foot=findViewById(R.id.foot);
+        sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);
+
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
+
+        String messagejour = sharedPreferences1.getString("messagejour", "Aucun rappel n'a été planifier");
+        String messagesemaine = sharedPreferences1.getString("messagesemaine", "");
+        String messagemois = sharedPreferences1.getString("messagemois", "");
+        String selectedDayOfWeek = sharedPreferences1.getString("selectedDayOfWeek", "");
+        String selectedDayOfMonth = sharedPreferences1.getString("selectedDayOfMonth", "");
+
+        String messageparseconde = sharedPreferences1.getString("messageparseconde", "");
+        String listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
+
+        if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
+             recipients = recupererNumeros(listedesnumeros);
+            scheduleSMSEvery30Seconds(messageparseconde,recipients);
+            System.out.println("vnvcbncvnbnbcnbcnbvcnnvcnvcvncnvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb "+recipients);
+        }
+       
+
+        if (!selectedDayOfMonth.isEmpty()){
+            scheduleSMSOnWeek(selectedDayOfWeek,messagesemaine,recipients);
+            scheduleSMSOnSelectedDate(selectedDayOfMonth,messagemois,recipients);
+            scheduleSMSDaily(messagejour,recipients);
+        }
 
         profil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         rl2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,MoreTenant.class));
+                startActivity(new Intent(MainActivity.this,Historique.class));
             }
         });
         rlt2.setOnClickListener(new View.OnClickListener() {
@@ -101,26 +115,130 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Créer un Handler pour envoyer périodiquement le SMS
-       // handler = new Handler();
-       // handler.postDelayed(sendSMSRunnable, INTERVAL_MS);
+        /*handler = new Handler();
+        handler.postDelayed(sendSMSRunnable, INTERVAL_MS);*/
         if (checkPermission()) {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         } else {
             requestPermission();
 
         }
-/*
-        whatsapp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                convertToPdfAndSend();
-                checkPermissions();
-            }
-        });
-*/
 
     }
+
+    private List<String> recupererNumeros(String listedesnumeros) {
+        String[] numerosArray = listedesnumeros.split(",");
+
+        List<String> result = new ArrayList<>();
+        for (String numero : numerosArray) {
+            result.add(numero.trim());
+        }
+        return result;
+    }
+
+    private void scheduleSMSEvery30Seconds(String message, List<String> recipients) {
+        System.out.println("BVVCBNNBVCBNVCVCNBVBNCVBNVCBNBNVCBNVCBNVCBNCVBNCVBNVCBNVCBNBNCVN "+recipients);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
+        intent.putExtra("message", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+
+        // Utilisez AlarmManager pour planifier l'envoi de SMS toutes les 30 secondes
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP, // Type d'alarme : RTC_WAKEUP permet de réveiller l'appareil s'il est en veille
+                System.currentTimeMillis(), // Début de l'alarme (maintenant)
+                30 * 1000, // Intervalle entre les répétitions (30 secondes)
+                pendingIntent
+        );
+    }
+
+
+    private void scheduleSMSDaily(String messagejour, List<String> recipients) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
+        intent.putExtra("message", messagejour);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+
+
+        // Définissez l'heure à laquelle vous souhaitez envoyer le SMS chaque jour
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 9); // Heure d'envoi du SMS (9h00)
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Utilisez AlarmManager pour planifier l'envoi de SMS chaque jour à l'heure spécifiée
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+
+    private void scheduleSMSOnSelectedDate(String selectedDate, String messagemois, List<String> recipients) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
+        intent.putExtra("message", messagemois);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+
+
+        // Définissez la date à laquelle vous souhaitez envoyer le SMS chaque mois
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+
+            // Exemple : planifiez l'envoi de SMS chaque 25 du mois à l'heure spécifiée
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDate)); // Utilisez la date sélectionnée
+            calendar.set(Calendar.HOUR_OF_DAY, 10); // Heure d'envoi du SMS (10h00)
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+
+            // Utilisez AlarmManager pour planifier l'envoi de SMS chaque mois à la date spécifiée
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 30, pendingIntent);
+
+    }
+
+
+    private void scheduleSMSOnWeek(String selectedDayOfWeek, String messagesemaine, List<String> recipients) {
+        int jour = getJourSemaineCalendrier(selectedDayOfWeek);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
+        intent.putExtra("message", messagesemaine);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
+         // Définissez l'heure à laquelle vous souhaitez envoyer le SMS chaque mercredi
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_WEEK, jour);
+            calendar.set(Calendar.HOUR_OF_DAY, 9); // Heure d'envoi du SMS (9h00)
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+
+            // Utilisez AlarmManager pour planifier l'envoi de SMS chaque mercredi à l'heure spécifiée
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+    }
+
+    private int getJourSemaineCalendrier(String jourSemaine) {
+        switch (jourSemaine) {
+            case "Lundi":
+                return Calendar.MONDAY;
+            case "Mardi":
+                return Calendar.TUESDAY;
+            case "Mercredi":
+                return Calendar.WEDNESDAY;
+            case "Jeudi":
+                return Calendar.THURSDAY;
+            case "Vendredi":
+                return Calendar.FRIDAY;
+            case "Samedi":
+                return Calendar.SATURDAY;
+            case "Dimanche":
+                return Calendar.SUNDAY;
+            default:
+                return -1;
+        }
+    }
+
+
+
     private void requestPermission() {
         // requesting permissions if not provided.
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CO);
@@ -132,107 +250,6 @@ public class MainActivity extends AppCompatActivity {
         int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
     }
-
-
-    private void convertToPdfAndSend() {
-
-        String filename= System.currentTimeMillis()+ "reçu.pdf";
-        String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Reçus/"+filename;
-        File pdfFile = new File(pdfFilePath);
-
-        if (pdfFile.exists()) {
-            // Supprimer le fichier PDF précédent s'il existe
-            boolean deleted = pdfFile.delete();
-            if (!deleted) {
-                // Gestion de l'échec de la suppression du fichier
-                Toast.makeText(this, "Erreur lors de la suppression du fichier PDF précédent", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        // Créer un nouveau document PDF
-        PdfDocument document = new PdfDocument();
-
-        // Créer une page PDF
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1080, 1920, 1).create();
-        PdfDocument.Page page = document.startPage(pageInfo);
-        Canvas canvas = page.getCanvas();
-
-        // Dessiner la vue de connexion sur le canvas
-        View view = findViewById(R.id.ll1);
-        view.draw(canvas);
-
-        // Terminer la page
-        document.finishPage(page);
-
-        // Enregistrer le document PDF localement
-        String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Reçus/";
-        File directory = new File(directoryPath);
-
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                // Gestion de l'échec de création du répertoire
-                Toast.makeText(this, "Erreur lors de la création du répertoire", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        pdfFile = new File(directoryPath + filename);
-
-        try {
-            FileOutputStream outputStream = new FileOutputStream(pdfFile);
-            document.writeTo(outputStream);
-            document.close();
-            outputStream.flush();
-            outputStream.close();
-
-            // Envoyer le PDF via WhatsApp
-            String phoneNumberWithCountryCode="+2250546968733";
-            sendPdfViaWhatsApp(pdfFile, phoneNumberWithCountryCode);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Gestion de l'erreur d'écriture du fichier PDF
-            Toast.makeText(this, "Erreur lors de la génération du fichier PDF"+e, Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void sendPdfViaWhatsApp(File pdfFile, String phoneNumberWithCountryCode) {
-        if (pdfFile.exists()) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("application/pdf");
-
-
-            Uri uri =FileProvider.getUriForFile(this,"com.example.notificationapp.provider", pdfFile);
-
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            intent.putExtra("jid", phoneNumberWithCountryCode + "@s.whatsapp.net");
-            intent.setPackage("com.whatsapp");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            // Afficher un message d'erreur si le fichier PDF n'existe pas
-            Toast.makeText(this, "Fichier PDF introuvable", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-/*
-    private void sendPdfViaWhatsApp(File pdfFile, String phoneNumberWithCountryCode) {
-            Uri pdfUri = Uri.fromFile(pdfFile);
-            String encodedPdfUri = Uri.encode(pdfUri.toString());
-            if (pdfFile.exists()) {
-                String whatsappUrl = String.format("https://api.whatsapp.com/send?phone=%s&text=Votre%20message&media=%s", phoneNumberWithCountryCode,encodedPdfUri);
-
-                // Ouvrir l'application WhatsApp avec l'URL
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(whatsappUrl));
-                startActivity(intent);
-            } else {
-                // Afficher un message d'erreur si le fichier PDF n'existe pas
-                Toast.makeText(this, "Fichier PDF introuvable", Toast.LENGTH_SHORT).show();
-            }
-
-    }
-*/
 
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -281,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         phoneNumbers.add("+2250504463805");
         phoneNumbers.add("+2250576155481");
 
-        String message = "En cette fin de mois, nous tenions à vous rappeler que le loyer pour le mois de mars est dû d'ici le 10/04/2024.Afin d'éviter tout retard.En cas de difficultés financières ou pour discuter de modalités de paiement alternatives, n'hésitez pas à nous contacter dès que possible. La transparence et la communication sont essentielles pour maintenir une relation locataire-propriétaire harmonieuse.";
+        String message = "En cette fin de mois, nous tenions à vous rappeler que le loyer pour ce mois est dû d'ici le 10 du mois prochain.Afin d'éviter tout retard.En cas de difficultés financières ou pour discuter de modalités de paiement alternatives, n'hésitez pas à nous contacter dès que possible. La transparence et la communication sont essentielles pour maintenir une relation locataire-propriétaire harmonieuse.";
         try {
             SmsManager smsManager = SmsManager.getDefault();
             ArrayList<String> parts = smsManager.divideMessage(message);

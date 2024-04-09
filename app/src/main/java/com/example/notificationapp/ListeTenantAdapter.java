@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -42,10 +43,19 @@ public class ListeTenantAdapter extends RecyclerView.Adapter<ListeTenantAdapter.
         CityItem cityItem = cityItems.get(position);
 
         holder.cityNameTextView1.setText(cityItem.getCityName());
-        holder.cityNameTextView1.setOnClickListener(new View.OnClickListener() {
+        holder.more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.llayout.setVisibility(View.VISIBLE);
+                if (holder.llayout.getVisibility() == View.VISIBLE) {
+                    // Le TextView est visible, alors cachez-le et affichez l'ImageView par défaut
+                    holder.llayout.setVisibility(View.GONE);
+                    holder.more.setImageResource(R.drawable.base1); // Image par défaut
+                } else {
+                    // Le TextView n'est pas visible, alors affichez-le et changez l'image de l'ImageView
+                    holder.llayout.setVisibility(View.VISIBLE);
+                    holder.more.setImageResource(R.drawable.base2); // Nouvelle image
+                }
+               // holder.llayout.setVisibility(View.VISIBLE);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext());
@@ -73,12 +83,14 @@ public class ListeTenantAdapter extends RecyclerView.Adapter<ListeTenantAdapter.
         TextView cityNameTextView1;
         RecyclerView recyclerview1;
         LinearLayout llayout;
+        ImageView more;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cityNameTextView1 = itemView.findViewById(R.id.textCityName01);
             recyclerview1 = itemView.findViewById(R.id.recyclerview01);
             llayout = itemView.findViewById(R.id.llayout);
+            more = itemView.findViewById(R.id.more);
         }
     }
 

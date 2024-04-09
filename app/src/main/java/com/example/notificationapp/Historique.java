@@ -5,10 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.example.notificationapp.models.CityItem;
+import com.example.notificationapp.models.HistItems;
 import com.example.notificationapp.models.Model_tenant;
 import com.example.notificationapp.models.Model_ticket;
 import com.google.firebase.FirebaseApp;
@@ -24,75 +32,73 @@ import java.util.List;
 
 public class Historique extends AppCompatActivity {
     private AdapterCityGroup classAdapter;
+    Adapter_historique studentAdapter;
     int incr;
+    String idAdmin;
+    RecyclerView recyclerView;
+    PopupRegister popusCostum;
+    RelativeLayout log;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historique);
-
-
-        List<CityItem> classes = new ArrayList<>();
-
-        /*// Remplir la liste avec des données
-        classes.add(new CityItem("Class 1", createStudentList(8)));
-        classes.add(new CityItem("Class 2", createStudentList(5)));
-        classes.add(new CityItem("Class 3", createStudentList(7)));*/
+        SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        idAdmin = donnes.getString("id", "");
         FirebaseApp.initializeApp(this);
+        recyclerView= findViewById(R.id.recyclerView);
+        log= findViewById(R.id.log);
 
         // Référence à la base de données Firebase
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
-
-        // Écouteur d'événements pour lire les données depuis Firebase
+        popusCostum = new PopupRegister(Historique.this);
+        popusCostum.setCancelable(false);
+        popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popusCostum.show();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("recu").child(idAdmin);
+        List<Model_ticket> ticketsData = new ArrayList<>();
         databaseReference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<CityItem> cityItems = new ArrayList<>();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                popusCostum.cancel();
+                // Effacer la liste existante avant de la remplir avec de nouvelles données
+                ticketsData.clear();
 
-                for (DataSnapshot citySnapshot : dataSnapshot.getChildren()) {
-                    String cityName = citySnapshot.getKey();
-                    List<Model_tenant> tenants = new ArrayList<>();
-
-                    for (DataSnapshot tenantSnapshot : citySnapshot.getChildren()) {
-                        Model_tenant tenant = tenantSnapshot.getValue(Model_tenant.class);
-                        tenants.add(tenant);
+                // Cette méthode est appelée chaque fois que les données changent
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        Model_ticket ticket = snapshot1.getValue(Model_ticket.class);
+                        ticketsData.add(ticket);
+                        System.out.println("BNXN?CVNCXN?CVXNCNCNVNNVNVNBVNNB "+ticket.getCaution());
                     }
 
-                    CityItem cityItem = new CityItem(cityName, tenants);
-                    cityItems.add(cityItem);
+                }
+                System.out.println("BNXN?CVNCXN?CVXNCNCNVNNVNVNBVNNB "+ticketsData);
+                if (ticketsData.isEmpty()){
+                    popusCostum.cancel();
+                    log.setVisibility(View.VISIBLE);
+                }else{
+                    popusCostum.cancel();
+                    log.setVisibility(View.GONE);
+                    studentAdapter = new Adapter_historique(Historique.this,ticketsData);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(Historique.this));
+                    recyclerView.setAdapter(studentAdapter);
+                    studentAdapter.notifyDataSetChanged();
                 }
 
-                // Mettez à jour l'adaptateur avec les données
-                classAdapter.setCityItems(cityItems);
-                classAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Gérer les erreurs
+            public void onCancelled(DatabaseError databaseError) {
+                // Gérer les erreurs ici
             }
         });
 
-        // Initialisez l'adaptateur avec une liste vide (sera mise à jour après récupération des données)
-        classAdapter = new AdapterCityGroup(new ArrayList<>());
-
-        // Configurez le RecyclerView
-        RecyclerView nestedRecyclerView = findViewById(R.id.recyclerView);
-        nestedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        nestedRecyclerView.setAdapter(classAdapter);
-
-        //DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
 
     }
 
-    private List<Model_tenant> createStudentList(int numberOfStudents) {
-        List<Model_tenant> students = new ArrayList<>();
-        for (int i = 0; i < numberOfStudents; i++) {
-            students.add(new Model_tenant("1", "John", "Doe", "35000","+2250102589655","Abobo", "Appartement", "01/01/2024", "900000", "900000", "01/01/2024"));
-        }
-        return students;
-    }
 
     @Override
     public void onBackPressed() {

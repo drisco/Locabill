@@ -16,7 +16,7 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:paddingTop="1dp"
-        android:src="@drawable/account"
+        android:src="@drawable/locabill"
         app:civ_border_color="@color/white"
         app:civ_border_overlay="true"
         app:civ_border_width="5dp" />

@@ -3,65 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#2196F3"
     android:layout_height="match_parent"
     tools:context=".DetailAdmin">
 
     <RelativeLayout
         android:id="@+id/r1"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         android:layout_marginTop="-20dp"
-        android:background="@drawable/bg_rect">
+        android:background="@drawable/bg_rect"
+        android:backgroundTint="#03A9F4">
         <ImageView
             android:id="@+id/m00"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/back"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            app:tint="@color/white" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/m00"
+            android:src="@drawable/locabill"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="true"
+            app:civ_border_width="2dp"
+            android:layout_centerHorizontal="true"/>
 
-        <TextView
-            android:id="@+id/t0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="25dp"
-            android:layout_toEndOf="@+id/m00"
-            android:text="Parametre "
-            android:textColor="@color/black"
-            android:textSize="24dp"
-            android:textStyle="bold" />
+
     </RelativeLayout>
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv1"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_below="@+id/r1"
-        android:src="@drawable/locabill"
-        android:layout_marginTop="-50dp"
-        app:civ_border_color="@color/white"
-        app:civ_border_overlay="true"
-        app:civ_border_width="2dp"
-        android:layout_centerHorizontal="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:layout_below="@+id/iv1">
+        android:layout_below="@+id/r1">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INFORMATIONS PERSONNELLES"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/new_border"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical">
         <RelativeLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
             <ImageView
                 android:id="@+id/m1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/person"/>
+                android:src="@drawable/person"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/t1"
@@ -76,24 +85,19 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
-
         <RelativeLayout
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center">
             <ImageView
                 android:id="@+id/m2"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/person"/>
+                android:src="@drawable/person"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/t2"
@@ -108,15 +112,10 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
         <RelativeLayout
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center">
             <ImageView
                 android:id="@+id/m3"
@@ -124,7 +123,8 @@
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/phone"/>
+                android:src="@drawable/phone"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/t3"
@@ -139,93 +139,112 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
+    </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/t3"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
-
-
-        <RelativeLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center">
-            <ImageView
-                android:id="@+id/m4"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/logout"/>
+            android:text="DECONNEXION ET CODE PIN"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
 
-            <TextView
-                android:id="@+id/t4"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/new_border"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/deco"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="24dp"
-                android:layout_toEndOf="@+id/m4"
-                android:text="Je me déconnecte"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:textStyle="bold" />
 
-         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/t4"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
+                android:layout_gravity="center">
+                <ImageView
+                    android:id="@+id/m4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/logout"
+                    app:tint="@color/white"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center">
-            <ImageView
-                android:id="@+id/m5"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/dial"/>
+                <TextView
+                    android:id="@+id/t4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_toEndOf="@+id/m4"
+                    android:text="Je me déconnecte"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/t5"
-                android:layout_width="wrap_content"
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pin"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="24dp"
-                android:layout_toEndOf="@+id/m5"
-                android:text="Ajouter un code de verrouillage"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_gravity="center">
+                <ImageView
+                    android:id="@+id/m5"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/dial"
+                    app:tint="@color/white"/>
 
-        </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/t5"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
+                <TextView
+                    android:id="@+id/t5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_toEndOf="@+id/m5"
+                    android:text="Ajouter un code de vérrouillage"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
-        <RelativeLayout
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:text="PLANIFICATIONS"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
+
+        <RelativeLayout
+            android:id="@+id/planifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/new_border"
             android:layout_gravity="center">
             <ImageView
                 android:id="@+id/m6"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/notifi"/>
+                android:src="@drawable/notifi"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/t6"
@@ -234,34 +253,31 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="24dp"
                 android:layout_toEndOf="@+id/m6"
-                android:text="Planifier un rappel"
+                android:text="Planifier un rappel automatique"
                 android:textColor="@color/white"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/t5"
-            android:layout_marginTop="25dp"
-            android:background="#B6A1A1" />
 
-        <TextView
-            android:id="@+id/upda"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:text="Edit profil"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:background="@drawable/bg_rect"
-            android:layout_marginTop="50dp"/>
+
+
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/upda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modifier mon profil"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:background="@drawable/new_border"
+        android:layout_marginTop="50dp"/>
 </RelativeLayout>

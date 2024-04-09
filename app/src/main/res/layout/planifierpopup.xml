@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_notification"
+            android:layout_gravity="center"
+            app:tint="@color/teal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choisissez vos options"
+            android:textStyle="bold"
+            android:gravity="center"/>
+        <RelativeLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvjour1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/new_border"
+                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:text="Je planifie un rappel journalier"/>
+
+            <ImageView
+                android:id="@+id/tvjour"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/tvjour1"
+                android:src="@drawable/base1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lljour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edjour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_marginEnd="30dp"
+                android:padding="5dp"
+                android:textSize="16dp"
+                android:hint="Saisissez le message que vous souhaiter envoyer chaque jour."
+                android:layout_marginStart="30dp"/>
+        </LinearLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvsemaine1"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/new_border"
+                android:textColor="@color/white"
+
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:text=" Je planifie un rappel Hebdomadaire"/>
+
+            <ImageView
+                android:id="@+id/tvsemaine"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/tvsemaine1"
+                android:src="@drawable/base1" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llsemaine"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edsemaine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_marginEnd="20dp"
+                android:padding="5dp"
+                android:textSize="16dp"
+                android:hint="Saisissez le message que vous souhaiter envoyer chaque semaine."
+                android:layout_marginStart="20dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/spinnerWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/recupsemaine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="20dp"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/spinnerWeek"
+                    android:background="@drawable/border_black"
+                    android:text=" Je planifie un rappel journalier" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvmois1"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:background="@drawable/new_border"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:text="Je planifie un rappel Mensuel"/>
+
+            <ImageView
+                android:id="@+id/tvmois"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/tvmois1"
+                android:src="@drawable/base1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llmois"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edmois"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_marginEnd="20dp"
+                android:padding="5dp"
+                android:textSize="16dp"
+                android:hint="Saisissez le message que vous souhaiter envoyer chaque mois."
+                android:layout_marginStart="20dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/spinnerMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/recupmois"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="20dp"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/spinnerMonth"
+                    android:background="@drawable/border_black"
+                    android:text="CHoisissez la date" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvmois10"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:background="@drawable/new_border"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:text="Je planifie un rappel de test"/>
+
+            <ImageView
+                android:id="@+id/tvmoistest"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/tvmois10"
+                android:src="@drawable/base1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llmoistest"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edmoistest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_marginEnd="20dp"
+                android:padding="5dp"
+                android:textSize="16dp"
+                android:hint="Saisissez le message que vous souhaiter envoyer chaque mois."
+                android:layout_marginStart="20dp"/>
+            <EditText
+                android:id="@+id/edmoistestnum"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_marginEnd="20dp"
+                android:padding="5dp"
+                android:textSize="16dp"
+                android:hint="Les numeros :num1,num2,num3 ..."
+                android:layout_marginStart="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/val"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Valider"
+        android:textSize="18dp"
+        android:padding="8dp"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/new_border"
+        android:textStyle="bold"/>
+</RelativeLayout>

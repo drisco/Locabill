@@ -8,9 +8,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.notificationapp.R;
 import com.example.notificationapp.models.CityItem;
@@ -28,8 +31,10 @@ import java.util.List;
 public class HistoriqueListeRecuGeneree extends AppCompatActivity {
     RecyclerView recyclerView;
     Adapter_tickets adapterTickets;
+    PopupRegister popusCostum;
     List<Model_ticket> ticketsData;
     ImageView retour2;String idAdmin,id_2;
+    RelativeLayout log;
     int incr;
 
     @SuppressLint("MissingInflatedId")
@@ -43,6 +48,7 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
         id_2 = intent.getStringExtra("id");
         recyclerView =findViewById(R.id.recyclerView);
         retour2 =findViewById(R.id.retour2);
+        log =findViewById(R.id.log);
 
         retour2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +58,10 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
             }
         });
 
-
+        popusCostum = new PopupRegister(HistoriqueListeRecuGeneree.this);
+        popusCostum.setCancelable(false);
+        popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popusCostum.show();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("recu").child(idAdmin).child(id_2);
         List<Model_ticket> ticketsData = new ArrayList<>();
 
@@ -60,6 +69,7 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                popusCostum.cancel();
                 // Effacer la liste existante avant de la remplir avec de nouvelles données
                 ticketsData.clear();
 
@@ -69,11 +79,18 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
                     ticketsData.add(ticket);
                 }
 
-                // Mettre à jour l'adaptateur avec les nouvelles données
-                adapterTickets = new Adapter_tickets(HistoriqueListeRecuGeneree.this,ticketsData);
-                recyclerView.setLayoutManager(new LinearLayoutManager(HistoriqueListeRecuGeneree.this));
-                recyclerView.setAdapter(adapterTickets);
-                adapterTickets.notifyDataSetChanged();
+                if (ticketsData.isEmpty()){
+                    popusCostum.cancel();
+                    log.setVisibility(View.VISIBLE);
+                }else{
+                    popusCostum.cancel();
+                    // Mettre à jour l'adaptateur avec les nouvelles données
+                    adapterTickets = new Adapter_tickets(HistoriqueListeRecuGeneree.this,ticketsData);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(HistoriqueListeRecuGeneree.this));
+                    recyclerView.setAdapter(adapterTickets);
+                    adapterTickets.notifyDataSetChanged();
+                }
+
             }
 
             @Override

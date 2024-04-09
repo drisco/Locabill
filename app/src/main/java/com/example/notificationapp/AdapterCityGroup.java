@@ -8,16 +8,18 @@ package com.example.notificationapp;
         import androidx.recyclerview.widget.LinearLayoutManager;
         import androidx.recyclerview.widget.RecyclerView;
         import com.example.notificationapp.models.CityItem;
+        import com.example.notificationapp.models.HistItems;
+
         import java.util.List;
 
 public class AdapterCityGroup extends RecyclerView.Adapter<AdapterCityGroup.ViewHolder> {
-    private List<CityItem> cityItems;
+    private List<HistItems> cityItems;
 
-    public AdapterCityGroup(List<CityItem> classes) {
+    public AdapterCityGroup(List<HistItems> classes) {
         this.cityItems=classes;
     }
 
-    public void setCityItems(List<CityItem> cityItems) {
+    public void setCityItems(List<HistItems> cityItems) {
         this.cityItems = cityItems;
     }
 
@@ -30,13 +32,13 @@ public class AdapterCityGroup extends RecyclerView.Adapter<AdapterCityGroup.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CityItem cityItem = cityItems.get(position);
+        HistItems cityItem = cityItems.get(position);
 
-        holder.cityNameTextView.setText(cityItem.getCityName());
+        /*holder.cityNameTextView.setText(cityItem.getCityName());
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext());
         holder.recyclerview.setLayoutManager(layoutManager);
         Adapter_historique studentAdapter = new Adapter_historique(cityItem.getTenantList());
-        holder.recyclerview.setAdapter(studentAdapter);
+        holder.recyclerview.setAdapter(studentAdapter);*/
 
     }
 
