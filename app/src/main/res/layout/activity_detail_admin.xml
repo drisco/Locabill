@@ -15,11 +15,11 @@
         android:backgroundTint="#03A9F4">
         <ImageView
             android:id="@+id/m00"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/back"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             app:tint="@color/white" />
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv1"

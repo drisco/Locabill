@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="azert"
-        android:padding="5dp"
+        android:padding="15dp"
         android:gravity="center"
         android:textColor="@color/white"
-        android:background="@color/green"
+        android:background="@drawable/new_border"
         android:textSize="18sp"/>
 
     <androidx.recyclerview.widget.RecyclerView

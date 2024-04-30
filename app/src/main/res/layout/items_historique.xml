@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="5dp"
+    android:id="@+id/ritem"
     android:layout_height="wrap_content">
 
     <TextView
@@ -10,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="date"
+        android:textStyle="bold"
         android:paddingStart="5sp"
         tools:ignore="InvalidId" />
 
@@ -22,29 +24,29 @@
         android:paddingStart="5sp"
         android:paddingEnd="5sp"
         android:paddingTop="5sp"
-        android:paddingBottom="0dp"
-        android:layout_marginTop="5sp">
+        android:paddingBottom="5dp"
+        android:layout_marginTop="1sp">
         <TextView
             android:id="@+id/titre"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
-            android:text="Quitance de loyer : "
-            android:textSize="24sp"
+            android:text="Réçu : "
+            android:textSize="16sp"
             android:textStyle="bold" />
         <View
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="1dp"
             android:layout_below="@+id/titre"
             android:layout_marginStart="50sp"
+            android:layout_centerHorizontal="true"
             android:layout_marginEnd="50sp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="1dp"
             android:background="@android:color/black" />
         <LinearLayout
             android:id="@+id/l1"
             android:layout_width="wrap_content"
-            android:layout_marginTop="30sp"
-
+            android:layout_marginTop="5sp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titre"
             android:layout_alignParentStart="true"
@@ -56,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nom : "
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
             <!-- TextViews pour le nom, prénom, numéro -->
             <TextView
@@ -64,15 +66,7 @@
                 android:layout_height="wrap_content"
                 android:text="Prénom : "
                 android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Numéro : "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -80,41 +74,14 @@
                 android:layout_height="wrap_content"
                 android:text="Montant : "
                 android:layout_marginTop="5sp"
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Type de maison : "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Début de l'usage : "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Avance : "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Caution : "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll2"
             android:layout_width="wrap_content"
-            android:layout_marginTop="30sp"
+            android:layout_marginTop="5sp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titre"
             android:layout_marginEnd="5dp"
@@ -126,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bamba  "
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
 
 
@@ -137,17 +104,10 @@
                 android:layout_height="wrap_content"
                 android:text="Drissa  "
                 android:layout_marginTop="5sp"
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/number1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+2250504389406  "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/montant1"
@@ -155,88 +115,11 @@
                 android:layout_height="wrap_content"
                 android:text="90000 FCFA  "
                 android:layout_marginTop="5sp"
-                android:textSize="14sp"
+                android:textSize="12dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/type1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Studio "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/debut1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="05/12/2023 "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/avance1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="180000 FCFA "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/caution1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="180000 FCFA "
-                android:layout_marginTop="5sp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/s_chiffre1"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_below="@+id/l1"
-            android:textStyle="bold"
-            android:layout_marginStart="25dp"
-            android:textSize="14sp"
-            android:layout_height="wrap_content"
-            android:text="Somme en chiffre : " />
 
-        <TextView
-            android:id="@+id/textViewPaymentDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="5sp"
-            android:layout_below="@+id/s_chiffre1"
-            android:text="Fait à Abidjan le :" />
-
-        <TextView
-            android:id="@+id/date1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/s_chiffre1"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/textViewPaymentDate"
-            android:text="25/05/2024"
-            android:textStyle="bold"
-            tools:ignore="DuplicateIds" />
-
-
-        <ImageView
-            android:id="@+id/qrImageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewPaymentDate"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/iv_open" />
 
     </RelativeLayout>
 

@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- res/layout/activity_main.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:background="@color/blue"
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/headT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:text="Liste de tout les reçus"/>
+        <ImageView
+            android:id="@+id/headI"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/history"
+            app:tint="@color/white" />
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/log"
         android:layout_width="match_parent"
@@ -25,7 +60,9 @@
             android:layout_height="180dp"
             android:src="@drawable/vide"/>
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/head"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

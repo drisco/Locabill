@@ -180,15 +180,24 @@
                 android:layout_below="@id/editTextTypeMaison"
                 android:text="Debut de loca"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/editTextDebutLoca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_black"
-                android:padding="8dp"
-                android:gravity="end"
                 android:layout_below="@id/textViewDebutLoca"
-                android:inputType="date"/>
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/pick"
+                android:background="@drawable/border_black"
+                android:gravity="end"
+                android:text=""
+                android:padding="8dp" />
+            <ImageView
+                android:id="@+id/pick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewDebutLoca"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/add"/>
 
             <!-- Caution -->
             <TextView

@@ -11,8 +11,8 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/retour1"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             style="@style/imageShow"
             android:src="@drawable/back"/>
     </RelativeLayout>
@@ -22,8 +22,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bn"
         android:layout_below="@+id/yout1"
-        android:paddingBottom="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="70dp"
+        android:paddingBottom="10dp">
 
         <RelativeLayout
             android:id="@+id/recuId"
@@ -77,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nom : "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -85,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Prénom : "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -93,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Numéro : "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -101,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Montant payé : "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -109,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Type de maison : "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -117,21 +118,21 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Mois payé : "
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <!--<TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Avance : "
-                        android:layout_marginTop="10dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="Avance : "
+                        android:layout_marginTop="10dp"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                    <!--<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Caution : "
                         android:layout_marginTop="10dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />-->
                 </LinearLayout>
 
@@ -150,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Bamba  "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -159,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Drissa  "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -168,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="+2250504389406  "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -177,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="90000 FCFA  "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -186,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Studio "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -195,24 +196,24 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text=" Moi click ici "
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <!--<TextView
+                    <TextView
                         android:id="@+id/avance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="180000 FCFA "
                         android:layout_marginTop="10dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-                    <TextView
+                    <!--<TextView
                         android:id="@+id/caution"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="180000 FCFA "
                         android:layout_marginTop="10dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />-->
                 </LinearLayout>
 
@@ -224,7 +225,7 @@
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:text="Somme en chiffre : "
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -250,16 +251,28 @@
                     android:textStyle="bold"
                     tools:ignore="DuplicateIds" />
 
+                <TextView
+                    android:id="@+id/cx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/qrImageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Locabill vous rémercie !"
+                    android:textStyle="bold"
+                    tools:ignore="DuplicateIds" />
+
 
                 <ImageView
                     android:id="@+id/qrImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_below="@+id/textViewPaymentDate"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="15dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/iv_open" />
 
@@ -287,13 +300,18 @@
                     android:id="@+id/payer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
                     android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="2dp"
                     android:layout_toStartOf="@+id/plus"
-                    android:text="Payer avance" />
+                    android:background="@color/blue"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/blue"
+                    android:text="Payer avance"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/plus"
@@ -316,29 +334,19 @@
 
                 <EditText
                     android:id="@+id/edit"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/buttonPrintReceipt"
                     android:layout_toEndOf="@+id/tt"
+                    android:padding="5dp"
                     android:background="@drawable/border_black"
+                    android:backgroundTint="@color/white"
                     android:gravity="center"
                     android:inputType="number" />
 
-                <TextView
-                    android:id="@+id/buttonPrintReceipt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/new_border"
-                    android:backgroundTint="@color/green"
-                    android:padding="5dp"
-                    android:text="Actualiser"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tt"
@@ -346,29 +354,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Saisisser le montant : "
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/pick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/edit"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/lock" />
-
-                <TextView
-                    android:id="@+id/date0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/edit"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_toEndOf="@+id/pick"
-                    android:text="Cliquer pour changer le mois payé : "
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
+
             </RelativeLayout>
         </RelativeLayout>
 

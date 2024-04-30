@@ -145,9 +145,9 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                     popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popup.show();
                     DatabaseReference localiteReference = databaseReference.child(idAdmin).child(user.getLocalite());
-                    //localiteReference.removeValue();
-                    /*startActivity(new Intent(List_of_tenants.this,MainActivity.class));
-                    finish();*/
+                    localiteReference.removeValue();
+                    startActivity(new Intent(List_of_tenants.this,MainActivity.class));
+                    finish();
                 }
             });
             pop.setNegativeButton("Non", new DialogInterface.OnClickListener() {
@@ -187,6 +187,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             intent.putExtra("type_de_maison", user.getType_de_maison());
             intent.putExtra("debut_de_loca", dateFormatted);
             intent.putExtra("caution", user.getCaution());
+            intent.putExtra("lieu", user.getLocalite());
             intent.putExtra("avance", user.getAvance());
             intent.putExtra("date", user.getDate());
             startActivity(intent);

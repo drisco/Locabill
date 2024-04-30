@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,10 +34,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notificationapp.models.Model_code_pin;
 import com.example.notificationapp.models.Model_tenant;
 import com.example.notificationapp.models.Model_ticket;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -50,25 +55,28 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
 public class New_ticket extends AppCompatActivity {
     NumberToWords numberToWords = new NumberToWords();
     private static final int PERMISSION_REQUEST_CODE = 140;
     private static final int PERMISSION_REQUEST_CO = 10;
-    DatabaseReference databaseReference;
-    int incr;String id_2;
+    DatabaseReference databaseReference, databaseReference1;
+    int incr,intmontant,intavance;String id_2,lieu;
 
-    ImageView plus,moins,pick;
+    ImageView plus,moins;
     EditText edit;
     RelativeLayout show,recuId;
     ImageView qrImageView,retour1;
-    TextView buttonPrintReceipt,date0;
+    TextView buttonPrintReceipt;
     Button buttonSendReceipt;
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat monthYearFormat;
-    TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer;
-    int count = 0;String qrContent,idAdmin,montantChiffre;
+    TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer,avance;
+    int count = 0;String qrContent,idAdmin,montantChiffre,resultat,numberInWords;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -78,14 +86,15 @@ public class New_ticket extends AppCompatActivity {
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("recu");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
         plus = findViewById(R.id.plus);
         edit = findViewById(R.id.edit);
         retour1 = findViewById(R.id.retour1);
         show = findViewById(R.id.show);
         recuId = findViewById(R.id.recuId);
         payer = findViewById(R.id.payer);
-        pick = findViewById(R.id.pick);
-        date0 = findViewById(R.id.date0);
+        avance = findViewById(R.id.avance);
+
         buttonPrintReceipt = findViewById(R.id.buttonPrintReceipt);
         buttonSendReceipt = findViewById(R.id.buttonSendReceipt);
         qrImageView = findViewById(R.id.qrImageView);
@@ -113,7 +122,7 @@ public class New_ticket extends AppCompatActivity {
                 count++;
                 if (count==1){
                     show.setVisibility(View.VISIBLE);
-                    plus.setImageResource(R.drawable._replay);
+                    plus.setImageResource(R.drawable.cancel);
                 }else if (count==2){
                     show.setVisibility(View.GONE);
                     plus.setImageResource(R.drawable.add);
@@ -129,12 +138,7 @@ public class New_ticket extends AppCompatActivity {
             }
         });
 
-        pick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                datePickerDialog.show();
-            }
-        });
+
         Intent intent = getIntent();
         id_2 = intent.getStringExtra("id");
         String nom = intent.getStringExtra("nom");
@@ -147,7 +151,20 @@ public class New_ticket extends AppCompatActivity {
         String cautions = intent.getStringExtra("caution");
         String avances = intent.getStringExtra("avance");
         String date_ = intent.getStringExtra("date");
-        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
+        lieu = intent.getStringExtra("lieu");
+        numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
+
+        intmontant = Integer.parseInt(prix);
+        intavance =Integer.parseInt(avances);
+        if (intavance>=intmontant){
+            resultat= String.valueOf(intavance-intmontant);
+            avance.setText(resultat+ " FCFA");
+
+        }else{
+            resultat=avances;
+            avance.setText(avances+ " FCFA");
+        }
+
 
         s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
         montantChiffre=s_chiffre.getText().toString();
@@ -165,14 +182,13 @@ public class New_ticket extends AppCompatActivity {
         date.setText(dateFormatted);
 
          // Générez le code QR à partir du contenu
-        generateQRCode(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
+        generateQRCode(id_2);
 
         buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                        type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
+                        type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),date.getText().toString());
                 convertToPdfAndSend();
                 checkPermissions();
             }
@@ -192,24 +208,23 @@ public class New_ticket extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()){
-                    montant.setText(s.toString()+" FCFA");
-                    s_chiffre.setText("Montant en chiffre : "+NumberToWords.convertToWords(Integer.parseInt(s.toString()))+ " FCFA");
+                    int avancein =Integer.parseInt(resultat);
+                    avancein +=Integer.parseInt(s.toString());
+                    resultat= String.valueOf(avancein);
+                    avance.setText(avancein+" FCFA");
                 }else{
-                    montant.setText(prix+" FCFA");
-                    s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
-                    montantChiffre=s_chiffre.getText().toString();
+                    if (intavance>=intmontant){
+                        resultat= String.valueOf(intavance-intmontant);
+                        avance.setText(resultat+ " FCFA");
+
+                    }else{
+                        avance.setText(avances+ " FCFA");
+                    }
 
                 }
             }
         });
-        buttonPrintReceipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                generateQRCode(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                        type.getText().toString(),debut.getText().toString(),cautions,avances,date.getText().toString());
 
-            }
-        });
     }
 
     private void setupDatePicker() {
@@ -228,16 +243,17 @@ public class New_ticket extends AppCompatActivity {
                 // Formater la date sélectionnée en utilisant le format du mois et de l'année
                 String mattedDate = monthYearFormat.format(selectedDate.getTime());
                 debut.setText(mattedDate);
-                date0.setText(mattedDate);
             }
         }, year, month, dayOfMonth);
     }
 
 
     private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
+
+        databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, avance,montantChiffre, date);
+        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, date);
         localiteReference.setValue(nouveauLocataire);
     }
 
@@ -253,16 +269,11 @@ public class New_ticket extends AppCompatActivity {
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void generateQRCode(String toString, String toString1, String toString2, String toString3, String toString4, String toString5, String toString6, String toString7, String toString8) {
-
-        qrContent ="\nNom: " + toString + "\nPrénom: " + toString1 + "\nPrix: " + toString2 +
-                "\nNuméro: " + toString3 + "\nType de maison: " + toString4 + "\nDébut de location: " + toString5 +
-                "\nCaution: " + toString6 + "\nAvance: " + toString7 + "\nDate: " + toString8;
-        System.out.println("GFVHHJDG 99999999 TRUE TRUE APRES= "+qrContent);
+    private void generateQRCode(String id) {
 
         try {
             MultiFormatWriter formatWriter = new MultiFormatWriter();
-            BitMatrix matrix = formatWriter.encode(qrContent, BarcodeFormat.QR_CODE, 500, 500);
+            BitMatrix matrix = formatWriter.encode(id, BarcodeFormat.QR_CODE, 500, 500);
             BarcodeEncoder barcode = new BarcodeEncoder();
             Bitmap bitmap = barcode.createBitmap(matrix);
             qrImageView.setImageBitmap(bitmap);
@@ -283,7 +294,10 @@ public class New_ticket extends AppCompatActivity {
         }
     }
     private void convertToPdfAndSend() {
-
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
         String filename= System.currentTimeMillis()+ "reçu.pdf";
         String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Reçus/"+filename;
         File pdfFile = new File(pdfFilePath);
@@ -302,32 +316,14 @@ public class New_ticket extends AppCompatActivity {
         PdfDocument document = new PdfDocument();
 
         // Créer une page PDF
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1080, 1920, 1).create();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(screenWidth, screenHeight, 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
-        Canvas canvas = page.getCanvas();
+
 
 // Obtenir la vue à dessiner
         View view = findViewById(R.id.detailsLayout);
-
-// Mesurer la vue
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(canvas.getWidth(), View.MeasureSpec.EXACTLY);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(canvas.getHeight(), View.MeasureSpec.EXACTLY);
-        view.measure(widthMeasureSpec, heightMeasureSpec);
-        int marginLeft = 50; // Marge à gauche
-        int marginTop = 10; // Marge en haut
-
-// Calculer la position horizontale pour centrer la vue avec marges
-        int centerX = (canvas.getWidth() - view.getMeasuredWidth()) / 2 + marginLeft;
-        int centerY = (canvas.getHeight() - view.getMeasuredHeight()) / 2 + marginTop;
-
-
-// Définir les limites de dessin pour la vue centrée
-        view.layout(centerX, centerY, centerX + view.getMeasuredWidth(), centerY + view.getMeasuredHeight());
-
-// Dessiner la vue sur le canvas
+        Canvas canvas = page.getCanvas();
         view.draw(canvas);
-
-// Terminer la page
         document.finishPage(page);
 
 
@@ -411,12 +407,11 @@ public class New_ticket extends AppCompatActivity {
     }
     private void sendSMS() {
 
-        String message="Bonjour Monsieur/Madame "+ userPrenom.getText().toString()+ " Votre reçu de paiement du mois à été géneré";
+        String message="Bonjour Monsieur/Madame "+ userPrenom.getText().toString()+ " Votre reçu de paiement du mois à été envoyé sur votre whatsapp";
         try {
             SmsManager smsManager = SmsManager.getDefault();
             ArrayList<String> parts = smsManager.divideMessage(message);
                 smsManager.sendMultipartTextMessage(number.getText().toString(), null, parts, null, null);
-
 
             Toast.makeText(getApplicationContext(), "SMS envoyés avec succès.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {

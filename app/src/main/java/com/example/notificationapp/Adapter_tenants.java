@@ -65,6 +65,7 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
         holder.date.setText("Date : "+user.getDebut_de_loca());
         holder.adresse.setText("Prix : "+user.getPrix());
 
+
 /*
         holder.relative_view.setOnClickListener(new View.OnClickListener() {
             @Override

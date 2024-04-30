@@ -13,8 +13,8 @@
         <ImageView
             android:id="@+id/retour2"
             style="@style/imageShow"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/back"/>
         <TextView
             android:id="@+id/locataireTextView"

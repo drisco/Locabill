@@ -15,7 +15,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         List<String> recipients1 = intent.getStringArrayListExtra("recipients1");
         List<String> recipients = intent.getStringArrayListExtra("recipients");
         String message = intent.getStringExtra("message");
-        String ok = intent.getStringExtra("ok");
 
         // Envoyer le SMS à chaque destinataire
         for (String recipient : recipients) {
@@ -23,7 +22,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             //smsManager.sendTextMessage(recipient, null, message, null, null);
         }
 
-        // Vous pouvez ajouter d'autres actions ici en fonction de vos besoins
     }
 }
 

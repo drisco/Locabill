@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.notificationapp.models.CityItem;
 import com.example.notificationapp.models.HistItems;
@@ -30,8 +31,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Historique extends AppCompatActivity {
+public class Historique extends AppCompatActivity implements Adapter_historique.ItemClickListener {
     private AdapterCityGroup classAdapter;
+    List<Model_ticket> ticketsData;
+
     Adapter_historique studentAdapter;
     int incr;
     String idAdmin;
@@ -50,6 +53,7 @@ public class Historique extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         recyclerView= findViewById(R.id.recyclerView);
         log= findViewById(R.id.log);
+        ticketsData = new ArrayList<>();
 
         // Référence à la base de données Firebase
         popusCostum = new PopupRegister(Historique.this);
@@ -57,7 +61,7 @@ public class Historique extends AppCompatActivity {
         popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popusCostum.show();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("recu").child(idAdmin);
-        List<Model_ticket> ticketsData = new ArrayList<>();
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -86,6 +90,7 @@ public class Historique extends AppCompatActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(Historique.this));
                     recyclerView.setAdapter(studentAdapter);
                     studentAdapter.notifyDataSetChanged();
+                    studentAdapter.setClickListener(Historique.this);
                 }
 
             }
@@ -99,7 +104,24 @@ public class Historique extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Model_ticket tiket = ticketsData.get(position);
 
+        Intent intent =new Intent(Historique.this,DetailTikets.class);
+        intent.putExtra("id", tiket.getId());
+        intent.putExtra("nom", tiket.getNom());
+        intent.putExtra("prenom", tiket.getPrenom());
+        intent.putExtra("prix", tiket.getMontant());
+        intent.putExtra("numero", tiket.getNumero());
+        intent.putExtra("type_de_maison", tiket.getType());
+        intent.putExtra("debut_de_loca", tiket.getDebutLoca());
+        intent.putExtra("chiffre", tiket.getMontantChiffre());
+        intent.putExtra("date", tiket.getDate());
+        startActivity(intent);
+        finish();
+        Toast.makeText(this, tiket.getId(), Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onBackPressed() {
         incr++;
@@ -109,4 +131,5 @@ public class Historique extends AppCompatActivity {
             finish();
         }
     }
+
 }

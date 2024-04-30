@@ -3,6 +3,7 @@ package com.example.notificationapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -23,19 +25,24 @@ import com.example.notificationapp.models.Model_tenant;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Creat_new_tenant extends AppCompatActivity {
 
     private EditText editTextNom, editTextPrenom, editTextPrix, editTextNumero,
-            editTextTypeMaison, editTextDebutLoca, editTextCaution, editTextAvance;
-    private TextView TextCommune;
+            editTextTypeMaison, editTextCaution, editTextAvance;
+    private TextView TextCommune,editTextDebutLoca;
     DatabaseReference databaseReference;
     Spinner spinnerSites;
     PopusCostum popusCostum;
     PopupRegister popup;
-    ImageView retour3;
+    ImageView retour3,pick;
+    private DatePickerDialog datePickerDialog;
+
     int incr;
     String idAdmin;
     private Button btnValider;
@@ -49,6 +56,7 @@ public class Creat_new_tenant extends AppCompatActivity {
          databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
 
         spinnerSites = findViewById(R.id.spinnerSites);
+        pick = findViewById(R.id.pick);
         editTextNom = findViewById(R.id.editTextNom);
         editTextPrenom = findViewById(R.id.editTextPrenom);
         editTextPrix = findViewById(R.id.editTextPrix);
@@ -89,7 +97,29 @@ public class Creat_new_tenant extends AppCompatActivity {
             }
         });
 
+        pick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault()); // Format "Février 2024" pour la France
+                datePickerDialog = new DatePickerDialog(Creat_new_tenant.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Créer un objet Calendar et le définir sur la date sélectionnée
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, monthOfYear, dayOfMonth);
 
+                        // Formater la date sélectionnée en utilisant le format du mois et de l'année
+                        String mattedDate = monthYearFormat.format(selectedDate.getTime());
+                        editTextDebutLoca.setText(mattedDate);
+                    }
+                }, year, month, dayOfMonth);
+                datePickerDialog.show();
+            }
+        });
         btnValider = findViewById(R.id.btnValider);
         btnValider.setOnClickListener(new View.OnClickListener() {
             @Override
