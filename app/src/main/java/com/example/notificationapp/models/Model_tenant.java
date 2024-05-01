@@ -2,6 +2,7 @@ package com.example.notificationapp.models;
 
 public class Model_tenant {
     private String id;
+    private String idProprie;
     private String nom;
     private String prenom;
     private String prix;
@@ -11,13 +12,15 @@ public class Model_tenant {
     private String debut_de_loca;
     private String caution;
     private String avance;
+    private String statut;
     private String date;
 
     public Model_tenant() {
     }
 
-    public Model_tenant(String id,String nom, String prenom, String prix,String numero,String localite, String type_de_maison, String debut_de_loca, String caution, String avance, String date) {
+    public Model_tenant(String id,String idProprie,String nom, String prenom, String prix,String numero,String localite, String type_de_maison, String debut_de_loca, String caution, String avance,String statut, String date) {
         this.id = id;
+        this.idProprie = idProprie;
         this.nom = nom;
         this.prenom = prenom;
         this.prix = prix;
@@ -27,7 +30,16 @@ public class Model_tenant {
         this.debut_de_loca = debut_de_loca;
         this.caution = caution;
         this.avance = avance;
+        this.statut = statut;
         this.date = date;
+    }
+
+    public String getIdProprie() {
+        return idProprie;
+    }
+
+    public void setIdProprie(String idProprie) {
+        this.idProprie = idProprie;
     }
 
     public String getId() {
@@ -102,22 +114,13 @@ public class Model_tenant {
         this.caution = caution;
     }
 
-    @Override
-    public String toString() {
-        return "Model_tenant{" +
-                "id='" + id + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", prix='" + prix + '\'' +
-                ", numero='" + numero + '\'' +
-                ", type_de_maison='" + type_de_maison + '\'' +
-                ", debut_de_loca='" + debut_de_loca + '\'' +
-                ", caution='" + caution + '\'' +
-                ", avance='" + avance + '\'' +
-                ", date='" + date + '\'' +
-                '}';
+    public String getStatut() {
+        return statut;
     }
 
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
     public String getAvance() {
         return avance;
     }
@@ -134,5 +137,22 @@ public class Model_tenant {
         this.date = date;
     }
 
-
+    @Override
+    public String toString() {
+        return "Model_tenant{" +
+                "id='" + id + '\'' +
+                ", idProprie='" + idProprie + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", prix='" + prix + '\'' +
+                ", numero='" + numero + '\'' +
+                ", localite='" + localite + '\'' +
+                ", type_de_maison='" + type_de_maison + '\'' +
+                ", debut_de_loca='" + debut_de_loca + '\'' +
+                ", caution='" + caution + '\'' +
+                ", avance='" + avance + '\'' +
+                ", statut='" + statut + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

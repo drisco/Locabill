@@ -1,6 +1,8 @@
 package com.example.notificationapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +25,9 @@ public class EspaceLocataires extends AppCompatActivity {
     TextView nomEtPrenom,editer;
     private Fragment historiqueFragment;
     private Fragment paiementFragment;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,12 @@ public class EspaceLocataires extends AppCompatActivity {
         historiqueFragment = new HistoriqueFragment();
         paiementFragment = new PaiementFragment();
         showHistoriqueFragment(null);
+        sharedPreferences = getSharedPreferences("codeconfirm",Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        SharedPreferences donnes =getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
+        String nometprenom = donnes.getString("nometprenom", "");
+        nomEtPrenom.setText(nometprenom);
+
 
 
 

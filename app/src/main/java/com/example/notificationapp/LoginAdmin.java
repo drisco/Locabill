@@ -7,6 +7,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +31,7 @@ public class LoginAdmin extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     int incr;
-    ProgressBar idPBLoading;
+    PopupRegister popup;
     DatabaseReference databaseReference, databaseReference1;
     String codePinValue;
     @Override
@@ -59,7 +61,6 @@ public class LoginAdmin extends AppCompatActivity {
         }
         passwordEdt = findViewById(R.id.idEdtPassword);
         numero = findViewById(R.id.idEdtUserNumero);
-        idPBLoading = findViewById(R.id.idPBLoading);
         register = findViewById(R.id.idTVNewUser);
         btnlogin = findViewById(R.id.idBtnLogin);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
@@ -79,7 +80,10 @@ public class LoginAdmin extends AppCompatActivity {
                 if (numero.getText().toString().isEmpty()|| passwordEdt.getText().toString().isEmpty()){
 
                 }else {
-                    idPBLoading.setVisibility(View.VISIBLE);
+                    popup = new PopupRegister(LoginAdmin.this);
+                    popup.setCancelable(false);
+                    popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popup.show();
                     login(numero.getText().toString(),passwordEdt.getText().toString());
 
                 }
@@ -121,9 +125,7 @@ public class LoginAdmin extends AppCompatActivity {
 
                         // Vérifiez si le mot de passe correspond
                         if (user != null && user.getPwd().equals(password)) {
-                            idPBLoading.setVisibility(View.GONE);
-                            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+codePinValue);
-
+                            popup.dismiss();
                             editor.putString("id", user.getId());
                             editor.putString("nom", user.getUserName());
                             editor.putString("prenom", user.getUserPrenom());
@@ -134,13 +136,13 @@ public class LoginAdmin extends AppCompatActivity {
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                             finish();
                         } else {
-                            idPBLoading.setVisibility(View.GONE);
+                            popup.dismiss();
                             // Le mot de passe est incorrect, affichez un message d'erreur
                             Toast.makeText(getApplicationContext(), "Mot de passe incorrect.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
-                    idPBLoading.setVisibility(View.GONE);
+                    popup.dismiss();
                     // Aucun utilisateur avec ce numéro de téléphone n'a été trouvé, affichez un message d'erreur
                     Toast.makeText(getApplicationContext(), "Aucun utilisateur trouvé avec ce numéro de téléphone.", Toast.LENGTH_SHORT).show();
                 }

@@ -28,7 +28,7 @@
         android:theme="@style/Theme.NotificationApp"
         tools:targetApi="31">
         <activity
-            android:name=".LoginAdmin"
+            android:name=".EspaceLocataires"
             android:exported="false" />
         <activity
             android:name=".DetailTikets"
@@ -73,7 +73,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".EspaceLocataires"
+            android:name=".LoginAdmin"
             android:exported="true"
             android:launchMode="singleTask"
             android:lockTaskMode="if_whitelisted">

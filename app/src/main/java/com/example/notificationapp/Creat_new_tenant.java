@@ -164,7 +164,7 @@ public class Creat_new_tenant extends AppCompatActivity {
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(commune).push();
         String nouvelId = localiteReference.getKey();
 
-        Model_tenant nouveauLocataire = new Model_tenant(nouvelId, nom, prenom, prix, numero,commune, typeMaison, debutLoca, caution, avance, finalFormattedDate);
+        Model_tenant nouveauLocataire = new Model_tenant(nouvelId,idAdmin, nom, prenom, prix, numero,commune, typeMaison, debutLoca, caution, avance,"non", finalFormattedDate);
         popusCostum.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

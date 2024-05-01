@@ -133,7 +133,7 @@ public class UpdateTenant extends AppCompatActivity {
         String finalFormattedDate = formattedDate;
         DatabaseReference locataireReference = databaseReference.child(commune).child(id);
 
-        Model_tenant locataireMaj = new Model_tenant(id, nom, prenom,prix, numero, commune, typeMaison, debutLoca, caution, avance, finalFormattedDate);
+        Model_tenant locataireMaj = new Model_tenant(id,idAdmin, nom, prenom,prix, numero, commune, typeMaison, debutLoca, caution, avance,"non", finalFormattedDate);
         locataireReference.setValue(locataireMaj);
         startActivity(new Intent(UpdateTenant.this, List_of_tenants.class));
         finish();
