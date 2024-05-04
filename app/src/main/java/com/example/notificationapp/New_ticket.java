@@ -211,7 +211,7 @@ public class New_ticket extends AppCompatActivity {
                     int avancein =Integer.parseInt(resultat);
                     avancein +=Integer.parseInt(s.toString());
                     resultat= String.valueOf(avancein);
-                    avance.setText(avancein+" FCFA");
+                    avance.setText(resultat+" FCFA");
                 }else{
                     if (intavance>=intmontant){
                         resultat= String.valueOf(intavance-intmontant);
@@ -249,11 +249,14 @@ public class New_ticket extends AppCompatActivity {
 
 
     private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String heureActuelle = sdf.format(heure);
 
         databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, date);
+        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, date,heureActuelle);
         localiteReference.setValue(nouveauLocataire);
     }
 

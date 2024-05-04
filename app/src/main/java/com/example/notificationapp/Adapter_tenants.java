@@ -3,6 +3,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
     }
 
     // binds the data to the TextView in each row
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Model_tenant user = mData.get(position);
@@ -64,6 +65,12 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
         holder.type.setText("Type : "+user.getType_de_maison());
         holder.date.setText("Date : "+user.getDebut_de_loca());
         holder.adresse.setText("Prix : "+user.getPrix());
+        if (user.getStatut().equals("payé")){
+            holder.statut.setText(user.getStatut());
+        }else{
+            holder.statut.setText(user.getStatut());
+            holder.statut.setTextColor(Color.RED);
+        }
 
 
 /*
@@ -100,7 +107,7 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nom;
-        TextView prenom;
+        TextView prenom,statut;
         TextView numero,caution,avance,date,type,adresse;
         RelativeLayout relative_view;
         ImageView option;
@@ -114,6 +121,7 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
             adresse = itemView.findViewById(R.id.adresse);
             date = itemView.findViewById(R.id.date);
             type = itemView.findViewById(R.id.type);
+            statut = itemView.findViewById(R.id.statut);
             option = itemView.findViewById(R.id.option);
 
             option.setOnClickListener(this);

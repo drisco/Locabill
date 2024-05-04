@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -41,23 +42,35 @@ public class LoginAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_admin);
 
-        SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
-        String idAdmin = donnes.getString("id", "");
-        String nom = donnes.getString("nom", "");
-        String numeroAd = donnes.getString("numero", "");
-        String codepin = donnes.getString("codepin", "");
-        System.out.println("HJEBRJIHRGJNGTENIJTREJGIERIGOI 0001 "+codepin);
+        sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String idAdmin = sharedPreferences.getString("id", "");
+        String nom = sharedPreferences.getString("nom", "");
+        String numeroAd = sharedPreferences.getString("numero", "");
+        String codepin = sharedPreferences.getString("codepin", "");
+        SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
+        String idloca = loca.getString("id", "");
+        Log.d("tag","toutes les données :" + idAdmin + " " + nom + " " + numeroAd);
+
 
         if (!idAdmin.isEmpty() || !nom.isEmpty()||!numeroAd.isEmpty()){
-
+            System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ000");
             if (!codepin.isEmpty()){
+                System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ222");
                 startActivity(new Intent(LoginAdmin.this,Login.class));
                 finish();
             }else{
+                System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ111");
                 startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                 finish();
             }
 
+        }else {
+            System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJVRAI");
+            if (!idloca.isEmpty()){
+                startActivity(new Intent(LoginAdmin.this,EspaceLocataires.class));
+                finish();
+            }
         }
         passwordEdt = findViewById(R.id.idEdtPassword);
         numero = findViewById(R.id.idEdtUserNumero);
@@ -65,8 +78,6 @@ public class LoginAdmin extends AppCompatActivity {
         btnlogin = findViewById(R.id.idBtnLogin);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("codepin");
-        sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,9 +103,6 @@ public class LoginAdmin extends AppCompatActivity {
     }
 
     private void login(String number, String password) {
-        // Récupérez une référence à la base de données Firebase
-
-// Vérifiez si un utilisateur existe avec le numéro de téléphone et le mot de passe fournis
         databaseReference.orderByChild("numeros").equalTo(number).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,7 +162,6 @@ public class LoginAdmin extends AppCompatActivity {
             }
 
         });
-
     }
     @Override
     public void onBackPressed() {

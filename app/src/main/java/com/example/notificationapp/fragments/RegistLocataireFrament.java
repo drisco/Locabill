@@ -47,7 +47,7 @@ public class RegistLocataireFrament  extends Fragment {
     private final String channelId = "countdown_notification_channel";
     private final int notificationId = 1;
     TextView dBtnRegister;
-    String idAdmin, id,ville,nometprenom;
+    String idAdmin, id,ville,nom,prenom,numero,somme,caution,avance,debutUsage,type;
     PopupRegister popup;
     private final int PERMISSION_REQUEST_CODE = 100;
     SharedPreferences sharedPreferences;
@@ -99,7 +99,14 @@ public class RegistLocataireFrament  extends Fragment {
                                     editor.putString("idAdmin",idAdmin );
                                     editor.putString("id",id );
                                     editor.putString("ville", ville);
-                                    editor.putString("nometprenom", nometprenom);
+                                    editor.putString("nom", nom);
+                                    editor.putString("prenom", prenom);
+                                    editor.putString("caution", caution);
+                                    editor.putString("avance", avance);
+                                    editor.putString("debutUsage", debutUsage);
+                                    editor.putString("type", type);
+                                    editor.putString("numero", numero);
+                                    editor.putString("somme", somme);
                                     editor.apply();
                                     startActivity(new Intent(getContext(), EspaceLocataires.class));
 
@@ -164,7 +171,14 @@ public class RegistLocataireFrament  extends Fragment {
                                     idAdmin=utilisateur.getIdProprie();
                                     id=utilisateur.getId();
                                     ville=utilisateur.getLocalite();
-                                    nometprenom=utilisateur.getNom()+utilisateur.getPrenom();
+                                    numero=utilisateur.getNumero();
+                                    somme=utilisateur.getPrix();
+                                    nom=utilisateur.getNom();
+                                    prenom=utilisateur.getPrenom();
+                                    type=utilisateur.getType_de_maison();
+                                    caution=utilisateur.getCaution();
+                                    avance=utilisateur.getAvance();
+                                    debutUsage=utilisateur.getDebut_de_loca();
                                     dBtnRegister.setText("Comfirmer");
                                     confCodesv.setVisibility(View.VISIBLE);
                                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

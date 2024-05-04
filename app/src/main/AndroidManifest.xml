@@ -97,7 +97,7 @@
         </provider>
 
         <service android:name=".SmsReminderService" />
-
+        <service android:name=".models.MesServices" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 

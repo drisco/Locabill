@@ -32,8 +32,8 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
     RecyclerView recyclerView;
     Adapter_tickets adapterTickets;
     PopupRegister popusCostum;
-    List<Model_ticket> ticketsData;
-    ImageView retour2;String idAdmin,id_2;
+    ImageView retour2;
+    String idAdmin,id_2;
     RelativeLayout log;
     int incr;
 

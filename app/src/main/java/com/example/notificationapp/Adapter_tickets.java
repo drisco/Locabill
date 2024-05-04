@@ -25,7 +25,7 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
     private ItemClickListener mClickListener;
     Context context;
 
-    Adapter_tickets(Context context, List<Model_ticket> data) {
+    public  Adapter_tickets(Context context, List<Model_ticket> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -82,6 +82,7 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView  date1,s_chiffre1,caution1,avance1,debut1,type1,montant1,number1,userPrenom1,userNom1,date2;
         ImageView qrImageView1;
+        RelativeLayout itemview;
         ViewHolder(View itemView) {
             super(itemView);
             date1 = itemView.findViewById(R.id.date1);
@@ -96,6 +97,8 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
             userNom1 = itemView.findViewById(R.id.userNom1);
             qrImageView1 = itemView.findViewById(R.id.qrImageView1);
             date2 = itemView.findViewById(R.id.date2);
+            itemview = itemView.findViewById(R.id.itemview);
+            itemview.setOnClickListener((View.OnClickListener) this);
 
 
         }
@@ -108,7 +111,7 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
 
 

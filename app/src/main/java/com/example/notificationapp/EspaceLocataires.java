@@ -2,6 +2,7 @@ package com.example.notificationapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -46,10 +47,19 @@ public class EspaceLocataires extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("codeconfirm",Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         SharedPreferences donnes =getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
-        String nometprenom = donnes.getString("nometprenom", "");
-        nomEtPrenom.setText(nometprenom);
+        String nom= donnes.getString("nom", "");
+        String prenom = donnes.getString("prenom", "");
+        nomEtPrenom.setText(nom+" "+prenom);
 
-
+        deconnexion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.clear();
+                editor.apply();
+                startActivity(new Intent(EspaceLocataires.this,RegisterAdmin.class));
+                finish();
+            }
+        });
 
 
 

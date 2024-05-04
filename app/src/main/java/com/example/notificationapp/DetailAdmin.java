@@ -85,7 +85,7 @@ public class DetailAdmin extends AppCompatActivity {
 
         name.setText(nom);
         pseudo.setText(prenom);
-        number.setText("+225 "+numero);
+        number.setText(numero);
 
         weekDays = Arrays.asList("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
         monthDays = new ArrayList<>();
@@ -158,8 +158,8 @@ public class DetailAdmin extends AppCompatActivity {
                 llmois = bottomSheetView.findViewById(R.id.llmois);
                 llsemaine = bottomSheetView.findViewById(R.id.llsemaine);
                 val = bottomSheetView.findViewById(R.id.val);
-                editor.putString("selectedDayOfWeek", selectedDayOfWeek);
-                editor.apply();
+                editor1.putString("selectedDayOfWeek", selectedDayOfWeek);
+                editor1.apply();
                 tvjour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

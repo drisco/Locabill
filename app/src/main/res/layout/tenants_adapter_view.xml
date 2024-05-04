@@ -12,6 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp">
+        <TextView
+            android:id="@+id/st"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Statut :"/>
+
+        <TextView
+            android:id="@+id/statut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/green"
+            android:layout_toEndOf="@+id/st"
+            android:text="payé" />
         <ImageView
             android:id="@+id/option"
             android:layout_alignParentEnd="true"

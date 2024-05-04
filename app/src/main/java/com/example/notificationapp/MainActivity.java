@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
              recipients = recupererNumeros(listedesnumeros);
             scheduleSMSEvery30Seconds(messageparseconde,recipients);
-            System.out.println("vnvcbncvnbnbcnbcnbvcnnvcnvcvncnvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb "+recipients);
         }
        
 
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         foot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Bricefile.class));
+                //startActivity(new Intent(MainActivity.this, Bricefile.class));
             }
         });
         rl1.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scheduleSMSEvery30Seconds(String message, List<String> recipients) {
-        System.out.println("BVVCBNNBVCBNVCVCNBVBNCVBNVCBNBNVCBNVCBNVCBNCVBNCVBNVCBNVCBNBNCVN "+recipients);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);

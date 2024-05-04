@@ -32,9 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Historique extends AppCompatActivity implements Adapter_historique.ItemClickListener {
-    private AdapterCityGroup classAdapter;
     List<Model_ticket> ticketsData;
-
     Adapter_historique studentAdapter;
     int incr;
     String idAdmin;
@@ -75,11 +73,9 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         Model_ticket ticket = snapshot1.getValue(Model_ticket.class);
                         ticketsData.add(ticket);
-                        System.out.println("BNXN?CVNCXN?CVXNCNCNVNNVNVNBVNNB "+ticket.getCaution());
                     }
 
                 }
-                System.out.println("BNXN?CVNCXN?CVXNCNCNVNNVNVNBVNNB "+ticketsData);
                 if (ticketsData.isEmpty()){
                     popusCostum.cancel();
                     log.setVisibility(View.VISIBLE);

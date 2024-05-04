@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.notificationapp.models.CityItem;
 import com.example.notificationapp.models.Model_tenant;
+import com.example.notificationapp.models.Model_ticket;
+import com.example.notificationapp.models.StatutRecu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,8 +45,9 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     public RecyclerView recyclerView;
     PopupRegister popusCostum;
     PopupRegister popup;
+    Handler handler;
 
-    public Adapter_tenants tenantAdapter;
+
     public ListeTenantAdapter listAdapter;
     Model_tenant user;
     int incr;
@@ -51,7 +55,8 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     TextView empty;
     ImageView retour2;
     RelativeLayout log;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,databaseReference2;
+    Model_tenant tenant;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -60,11 +65,13 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         setContentView(R.layout.activity_list_of_tenants);
         retour2 =findViewById(R.id.retour2);
         log =findViewById(R.id.log);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
+        handler = new Handler();
 
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
+        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
         retour2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,9 +83,37 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         popusCostum.setCancelable(false);
         popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popusCostum.show();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
 
         // Écouteur d'événements pour lire les données depuis Firebase
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Récupérer les données des utilisateurs
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        popusCostum.cancel();
+
+                        for (DataSnapshot citySnapshot : dataSnapshot.getChildren()) {
+                            List<Model_tenant> tenants = new ArrayList<>();
+                            for (DataSnapshot tenantSnapshot : citySnapshot.getChildren()) {
+                                tenant = tenantSnapshot.getValue(Model_tenant.class);
+                                tenants.add(tenant);
+                                ajouterRecuAuto(tenant);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Gérer les erreurs
+                    }
+                });
+
+                // Planifier la prochaine exécution dans 10 minutes
+                handler.postDelayed(this, 10 * 60 * 1000); // 10 minutes * 60 secondes * 1000 millisecondes
+            }
+        }, 10 * 60 * 1000); // Démarrer la première exécution dans 10 minutes
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -89,7 +124,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                     String cityName = citySnapshot.getKey();
                     List<Model_tenant> tenants = new ArrayList<>();
                     for (DataSnapshot tenantSnapshot : citySnapshot.getChildren()) {
-                        Model_tenant tenant = tenantSnapshot.getValue(Model_tenant.class);
+                         tenant = tenantSnapshot.getValue(Model_tenant.class);
                         tenants.add(tenant);
 
                     }
@@ -129,6 +164,18 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
 
     }
 
+    private void ajouterRecuAuto(Model_tenant tenant) {
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        String dateFormatted = sdf2.format(heure);
+        String heureActuelle = sdf.format(heure);
+        DatabaseReference localiteReference = databaseReference2.child(tenant.getIdProprie()).child(tenant.getId()).push();
+        String nouvelId = localiteReference.getKey();
+        StatutRecu statut = new StatutRecu(nouvelId, tenant.getIdProprie(), tenant.getId(), tenant.getStatut(),dateFormatted,heureActuelle, tenant.getPrix());
+        localiteReference.child(nouvelId).setValue(statut);
+        databaseReference.child(tenant.getLocalite()).child(tenant.getId()).child("statut").setValue("impayé");
+    }
 
 
     @Override
