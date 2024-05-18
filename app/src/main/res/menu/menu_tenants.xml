@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/creer"
-        android:title="creer facture" />
+        android:title="Réçu" />
     <item
         android:id="@+id/historique"
-        android:title="historique" />
+        android:title="Historique" />
     <item
         android:id="@+id/modifier"
-        android:title="modifier" />
+        android:title="Modifier" />
     <item
         android:id="@+id/supprimer"
         android:title="Supprimer" />

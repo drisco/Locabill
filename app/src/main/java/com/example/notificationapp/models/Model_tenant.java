@@ -14,11 +14,12 @@ public class Model_tenant {
     private String avance;
     private String statut;
     private String date;
+    private String pasword;
 
     public Model_tenant() {
     }
 
-    public Model_tenant(String id,String idProprie,String nom, String prenom, String prix,String numero,String localite, String type_de_maison, String debut_de_loca, String caution, String avance,String statut, String date) {
+    public Model_tenant(String id,String idProprie,String nom, String prenom, String prix,String numero,String localite, String type_de_maison, String debut_de_loca, String caution, String avance,String statut, String date, String pasword) {
         this.id = id;
         this.idProprie = idProprie;
         this.nom = nom;
@@ -32,6 +33,7 @@ public class Model_tenant {
         this.avance = avance;
         this.statut = statut;
         this.date = date;
+        this.pasword = pasword;
     }
 
     public String getIdProprie() {
@@ -137,6 +139,14 @@ public class Model_tenant {
         this.date = date;
     }
 
+    public String getPasword() {
+        return pasword;
+    }
+
+    public void setPasword(String pasword) {
+        this.pasword = pasword;
+    }
+
     @Override
     public String toString() {
         return "Model_tenant{" +
@@ -153,6 +163,7 @@ public class Model_tenant {
                 ", avance='" + avance + '\'' +
                 ", statut='" + statut + '\'' +
                 ", date='" + date + '\'' +
+                ", pasword='" + pasword + '\'' +
                 '}';
     }
 }

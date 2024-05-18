@@ -251,7 +251,8 @@ public class New_ticket extends AppCompatActivity {
     private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String heureActuelle = sdf.format(heure);
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle  = sdf.format(heure);
 
         databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();

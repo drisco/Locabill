@@ -62,6 +62,9 @@ public class HistoriqueFragment extends Fragment implements Adapter_tickets.Item
         recyclerView =view.findViewById(R.id.recyclerView0);
         log =view.findViewById(R.id.log0);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
         popusCostum = new PopupRegister(getActivity());
         popusCostum.setCancelable(false);
         popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -88,8 +91,7 @@ public class HistoriqueFragment extends Fragment implements Adapter_tickets.Item
                 }else{
                     popusCostum.cancel();
                     // Mettre à jour l'adaptateur avec les nouvelles données
-                    adapterTickets = new Adapter_tickets(requireContext(),ticketsData);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapterTickets = new Adapter_tickets(getContext(),ticketsData);
                     recyclerView.setAdapter(adapterTickets);
                     //adapterTickets.setClickListener((Adapter_tickets.ItemClickListener) getActivity());
                     adapterTickets.notifyDataSetChanged();

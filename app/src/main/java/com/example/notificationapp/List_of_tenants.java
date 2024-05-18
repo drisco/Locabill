@@ -45,7 +45,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     public RecyclerView recyclerView;
     PopupRegister popusCostum;
     PopupRegister popup;
-    Handler handler;
 
 
     public ListeTenantAdapter listAdapter;
@@ -65,7 +64,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         setContentView(R.layout.activity_list_of_tenants);
         retour2 =findViewById(R.id.retour2);
         log =findViewById(R.id.log);
-        handler = new Handler();
 
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
@@ -85,35 +83,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         popusCostum.show();
 
         // Écouteur d'événements pour lire les données depuis Firebase
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Récupérer les données des utilisateurs
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        popusCostum.cancel();
-
-                        for (DataSnapshot citySnapshot : dataSnapshot.getChildren()) {
-                            List<Model_tenant> tenants = new ArrayList<>();
-                            for (DataSnapshot tenantSnapshot : citySnapshot.getChildren()) {
-                                tenant = tenantSnapshot.getValue(Model_tenant.class);
-                                tenants.add(tenant);
-                                ajouterRecuAuto(tenant);
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Gérer les erreurs
-                    }
-                });
-
-                // Planifier la prochaine exécution dans 10 minutes
-                handler.postDelayed(this, 10 * 60 * 1000); // 10 minutes * 60 secondes * 1000 millisecondes
-            }
-        }, 10 * 60 * 1000); // Démarrer la première exécution dans 10 minutes
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -163,21 +132,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             listAdapter.setClickListener(this);
 
     }
-
-    private void ajouterRecuAuto(Model_tenant tenant) {
-        Date heure = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        String dateFormatted = sdf2.format(heure);
-        String heureActuelle = sdf.format(heure);
-        DatabaseReference localiteReference = databaseReference2.child(tenant.getIdProprie()).child(tenant.getId()).push();
-        String nouvelId = localiteReference.getKey();
-        StatutRecu statut = new StatutRecu(nouvelId, tenant.getIdProprie(), tenant.getId(), tenant.getStatut(),dateFormatted,heureActuelle, tenant.getPrix());
-        localiteReference.child(nouvelId).setValue(statut);
-        databaseReference.child(tenant.getLocalite()).child(tenant.getId()).child("statut").setValue("impayé");
-    }
-
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId()==R.id.supprimer){

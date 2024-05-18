@@ -5,11 +5,19 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
@@ -17,6 +25,7 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -27,6 +36,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotificationApp"
         tools:targetApi="31">
+        <activity
+            android:name=".AnnonceInfos"
+            android:exported="false" />
+        <activity
+            android:name=".AnnonceProbleme"
+            android:exported="false" />
+        <activity
+            android:name=".TestActivity"
+            android:exported="false" />
         <activity
             android:name=".EspaceLocataires"
             android:exported="false" />
@@ -94,11 +112,32 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
+        </provider> <!-- TOUT LES SERVICES DE MON PROJET SE TROUVENT ICI -->
+        <service android:name=".messervice.SmsReminderService" />
 
-        <service android:name=".SmsReminderService" />
-        <service android:name=".models.MesServices" />
-        <receiver android:name=".AlarmReceiver" />
+        <receiver
+            android:name=".messervice.MainBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="com.example.notificationapp.messervice.ACTION_CUSTOM" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".messervice.MesServices"
+            android:exported="false" />
+
+        <receiver
+            android:name=".messervice.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="com.example.notificationapp.messervice.ACTION_CUSTOM" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

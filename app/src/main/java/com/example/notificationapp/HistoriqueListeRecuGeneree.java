@@ -63,7 +63,7 @@ public class HistoriqueListeRecuGeneree extends AppCompatActivity {
         popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popusCostum.show();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("recu").child(idAdmin).child(id_2);
-        List<Model_ticket> ticketsData = new ArrayList<>();
+            List<Model_ticket> ticketsData = new ArrayList<>();
 
         reference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")

@@ -1,45 +1,21 @@
 package com.example.notificationapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.notificationapp.fragments.HistoriqueFragment;
-import com.example.notificationapp.fragments.PaiementFragment;
 import com.example.notificationapp.fragments.RegistLocataireFrament;
 import com.example.notificationapp.fragments.RegistProprieFragment;
-import com.example.notificationapp.models.Admin;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class RegisterAdmin extends AppCompatActivity {
     ImageView retour,traitPay,traitHis;
     private Fragment regisLocataireFragment;
     private Fragment registProrietFragment;
-int incr;
+    int incr;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

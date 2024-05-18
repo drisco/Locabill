@@ -31,6 +31,7 @@
 
     <RelativeLayout
         android:id="@+id/rl"
+        android:layout_below="@+id/idTVNewUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -53,9 +54,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_below="@+id/image_profil"
-            android:text="Connexion"
+            android:text="Se connecter"
             android:textColor="@color/white"
-            android:textSize="35dp"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
         <!--edit text for user name-->
@@ -66,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/wx"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:hint="Enter Votre Numéro"
             android:padding="5dp"
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idTILUserName"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
             android:hint="Enter votre Mot de passe"
             android:padding="5dp"
@@ -130,7 +131,7 @@
             android:padding="15dp"
             android:background="@drawable/new_border"
             android:backgroundTint="#0F7C49"
-            android:text="Connecter"
+            android:text="Connexion"
             android:textAllCaps="false" />
 
         <!--text view for creating a new account-->
@@ -148,42 +149,7 @@
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/progress_back"
             android:visibility="gone" />
-        <RelativeLayout
-            android:id="@+id/googlesign"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/idBtnLogin"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="45dp"
-            android:background="@drawable/border_black"
-            android:orientation="horizontal"
-            android:padding="5dp">
 
-            <ImageView
-                android:id="@+id/im"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:layout_marginStart="17dp"
-                android:src="@drawable/lock" />
-
-            <TextView
-                android:id="@+id/bz"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="27dp"
-                android:layout_toEndOf="@+id/im"
-                android:gravity="center"
-                android:paddingTop="3dp"
-                android:text="Sign up with google"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -193,7 +159,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
         android:textColor="#8B8F8B"

@@ -3,7 +3,7 @@
     android:enterFadeDuration="150"
     android:exitFadeDuration="100">
     <item android:state_pressed="true">
-        <color android:color="#11000000"/>
+        <color android:color="#ffffffff"/>
     </item>
     <item android:state_selected="true">
         <color android:color="#11000000"/>

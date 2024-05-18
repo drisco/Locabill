@@ -6,15 +6,15 @@ import android.app.Dialog;
 import android.widget.TextView;
 
 public class AlertPaiement extends Dialog {
-    TextView btnCancel,titre,message;
+    TextView btnCancel,titre,message,retard;
     @SuppressLint("MissingInflatedId")
     public AlertPaiement(Activity activity) {
         super(activity, androidx.appcompat.R.style.Base_Theme_AppCompat_Dialog_Alert);
         setContentView(R.layout.alerte_paiement);
-
         // Récupérer le bouton "Annuler" et ajouter un écouteur de clic
         btnCancel = findViewById(R.id.btnCancel);
         titre = findViewById(R.id.titre);
+        retard = findViewById(R.id.retard);
         message = findViewById(R.id.message);
     }
     public TextView getRetour() {
@@ -32,5 +32,23 @@ public class AlertPaiement extends Dialog {
     // Méthode pour définir le texte du message
     public void setMessageText(String text) {
         message.setText(text);
+    }
+
+    public void setCancelBackground(int drawableResId) {
+        btnCancel.setBackgroundResource(drawableResId);
+    }
+
+    // Méthode pour définir la couleur du texte du bouton "Annuler"
+    public void setCancelTextColor(int colorResId) {
+        btnCancel.setTextColor(getContext().getResources().getColor(colorResId));
+    }
+    public void setTitreColor(int colorResId) {
+        titre.setTextColor(getContext().getResources().getColor(colorResId));
+    }
+    public void setRetardTextColor(int colorResId) {
+        retard.setTextColor(getContext().getResources().getColor(colorResId));
+    }
+    public void setRetard(String text) {
+        retard.setText(text);
     }
 }

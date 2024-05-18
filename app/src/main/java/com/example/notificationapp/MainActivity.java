@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -24,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.notificationapp.messervice.AlarmReceiver;
+import com.example.notificationapp.messervice.MainBroadcastReceiver;
+import com.example.notificationapp.messervice.RappelPlaning;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,37 +56,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+
+        }
+
         rl1=findViewById(R.id.rl1);
         profil=findViewById(R.id.profil);
         rl2=findViewById(R.id.rl2);
         rlt2=findViewById(R.id.rlt2);
         r2=findViewById(R.id.r2);
         TextView foot=findViewById(R.id.foot);
-        sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);
 
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
 
-        String messagejour = sharedPreferences1.getString("messagejour", "Aucun rappel n'a été planifier");
-        String messagesemaine = sharedPreferences1.getString("messagesemaine", "");
-        String messagemois = sharedPreferences1.getString("messagemois", "");
-        String selectedDayOfWeek = sharedPreferences1.getString("selectedDayOfWeek", "");
-        String selectedDayOfMonth = sharedPreferences1.getString("selectedDayOfMonth", "");
+        if (!idAdmin.isEmpty()){
+            Intent intent = new Intent(getApplicationContext(), MainBroadcastReceiver.class);
+            intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
+            RappelPlaning.schedulepaiement(this);
+            RappelPlaning.scheduleChaquefindumois(this);
+        }
+
+        sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);
 
         String messageparseconde = sharedPreferences1.getString("messageparseconde", "");
         String listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
 
         if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
              recipients = recupererNumeros(listedesnumeros);
-            scheduleSMSEvery30Seconds(messageparseconde,recipients);
         }
-       
 
-        if (!selectedDayOfMonth.isEmpty()){
-            scheduleSMSOnWeek(selectedDayOfWeek,messagesemaine,recipients);
-            scheduleSMSOnSelectedDate(selectedDayOfMonth,messagemois,recipients);
-            scheduleSMSDaily(messagejour,recipients);
-        }
 
         profil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         foot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(MainActivity.this, Bricefile.class));
+                /*startActivity(new Intent(MainActivity.this, TestActivity.class));
+                finish();*/
             }
         });
         rl1.setOnClickListener(new View.OnClickListener() {
@@ -142,84 +148,7 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-    private void scheduleSMSEvery30Seconds(String message, List<String> recipients) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
-        intent.putExtra("message", message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
 
-        // Utilisez AlarmManager pour planifier l'envoi de SMS toutes les 30 secondes
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP, // Type d'alarme : RTC_WAKEUP permet de réveiller l'appareil s'il est en veille
-                System.currentTimeMillis(), // Début de l'alarme (maintenant)
-                30 * 1000, // Intervalle entre les répétitions (30 secondes)
-                pendingIntent
-        );
-    }
-
-
-    private void scheduleSMSDaily(String messagejour, List<String> recipients) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
-        intent.putExtra("message", messagejour);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
-
-
-        // Définissez l'heure à laquelle vous souhaitez envoyer le SMS chaque jour
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9); // Heure d'envoi du SMS (9h00)
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-
-        // Utilisez AlarmManager pour planifier l'envoi de SMS chaque jour à l'heure spécifiée
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
-
-
-    private void scheduleSMSOnSelectedDate(String selectedDate, String messagemois, List<String> recipients) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
-        intent.putExtra("message", messagemois);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
-
-
-        // Définissez la date à laquelle vous souhaitez envoyer le SMS chaque mois
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-
-            // Exemple : planifiez l'envoi de SMS chaque 25 du mois à l'heure spécifiée
-            calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDate)); // Utilisez la date sélectionnée
-            calendar.set(Calendar.HOUR_OF_DAY, 10); // Heure d'envoi du SMS (10h00)
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-
-            // Utilisez AlarmManager pour planifier l'envoi de SMS chaque mois à la date spécifiée
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 30, pendingIntent);
-
-    }
-
-
-    private void scheduleSMSOnWeek(String selectedDayOfWeek, String messagesemaine, List<String> recipients) {
-        int jour = getJourSemaineCalendrier(selectedDayOfWeek);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putStringArrayListExtra("recipients", (ArrayList<String>) recipients);
-        intent.putExtra("message", messagesemaine);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,  PendingIntent.FLAG_IMMUTABLE);
-         // Définissez l'heure à laquelle vous souhaitez envoyer le SMS chaque mercredi
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_WEEK, jour);
-            calendar.set(Calendar.HOUR_OF_DAY, 9); // Heure d'envoi du SMS (9h00)
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-
-            // Utilisez AlarmManager pour planifier l'envoi de SMS chaque mercredi à l'heure spécifiée
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
-
-    }
 
     private int getJourSemaineCalendrier(String jourSemaine) {
         switch (jourSemaine) {

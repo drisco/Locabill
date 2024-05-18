@@ -151,6 +151,7 @@ public class RegistProprieFragment  extends Fragment {
                     editor.putString("prenom", userPrenom);
                     editor.putString("numero", numeros);
                     editor.putString("mdp", pwd);
+                    editor.putString("proprie", "proprie");
                     editor.apply();
                     Admin nouveauAdmin =new Admin(nouvelId,userNames,userPrenom,numeros,pwd, finalFormattedDate);
                     localiteReference.setValue(nouveauAdmin);

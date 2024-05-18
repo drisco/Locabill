@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -11,7 +12,8 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-            android:src="@drawable/lock"/>
+            android:src="@drawable/locabill"
+            app:tint="@color/blue" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,25 +22,24 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="16dp"
-            android:text="Veuillez saisir un mot de passe de 4 chiffres pour securiser votre compte"/>
+            android:text="Modification "/>
         <TextView
             android:id="@+id/textViewNom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:textSize="14dp"
-            android:text="Saisisser le code pin"/>
+            android:text="Votre Nom"/>
 
         <EditText
-            android:id="@+id/editTex"
+            android:id="@+id/editNom"
             android:layout_width="match_parent"
             android:background="@drawable/border_black"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:textSize="18dp"
             android:gravity="end"
-            android:layout_below="@id/textViewNom"
-            android:inputType="number"/>
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/textViewNom1"
@@ -46,24 +47,57 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:textSize="14dp"
-            android:text="Comfirmer le code pin"/>
+            android:text="Votre prénom"/>
 
         <EditText
-            android:id="@+id/editTex1"
+            android:id="@+id/editPrenom"
             android:layout_width="match_parent"
             android:background="@drawable/border_black"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:textSize="18dp"
             android:gravity="end"
-            android:layout_below="@id/textViewNom"
-            android:inputType="number"/>
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="14dp"
+            android:text="Votre Numéro de télephone"/>
+
+        <EditText
+            android:id="@+id/numeroet"
+            android:layout_width="match_parent"
+            android:background="@drawable/border_black"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18dp"
+            android:gravity="end"
+            android:inputType="phone"/>
+
+        <TextView
+            android:id="@+id/mdpt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="14dp"
+            android:text="Votre Mot de passe"/>
+
+        <EditText
+            android:id="@+id/mdp"
+            android:layout_width="match_parent"
+            android:background="@drawable/border_black"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18dp"
+            android:gravity="end"
+            android:inputType="numberPassword"/>
 
         <Button
-            android:id="@+id/btnVal"
+            android:id="@+id/btnValet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextAvance"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="25dp"
             android:layout_marginTop="25dp"

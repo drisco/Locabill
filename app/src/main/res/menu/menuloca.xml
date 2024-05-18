@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/codep"
+        android:title="Code pin" />
+    <item
+        android:id="@+id/probleme"
+        android:title="problème" />
+    <item
+        android:id="@+id/deco"
+        android:title="Se deconnecter" />
+
+    <!--<item
+        android:id="@+id/supprimer"
+        android:title="Supprimer" />-->
+</menu>

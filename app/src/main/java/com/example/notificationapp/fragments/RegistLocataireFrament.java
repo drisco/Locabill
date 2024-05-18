@@ -30,6 +30,7 @@ import com.example.notificationapp.EspaceLocataires;
 import com.example.notificationapp.LoginAdmin;
 import com.example.notificationapp.PopupRegister;
 import com.example.notificationapp.R;
+import com.example.notificationapp.models.Model_code_pin;
 import com.example.notificationapp.models.Model_tenant;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,13 +47,15 @@ public class RegistLocataireFrament  extends Fragment {
     TextInputLayout confCodesv;
     private final String channelId = "countdown_notification_channel";
     private final int notificationId = 1;
+    Model_tenant utilisateur;
     TextView dBtnRegister;
-    String idAdmin, id,ville,nom,prenom,numero,somme,caution,avance,debutUsage,type;
+    String idAdmin, id,ville,nom,prenom,numero,somme,caution,avance,debutUsage,type,codeloca,password;
     PopupRegister popup;
     private final int PERMISSION_REQUEST_CODE = 100;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    DatabaseReference reference;
+    DatabaseReference reference, databaseReference1;
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,8 +65,14 @@ public class RegistLocataireFrament  extends Fragment {
         confCodesv =view.findViewById(R.id.confCode);
         phone =view.findViewById(R.id.phonep);
         dBtnRegister =view.findViewById(R.id.dBtnRegister);
-        createNotificationChannel();
+        //createNotificationChannel();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+
+        }
         reference = FirebaseDatabase.getInstance().getReference().child("localites");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("codepin");
+
         sharedPreferences = getActivity().getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -82,16 +91,13 @@ public class RegistLocataireFrament  extends Fragment {
                             popup.setCancelable(true);
                             popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                             popup.show();
-                            System.out.println("JFJKHGKFGKJHGF JGIRUGIHI JIRGIFHUGHRIHTG JHERIOHHEHI  "+"123");
 
                             confCodesv.setVisibility(View.VISIBLE);
                             SharedPreferences donnes = getContext().getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
                             String code = donnes.getString("codeconfirm", "");
                             if (!confCode.getText().toString().isEmpty()){
                                 String ccode=confCode.getText().toString();
-                                System.out.println("CODE "+code);
-                                System.out.println("JFJKHGKFGKJHGF JGIRUGIHI JIRGIFHUGHRIHTG JHERIOHHEHI  "+ccode);
-                                if (ccode.equals(code)){
+                                if (ccode.equals(password)){
                                     popup.dismiss();
                                     editor.clear();
                                     editor.apply();
@@ -107,13 +113,20 @@ public class RegistLocataireFrament  extends Fragment {
                                     editor.putString("type", type);
                                     editor.putString("numero", numero);
                                     editor.putString("somme", somme);
+                                    editor.putString("codepin", codeloca);
+                                    editor.putString("mdp", password);
                                     editor.apply();
+                                    Toast.makeText(getContext(), nom+prenom, Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getContext(), EspaceLocataires.class));
+                                    getActivity().finish();
 
+                                }else {
+                                    popup.dismiss();
+                                    Toast.makeText(getContext(), "Le mot de passe est incorrect", Toast.LENGTH_SHORT).show();
                                 }
                             }else {
                                 popup.dismiss();
-                                Toast.makeText(getContext(), "Veuillez saisir le code", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Veuillez saisir le mot de passe", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -144,7 +157,6 @@ public class RegistLocataireFrament  extends Fragment {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-                    sendNotification(generateRandomNumber());
                 }
             } else {
                 // Si l'utilisateur refuse la permission, afficher un message
@@ -157,46 +169,67 @@ public class RegistLocataireFrament  extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Pour chaque enfant de "idNoeud3"
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Récupérer les données de l'utilisateur
-                    for (DataSnapshot noeud2 :snapshot.getChildren()){
-                        for (DataSnapshot noeud3 :noeud2.getChildren()){
-                            Model_tenant utilisateur = noeud3.getValue(Model_tenant.class);
-                            System.out.println("Numero: " + utilisateur.getNumero());
-                            // Faire ce que vous voulez avec les données de l'utilisateur
-                            if (utilisateur != null) {
-                                popup.dismiss();
-                                if (utilisateur.getNumero().equals(number)){
-                                    idAdmin=utilisateur.getIdProprie();
-                                    id=utilisateur.getId();
-                                    ville=utilisateur.getLocalite();
-                                    numero=utilisateur.getNumero();
-                                    somme=utilisateur.getPrix();
-                                    nom=utilisateur.getNom();
-                                    prenom=utilisateur.getPrenom();
-                                    type=utilisateur.getType_de_maison();
-                                    caution=utilisateur.getCaution();
-                                    avance=utilisateur.getAvance();
-                                    debutUsage=utilisateur.getDebut_de_loca();
-                                    dBtnRegister.setText("Comfirmer");
-                                    confCodesv.setVisibility(View.VISIBLE);
-                                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
 
-                                    } else {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            sendNotification(generateRandomNumber());
-                                        }
+                if (dataSnapshot.exists()){
+                    boolean paiementEffectue = false;
+                    boolean isNumber = false;
+
+                    
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        // Récupérer les données de l'utilisateur
+                        for (DataSnapshot noeud2 :snapshot.getChildren()){
+                            for (DataSnapshot noeud3 :noeud2.getChildren()){
+                                 utilisateur = noeud3.getValue(Model_tenant.class);
+                                // Faire ce que vous voulez avec les données de l'utilisateur
+                                if (utilisateur != null) {
+                                    paiementEffectue = true;
+                                    popup.dismiss();
+                                    if (utilisateur.getNumero().equals(number)){
+                                        password= utilisateur.getPasword();
+                                            idAdmin=utilisateur.getIdProprie();
+                                            id=utilisateur.getId();
+                                            ville=utilisateur.getLocalite();
+                                            numero=utilisateur.getNumero();
+                                            somme=utilisateur.getPrix();
+                                            nom=utilisateur.getNom();
+                                            prenom=utilisateur.getPrenom();
+                                            type=utilisateur.getType_de_maison();
+                                            caution=utilisateur.getCaution();
+                                            avance=utilisateur.getAvance();
+                                            debutUsage=utilisateur.getDebut_de_loca();
+                                            dBtnRegister.setText("Comfirmer");
+                                            confCodesv.setVisibility(View.VISIBLE);
+                                            databaseReference1.child(id).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                        Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
+                                                        if (codePin != null) {
+                                                            codeloca = codePin.getCode();
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    System.out.println("Erreur : " + databaseError.getMessage());
+                                                }
+                                            });
+
+                                        
                                     }
                                 }
-                            }else{
-                                popup.dismiss();
-                                Toast.makeText(getContext(), "Aucun Compte trouvé avec ce numero", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
+                    if (paiementEffectue){
+
+                    }else{
+                        popup.dismiss();
+                        Toast.makeText(getContext(), "Aucun Compte trouvé avec ce numero", Toast.LENGTH_SHORT).show();
+                    }
                 }
+                // Pour chaque enfant de "idNoeud3"
             }
 
             @Override
@@ -230,21 +263,25 @@ public class RegistLocataireFrament  extends Fragment {
 
         return randomString;
     }
+/*
     private void sendNotification(String codepin) {
         editor.putString("codeconfirm", codepin);
         editor.apply();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                .setSmallIcon(R.drawable.locabill)
-                .setContentTitle("Code de confirmation")
-                .setContentText(codepin)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+                    .setSmallIcon(R.drawable.locabill)
+                    .setContentTitle("Code de confirmation")
+                    .setContentText(codepin)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
 
-            return;
+                return;
+            }
+            notificationManager.notify(notificationId, builder.build());
         }
-        notificationManager.notify(notificationId, builder.build());
     }
+*/
 }

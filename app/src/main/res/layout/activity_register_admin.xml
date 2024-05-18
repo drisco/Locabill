@@ -8,40 +8,48 @@
     android:gravity="center"
     android:background="@color/blue"
     tools:context=".RegisterAdmin">
-
-    <ImageView
-        android:id="@+id/retour"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_margin="15dp"
-        android:src="@drawable/back"
-        app:tint="@color/white" />
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/image_profil"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="1dp"
-        android:src="@drawable/locabill"
-        app:civ_border_color="@color/white"
-        app:civ_border_overlay="true"
-        app:civ_border_width="5dp" />
-    <TextView
-        android:id="@+id/titre"
+    <RelativeLayout
+        android:id="@+id/bn"
+        android:background="@drawable/backgr_newrect"
+        android:backgroundTint="#5BC0EB"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@+id/image_profil"
-        android:text="Nouveau compte"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/retour"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="15dp"
+            android:src="@drawable/back"
+            app:tint="@color/white" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_profil"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="1dp"
+            android:src="@drawable/locabill"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="true"
+            app:civ_border_width="5dp" />
+        <TextView
+            android:id="@+id/titre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/image_profil"
+            android:text="Nouveau compte"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_below="@id/titre"
+        android:layout_below="@id/bn"
         android:layout_marginTop="1dp">
 
         <LinearLayout

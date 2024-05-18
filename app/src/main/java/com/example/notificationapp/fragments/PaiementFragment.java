@@ -12,17 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.example.notificationapp.AlertPaiement;
+import com.example.notificationapp.Bricefile;
 import com.example.notificationapp.EspaceLocataires;
+import com.example.notificationapp.List_of_tenants;
 import com.example.notificationapp.NumberToWords;
 import com.example.notificationapp.R;
-import com.example.notificationapp.models.CityItem;
-import com.example.notificationapp.models.MesServices;
-import com.example.notificationapp.models.Model_tenant;
+import com.example.notificationapp.UpdateTenant;
 import com.example.notificationapp.models.Model_ticket;
 import com.example.notificationapp.models.StatutRecu;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,15 +40,31 @@ public class PaiementFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String idAdm,idLca,ville,numero,date ,statut,id,somme,somme1,caution,avance,debutUsage,type,nom,prenom;
-    StatutRecu tenant;
+
     Model_ticket tickets;
     TextView pyer;
     AlertPaiement popup;
+    private EspaceLocataires mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof EspaceLocataires) {
+            mActivity = (EspaceLocataires) context; // L'activité parent est EspaceLocataires
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null; // Pour éviter les fuites de mémoire
+    }
 
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_paiement, container, false);
+
         pyer =view.findViewById(R.id.pyer);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
@@ -72,7 +85,7 @@ public class PaiementFragment extends Fragment {
         type = sharedPreferences.getString("type", "");
 
         popup = new AlertPaiement(getActivity());
-        popup.setCancelable(false);
+        popup.setCancelable(true);
         popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         pyer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,21 +101,26 @@ public class PaiementFragment extends Fragment {
     private void methodeDeVerification() {
         databaseReference1.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot citySnapshot : dataSnapshot.getChildren()) {
-                        tenant = citySnapshot.getValue(StatutRecu.class);
-                        if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
-                            date=tenant.getDate();
-                            id= tenant.getId();
-                            statut= tenant.getStatut();
-                            somme= tenant.getSomme();
-                            Toast.makeText(getContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
-                            methodePayerRetard(date,id,somme);
-                        }else {
-                            Toast.makeText(getContext(), "Paiement normal0", Toast.LENGTH_SHORT).show();
-                            methodePourPayer();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
+
+                        for (DataSnapshot autherSnap :citySnapshot.getChildren()){
+                            StatutRecu tenant = autherSnap.getValue(StatutRecu.class);
+                            if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
+                                date=tenant.getDate();
+                                id= tenant.getId();
+                                statut= tenant.getStatut();
+                                somme= tenant.getSomme();
+                                Toast.makeText(getContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
+                                methodePayerRetard(date,id,somme);
+                            }else {
+                                Toast.makeText(getContext(), "Paiement normal0", Toast.LENGTH_SHORT).show();
+                                methodePourPayer();
+                            }
+                            break;
                         }
+                        break;
                     }
                 }else {
                     Toast.makeText(getContext(), "Paiement normal", Toast.LENGTH_SHORT).show();
@@ -122,127 +140,72 @@ public class PaiementFragment extends Fragment {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String heureActuelle = sdf.format(heure);
-        databaseReference2.child(idAdm).child(idLca);
+        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
         String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
-
-
-        Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, date,heureActuelle);
-        databaseReference2.setValue(nouveauLocataire);
-        databaseReference1.child(idAdm).child(idLca).child(id).child("statut").setValue("payé");
-        Intent intent = new Intent(getContext(), MesServices.class);
-        getContext().startService(intent);
-        startActivity(new Intent(getContext(), EspaceLocataires.class));
-    }
-
-    /*private void methodePourPayer() {
-        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
-        Date heure = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String heureActuelle = sdf.format(heure);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        String dateFormatted = sdf2.format(heure);
-
-        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca).push();
-        String nouvelId = localiteReference.getKey();
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance,numberInWords, dateFormatted,heureActuelle);
-        localiteReference.setValue(nouveauLocataire);
-        databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-        Intent intent = new Intent(getContext(), MesServices.class);
-        getContext().startService(intent);
-        startActivity(new Intent(getContext(), EspaceLocataires.class));
-
-        localiteReference.addValueEventListener(new ValueEventListener() {
+        popup.show();
+        popup.setTitreText(" Loyer en retard");
+        popup.setTitreColor(R.color.orange);
+        popup.setRetard(" Mois non reglé : "+date);
+        popup.setMessageText("Cher locataire, il semble que vous ayez un mois de loyer en retard. Merci de régulariser cette situation au plus vite pour éviter toute complication future. ");
+        popup.setCancelText("Payer le mois");
+        popup.setCancelBackground(R.drawable.bg_circle_green);
+        popup.setCancelTextColor(R.color.white);
+        popup.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
-                        tickets = citySnapshot.getValue(Model_ticket.class);
-                        if (tickets != null && tickets.getDate() != null && tickets.getDate().equals(dateFormatted)) {
-                            popup.show();
-                            popup.setMessageText("Vous avez deja reglé le paiement ce mois merci beaucoup pour votre fiabilité ");
-                            popup.getRetour().setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    popup.dismiss();
-                                }
-                            });
-                        }else {
-                            popup.show();
-                            popup.setMessageText("Votre paiement de ce mois a été éffectuer avec succes merci beaucoup pour votre fiabilité ");
-                            popup.getRetour().setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Toast.makeText(getContext(), "Paiement effectuer avec succes", Toast.LENGTH_SHORT).show();
-                                    String nouvelId = localiteReference.push().getKey();
-                                    Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance,numberInWords, dateFormatted,heureActuelle);
-                                    localiteReference.setValue(nouveauLocataire);
-                                    databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                                    // Créez un objet Intent pour démarrer le service
-                                    Intent intent = new Intent(getContext(), MesServices.class);
-                                    getContext().startService(intent);
-                                    startActivity(new Intent(getContext(), EspaceLocataires.class));
-                                    popup.dismiss();
-                                }
-                            });
-
-                        }
-                    }
-                }else {
-                    popup.show();
-                    popup.setMessageText("Votre paiement de ce mois a été éffectuer avec succes merci beaucoup pour votre fiabilité ");
-                    popup.getRetour().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getContext(), "Paiement effectuer avec succes", Toast.LENGTH_SHORT).show();
-                            String nouvelId = localiteReference.push().getKey();
-                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance,numberInWords, dateFormatted,heureActuelle);
-                            localiteReference.setValue(nouveauLocataire);
-                            databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                            // Créez un objet Intent pour démarrer le service
-                            Intent intent = new Intent(getContext(), MesServices.class);
-                            getContext().startService(intent);
-                            startActivity(new Intent(getContext(), EspaceLocataires.class));
-                            popup.dismiss();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View view) {
+                Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, date,heureActuelle);
+                localiteReference.child(id).setValue(nouveauLocataire);
+                databaseReference1.child(idAdm).child(idLca).child(id).child("statut").setValue("payé");
+                popup.dismiss();
+                Intent intent =new Intent(getContext(), Bricefile.class);
+                intent.putExtra("id", id);
+                intent.putExtra("nom", nom);
+                intent.putExtra("prenom", prenom);
+                intent.putExtra("prix", somme);
+                intent.putExtra("numero", numero);
+                intent.putExtra("localite", ville);
+                intent.putExtra("type_de_maison", type);
+                intent.putExtra("mois", date);
+                intent.putExtra("date", heureActuelle);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
 
-    }*/
+
+    }
+
     private void methodePourPayer() {
         String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String heureActuelle = sdf.format(heure);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle  = sdf.format(heure);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
         String dateFormatted = sdf2.format(heure);
 
         DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
         localiteReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Model_ticket> allMessages = new ArrayList<>();
                 if (snapshot.exists()) {
                     boolean paiementEffectue = false;
                     for (DataSnapshot citySnapshot : snapshot.getChildren()) {
                         Model_ticket ticket = citySnapshot.getValue(Model_ticket.class);
                         if (ticket != null && ticket.getDate() != null && ticket.getDate().equals(dateFormatted)) {
                             paiementEffectue = true;
-                            break; // Sortir de la boucle si le paiement a déjà été effectué ce mois-ci
                         }
                     }
                     if (paiementEffectue) {
                         popup.show();
-                        popup.setMessageText("Vous avez déjà réglé le paiement ce mois-ci, merci beaucoup pour votre fiabilité");
+                        popup.setMessageText("Vous avez déjà réglé le paiement de ce mois-ci"+" "+dateFormatted+" "+", merci beaucoup pour votre fiabilité");
+                        popup.setCancelText("Retour");
                         popup.getRetour().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popup.dismiss();
+                                goToHistoriqueFragment(view);
                             }
                         });
                     } else {
@@ -251,16 +214,23 @@ public class PaiementFragment extends Fragment {
                         popup.getRetour().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Toast.makeText(getContext(), "Paiement effectué avec succès", Toast.LENGTH_SHORT).show();
                                 String nouvelId = localiteReference.push().getKey();
                                 Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
                                 localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
                                 databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                                // Créez un objet Intent pour démarrer le service
-                                Intent intent = new Intent(getContext(), MesServices.class);
-                                getContext().startService(intent);
-                                startActivity(new Intent(getContext(), EspaceLocataires.class));
                                 popup.dismiss();
+                                Intent intent =new Intent(getContext(), Bricefile.class);
+                                intent.putExtra("id", idLca);
+                                intent.putExtra("nom", nom);
+                                intent.putExtra("prenom", prenom);
+                                intent.putExtra("prix", somme1);
+                                intent.putExtra("numero", numero);
+                                intent.putExtra("localite", ville);
+                                intent.putExtra("type_de_maison", type);
+                                intent.putExtra("mois", dateFormatted);
+                                intent.putExtra("date", heureActuelle);
+                                startActivity(intent);
+                                getActivity().finish();
                             }
                         });
                     }
@@ -268,6 +238,7 @@ public class PaiementFragment extends Fragment {
                     // Aucune donnée n'existe, ajoutez les nouvelles données
                     popup.show();
                     popup.setMessageText("Votre paiement de ce mois a été effectué avec succès, merci beaucoup pour votre fiabilité ");
+                    popup.setCancelText("Payer maintenant");
                     popup.getRetour().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -276,11 +247,19 @@ public class PaiementFragment extends Fragment {
                             Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
                             localiteReference.child(nouvelId).setValue(nouveauLocataire);
                             databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                            // Créez un objet Intent pour démarrer le service
-                            Intent intent = new Intent(getContext(), MesServices.class);
-                            getContext().startService(intent);
-                            startActivity(new Intent(getContext(), EspaceLocataires.class));
                             popup.dismiss();
+                            Intent intent =new Intent(getContext(), Bricefile.class);
+                            intent.putExtra("id", idLca);
+                            intent.putExtra("nom", nom);
+                            intent.putExtra("prenom", prenom);
+                            intent.putExtra("prix", somme1);
+                            intent.putExtra("numero", numero);
+                            intent.putExtra("localite", ville);
+                            intent.putExtra("type_de_maison", type);
+                            intent.putExtra("mois", dateFormatted);
+                            intent.putExtra("date", heureActuelle);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                     });
                 }
@@ -291,6 +270,12 @@ public class PaiementFragment extends Fragment {
                 // Gérer les erreurs
             }
         });
+    }
+
+    private void goToHistoriqueFragment(View view) {
+        if (mActivity != null) {
+            mActivity.showHistoriqueFragment(view); // Appel de la méthode de l'activité pour afficher le fragment historique
+        }
     }
 
 }

@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notificationapp.models.Message;
 import com.example.notificationapp.models.Model_code_pin;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DatabaseReference;
@@ -43,10 +44,10 @@ public class DetailAdmin extends AppCompatActivity {
     int incr;
     String selectedDayOfWeek, selectedDayOfMonth;
     SharedPreferences sharedPreferences1;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,databaseReferenceM;
     private BottomSheetDialog bottomSheetDialog;
 
-    private ImageView tvjour, tvsemaine, tvmois,tvmoistest;
+    private ImageView tvjour, tvsemaine, tvmois,tvmoistest,retour;
     private EditText editTextJour, editTextSemaine, editTextMois,edmoistest,edmoistestnum;
     private Spinner spinnerWeek, spinnerMonth;
     private ArrayAdapter<String> weekAdapter, monthAdapter;
@@ -61,9 +62,11 @@ public class DetailAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_admin);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("codepin");
+        databaseReferenceM = FirebaseDatabase.getInstance().getReference().child("message");
 
         logout =findViewById(R.id.m4);
         deco =findViewById(R.id.deco);
+        retour =findViewById(R.id.m00);
         pin =findViewById(R.id.pin);
         planifier =findViewById(R.id.planifier);
         name =findViewById(R.id.t1);
@@ -102,7 +105,15 @@ public class DetailAdmin extends AppCompatActivity {
         modifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DetailAdmin.this, "Update", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(DetailAdmin.this,AnnonceInfos.class));
+                finish();
+            }
+        });
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DetailAdmin.this,MainActivity.class));
+                finish();
             }
         });
 
@@ -256,9 +267,10 @@ public class DetailAdmin extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if (editTextMois.getText().toString().isEmpty()||editTextJour.getText().toString().isEmpty()||editTextJour.getText().toString().isEmpty()){
+                        if (editTextMois.getText().toString().isEmpty()||editTextJour.getText().toString().isEmpty()||editTextSemaine.getText().toString().isEmpty()){
                             if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
                                 Toast.makeText(DetailAdmin.this, "Aucun rappel n'est planifié", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
                             }else{
                                 editor1.clear();
                                 editor1.apply();
@@ -269,17 +281,23 @@ public class DetailAdmin extends AppCompatActivity {
                             }
                         }else{
                             if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
-                                editor1.clear();
+                                /*editor1.clear();
                                 editor1.apply();
                                 editor1.putString("messagejour", editTextJour.getText().toString());
                                 editor1.putString("messagesemaine", editTextSemaine.getText().toString());
                                 editor1.putString("messagemois", editTextMois.getText().toString());
                                 editor1.putString("selectedDayOfWeek", selectedDayOfWeek);
                                 editor1.putString("selectedDayOfMonth", selectedDayOfMonth);
-                                editor1.apply();
+                                editor1.apply();*/
+                                Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                Message msge1=new Message("messagesemaine",editTextSemaine.getText().toString());
+                                Message msge2=new Message("messagemois",editTextMois.getText().toString());
+                                databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
+                                databaseReferenceM.child(idAdmin).child("messagesemaine").setValue(msge1);
+                                databaseReferenceM.child(idAdmin).child("messagemois").setValue(msge2);
                                 bottomSheetDialog.dismiss();
                             }else{
-                                editor1.clear();
+                                /*editor1.clear();
                                 editor1.apply();
                                 editor1.putString("messagejour", editTextJour.getText().toString());
                                 editor1.putString("messagesemaine", editTextSemaine.getText().toString());
@@ -288,11 +306,15 @@ public class DetailAdmin extends AppCompatActivity {
                                 editor1.putString("selectedDayOfMonth", selectedDayOfMonth);
                                 editor1.putString("messageparseconde", edmoistest.getText().toString());
                                 editor1.putString("lesnumeros", edmoistestnum.getText().toString());
-                                editor1.apply();
+                                editor1.apply();*/
+                                Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                Message msge1=new Message("messagesemaine",editTextSemaine.getText().toString());
+                                Message msge2=new Message("messagemois",editTextMois.getText().toString());
+                                databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
+                                databaseReferenceM.child(idAdmin).child("messagesemaine").setValue(msge1);
+                                databaseReferenceM.child(idAdmin).child("messagemois").setValue(msge2);
                                 bottomSheetDialog.dismiss();
                             }
-
-
                         }
 
 

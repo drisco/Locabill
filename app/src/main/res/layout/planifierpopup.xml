@@ -24,29 +24,36 @@
         <RelativeLayout
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/tvjour1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:background="@drawable/new_border"
-                android:padding="5dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
-                android:text="Je planifie un rappel journalier"/>
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:layout_toStartOf="@+id/tvjour"
+                android:background="@drawable/new_border"
+                android:padding="5dp"
+                android:text="Je planifie un rappel journalier"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/tvjour"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@drawable/bg_circle"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/blue"
+                android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvjour1"
-                android:src="@drawable/base1" />
+                android:src="@drawable/base1"
+                app:tint="@color/white"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -72,29 +79,34 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/tvsemaine1"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:background="@drawable/new_border"
-                android:textColor="@color/white"
-
-                android:padding="5dp"
-                android:textStyle="bold"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=" Je planifie un rappel Hebdomadaire"/>
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:layout_toStartOf="@+id/tvsemaine"
+                android:background="@drawable/new_border"
+                android:padding="5dp"
+                android:text=" Je planifie un rappel Hebdomadaire"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/tvsemaine"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_circle"
-                android:backgroundTint="@color/black"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvsemaine1"
-                android:src="@drawable/base1" />
+                android:backgroundTint="@color/blue"
+                android:src="@drawable/base1"
+                app:tint="@color/white"/>
         </RelativeLayout>
 
 
@@ -148,29 +160,35 @@
 
         <RelativeLayout
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/tvmois1"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"
-                android:background="@drawable/new_border"
-                android:textColor="@color/white"
-                android:padding="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Je planifie un rappel Mensuel"/>
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/tvmois"
+                android:background="@drawable/new_border"
+                android:padding="5dp"
+                android:gravity="center"
+                android:text="Je planifie un rappel Mensuel"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/tvmois"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_circle"
-                android:backgroundTint="@color/black"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvmois1"
-                android:src="@drawable/base1" />
+                android:backgroundTint="@color/blue"
+                android:src="@drawable/base1"
+                app:tint="@color/white" />
         </RelativeLayout>
 
         <LinearLayout
@@ -224,28 +242,34 @@
         <RelativeLayout
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/tvmois10"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"
-                android:background="@drawable/new_border"
-                android:textColor="@color/white"
-                android:padding="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Je planifie un rappel de test"/>
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/tvmoistest"
+                android:background="@drawable/new_border"
+                android:padding="5dp"
+                android:gravity="center"
+                android:text="Je planifie un rappel de test"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/tvmoistest"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_circle"
-                android:backgroundTint="@color/black"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvmois10"
-                android:src="@drawable/base1" />
+                android:backgroundTint="@color/blue"
+                android:src="@drawable/base1"
+                app:tint="@color/white"/>
         </RelativeLayout>
 
         <LinearLayout

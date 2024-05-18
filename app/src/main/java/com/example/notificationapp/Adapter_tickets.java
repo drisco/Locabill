@@ -47,14 +47,12 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
         holder.userNom1.setText(ticket.getNom());
         holder.userPrenom1.setText(ticket.getPrenom());
         holder.number1.setText(ticket.getNumero());
+        holder.montant1.setText(ticket.getMontant()+" Fcfa");
         holder.type1.setText(ticket.getType());
-        holder.date1.setText(ticket.getDate());
-        holder.debut1.setText(ticket.getDebutLoca());
-        holder.caution1.setText(ticket.getCaution());
-        holder.avance1.setText(ticket.getAvance());
-        holder.s_chiffre1.setText("Montant en chiffre : "+ticket.getMontantChiffre());
+        holder.date1.setText(ticket.getHeure());
+        holder.debut1.setText(ticket.getDate());
 
-        String qrContent="\nNom: " + ticket.getNom() + "\nPrénom: " + ticket.getPrenom() + "\nPrix: " + ticket.getMontant() +
+        /*String qrContent="\nNom: " + ticket.getNom() + "\nPrénom: " + ticket.getPrenom() + "\nPrix: " + ticket.getMontant() +
                 "\nNuméro: " + ticket.getNumero() + "\nType de maison: " + ticket.getType() + "\nDébut de location: " + ticket.getDebutLoca() +
                 "\nCaution: " + ticket.getCaution() + "\nAvance: " + ticket.getAvance() + "\nDate: " + ticket.getDate();
 
@@ -68,7 +66,7 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
         } catch (WriterException e) {
             e.printStackTrace();
             // Gérez les exceptions ici
-        }
+        }*/
 
     }
 
@@ -86,16 +84,12 @@ public class Adapter_tickets extends RecyclerView.Adapter<Adapter_tickets.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             date1 = itemView.findViewById(R.id.date1);
-            s_chiffre1 = itemView.findViewById(R.id.s_chiffre1);
-            caution1 = itemView.findViewById(R.id.caution1);
-            avance1 = itemView.findViewById(R.id.avance1);
             debut1=itemView.findViewById(R.id.debut1);
             type1 = itemView.findViewById(R.id.type1);
             montant1 = itemView.findViewById(R.id.montant1);
             number1 = itemView.findViewById(R.id.number1);
             userPrenom1 = itemView.findViewById(R.id.userPrenom1);
             userNom1 = itemView.findViewById(R.id.userNom1);
-            qrImageView1 = itemView.findViewById(R.id.qrImageView1);
             date2 = itemView.findViewById(R.id.date2);
             itemview = itemView.findViewById(R.id.itemview);
             itemview.setOnClickListener((View.OnClickListener) this);

@@ -1,4 +1,4 @@
-package com.example.notificationapp;
+package com.example.notificationapp.messervice;
 
 import android.app.Service;
 import android.content.Intent;

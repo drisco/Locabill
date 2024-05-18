@@ -4,85 +4,121 @@
     android:layout_height="match_parent"
     android:background="@color/blue"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
-        android:id="@+id/rl"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:gravity="center">
-        <!--edit text for user name-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phone"
-            style="@style/LoginTextInputLayoutStyle"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginEnd="20dp"
-            android:hint="Votre numéro de telephone"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:shapeAppearanceOverlay="@style/RoundedCorner"
-            app:hintTextColor="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phonep"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/se"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="phone"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:elevation="1dp"
+                android:textSize="30dp"
+                android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/confCode"
-            style="@style/LoginTextInputLayoutStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_below="@+id/phone"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:visibility="gone"
-            android:hint="Code de comfirmation"
-            android:padding="5dp"
-            android:textColorHint="@color/white"
-            app:shapeAppearanceOverlay="@style/RoundedCorner"
-            app:hintTextColor="@color/white">
+                android:layout_marginEnd="25dp"
+                android:gravity="center"
+                android:padding="25dp"
+                android:background="@drawable/new_border"
+                android:backgroundTint="#0F2E7C"
+                android:text="Se Connecter en Deux Etapes"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/confic"
+            <TextView
+                android:id="@+id/des"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="number"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_below="@+id/se"
                 android:textColor="@color/white"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:padding="25dp"
+                android:backgroundTint="#0F2E7C"
+                android:text="Votre proprietaire de loyer vous a deja creer un compte il vous suffit juste d'entrer votre numero de telephone donné au proprietaire ensuite appuyer sur le bouton Register et saisisser le mot de passe que votre prorietaire vous a fourni.\nNB: Apres la premiere connexion vous pouvez changer le mot de passe."/>
+            <!--edit text for user name-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/des"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Votre numéro de telephone"
+                android:padding="5dp"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:shapeAppearanceOverlay="@style/RoundedCorner"
+                app:hintTextColor="@color/white">
 
-        <!--button for creating user account.-->
-        <TextView
-            android:id="@+id/dBtnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/confCode"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginEnd="25dp"
-            android:gravity="center"
-            android:padding="15dp"
-            android:background="@drawable/new_border"
-            android:backgroundTint="#0F7C49"
-            android:text="Register"
-            android:textAllCaps="false" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phonep"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confCode"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/phone"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"
+                android:hint="Code de comfirmation"
+                android:padding="5dp"
+                android:textColorHint="@color/white"
+                app:shapeAppearanceOverlay="@style/RoundedCorner"
+                app:hintTextColor="@color/white">
 
-    </RelativeLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <!--button for creating user account.-->
+            <TextView
+                android:id="@+id/dBtnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/confCode"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginEnd="25dp"
+                android:gravity="center"
+                android:padding="15dp"
+                android:background="@drawable/new_border"
+                android:backgroundTint="#0F7C49"
+                android:text="Register"
+                android:textAllCaps="false" />
+
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -44,32 +44,35 @@ public class LoginAdmin extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
         String idAdmin = sharedPreferences.getString("id", "");
         String nom = sharedPreferences.getString("nom", "");
         String numeroAd = sharedPreferences.getString("numero", "");
         String codepin = sharedPreferences.getString("codepin", "");
         SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
         String idloca = loca.getString("id", "");
-        Log.d("tag","toutes les données :" + idAdmin + " " + nom + " " + numeroAd);
+        String code = loca.getString("codepin", "");
 
 
         if (!idAdmin.isEmpty() || !nom.isEmpty()||!numeroAd.isEmpty()){
-            System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ000");
             if (!codepin.isEmpty()){
-                System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ222");
                 startActivity(new Intent(LoginAdmin.this,Login.class));
                 finish();
             }else{
-                System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJ111");
                 startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                 finish();
             }
 
         }else {
-            System.out.println("NGKHLMKHJEIOTRJHE TJRIOJEOIHHTOHIJHIOJHHJVRAI");
             if (!idloca.isEmpty()){
-                startActivity(new Intent(LoginAdmin.this,EspaceLocataires.class));
-                finish();
+                if (!code.isEmpty()){
+                    startActivity(new Intent(LoginAdmin.this,Login.class));
+                    finish();
+                }else {
+                    startActivity(new Intent(LoginAdmin.this,EspaceLocataires.class));
+                    finish();
+                }
+
             }
         }
         passwordEdt = findViewById(R.id.idEdtPassword);
@@ -96,7 +99,7 @@ public class LoginAdmin extends AppCompatActivity {
                     popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popup.show();
                     login(numero.getText().toString(),passwordEdt.getText().toString());
-
+                    popup.dismiss();
                 }
             }
         });
@@ -118,7 +121,6 @@ public class LoginAdmin extends AppCompatActivity {
                                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                                     Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
                                     if (codePin != null) {
-                                        System.out.println("HRGHGRKJHGIUREGJHUERGHJGRJVBGEGRVBFKDBGRJFGKVREJVB 222 "+codePin.getCode());
                                         codePinValue = codePin.getCode();
                                         editor.putString("codepin", codePinValue);
                                         editor.apply();
@@ -139,7 +141,8 @@ public class LoginAdmin extends AppCompatActivity {
                             editor.putString("prenom", user.getUserPrenom());
                             editor.putString("numero", user.getNumeros());
                             editor.putString("mdp", user.getPwd());
-                            //editor.putString("codepin", codePinValue);
+                            editor.putString("proprie", "proprie");
+                            editor.putString("codepin", codePinValue);
                             editor.apply();
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                             finish();

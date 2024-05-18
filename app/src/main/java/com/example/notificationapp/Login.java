@@ -41,12 +41,12 @@ public class Login extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     DatabaseReference databaseReference;
-    String idAdmin;
+    String idAdmin,proprie;
     int incr;
     private StringBuilder passwordBuilder = new StringBuilder();
      BiometricPrompt biometricPrompt;
      androidx.biometric.BiometricPrompt.PromptInfo promptInfo;
-     String codePinValue;
+     String codePinValue,codeloca;
      Executor executor;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -57,7 +57,12 @@ public class Login extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         idAdmin = sharedPreferences.getString("id", "");
+        proprie = sharedPreferences.getString("proprie", "");
         codePinValue = sharedPreferences.getString("codepin", "");
+
+        SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
+        String idloca = loca.getString("id", "");
+         codeloca = loca.getString("codepin", "");
 
 
         tvInputTip = findViewById(R.id.tv_input_tip);
@@ -93,8 +98,13 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onAuthenticationSucceeded(@NonNull androidx.biometric.BiometricPrompt.AuthenticationResult result) {
                             super.onAuthenticationSucceeded(result);
-                            startActivity(new Intent(Login.this,MainActivity.class));
-                            finish();
+                            if (proprie.equals("proprie")){
+                                startActivity(new Intent(Login.this,MainActivity.class));
+                                finish();
+                            }else{
+                                startActivity(new Intent(Login.this,EspaceLocataires.class));
+                                finish();
+                            }
                         }
 
                         @Override
@@ -156,7 +166,15 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
                 passwordBuilder.setLength(0);
                 tvInputTip.setText("");
-            } else {
+            }else if(passwordBuilder.toString().equals(codeloca)){
+                iv_lock.setVisibility(View.GONE);
+                iv_error.setVisibility(View.GONE);
+                iv_ok.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(this, EspaceLocataires.class);
+                startActivity(intent);
+                passwordBuilder.setLength(0);
+                tvInputTip.setText("");
+            }else {
                 iv_lock.setVisibility(View.GONE);
                 iv_ok.setVisibility(View.GONE);
                 iv_error.setVisibility(View.VISIBLE);
@@ -184,7 +202,6 @@ public class Login extends AppCompatActivity {
         incr++;
         if (incr==1){
             super.onBackPressed();
-            //finish();
             finishAffinity();
         }
     }
