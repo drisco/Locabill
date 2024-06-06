@@ -59,10 +59,10 @@ public class RappelPlaning {
         // Calculer le temps pour la première diffusion
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, 45);
+        calendar.add(Calendar.MINUTE, 5);
 
         // Planifier les répétitions toutes les 5 minutes
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),   45 * 60 * 1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),   5 * 60 * 1000, pendingIntent);
     }
 
     public static void scheduleChaquelundi(Context context) {
@@ -135,10 +135,10 @@ public class RappelPlaning {
         // Calculer le temps pour la première diffusion
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, 10);
+        calendar.add(Calendar.MINUTE, 1);
 
         // Planifier les répétitions toutes les 5 minutes
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  10 * 60 * 1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  60 * 1000, pendingIntent);
     }
 
 

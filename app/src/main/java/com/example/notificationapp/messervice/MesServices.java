@@ -41,8 +41,6 @@ public class MesServices extends Service {
     SharedPreferences sharedPreferences,shareControl;
     private final int notificationId = 1;
     SharedPreferences.Editor editorStock;
-    private boolean isServiceRunning = false;
-
     String control;
     DatabaseReference recuRef ;
     private final String channelId = "countdown_notification_channel";
@@ -64,9 +62,7 @@ public class MesServices extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        isServiceRunning=true;
-        Toast.makeText(this, "verifier bien", Toast.LENGTH_SHORT).show();
-
+        System.out.println("JE SUIS ICIC ICICICICICICICICICICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCIIIIIIIIIIIIIIIIIII");
         recuRef = FirebaseDatabase.getInstance().getReference("recu");
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         shareControl = getSharedPreferences("shareControl", Context.MODE_PRIVATE);
@@ -74,8 +70,6 @@ public class MesServices extends Service {
         idAdm = sharedPreferences.getString("id", "");
         nom = sharedPreferences.getString("nom", "");
         control = shareControl.getString("ancien", "");
-        System.out.println("ANCIENANCIEN  "+control);
-        Log.d("TAG", "onStartCommand: service is runing");
 
         envoyerNotificationAdmin();
         return START_STICKY;
@@ -96,19 +90,23 @@ public class MesServices extends Service {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Model_ticket> allMessages = new ArrayList<>();
-        // Pour chaque nouvel enfant ajouté, récupérez ses données
-                    if (snapshot.exists()){
-                        for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                // Pour chaque nouvel enfant ajouté, récupérez ses données
+                if (snapshot.exists()){
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
 
-                            for (DataSnapshot child : childSnapshot.getChildren()){
-                                Model_ticket ticket = child.getValue(Model_ticket.class);
-                                allMessages.add(ticket);
-                                if (child.getChildrenCount() == 1) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        for (DataSnapshot child : childSnapshot.getChildren()){
+                            Model_ticket ticket = child.getValue(Model_ticket.class);
+                            allMessages.add(ticket);
+                            if (child.getChildrenCount() == 1) {
+                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+child.getChildrenCount());
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    createNotificationChannel();
                                         envoyerNotification(ticket.getDate(), ticket.getNom(), ticket.getNumero(), ticket.getPrenom(), ticket.getMontant());
                                     }
                                 }else{
-                                    Collections.sort(allMessages, new Comparator<Model_ticket>() {
+                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+child.getChildrenCount());
+
+                                Collections.sort(allMessages, new Comparator<Model_ticket>() {
                                         @Override
                                         public int compare(Model_ticket t1, Model_ticket t2) {
                                             return t2.getHeure().compareToIgnoreCase(t1.getHeure());
@@ -121,28 +119,27 @@ public class MesServices extends Service {
                         }
 
                         if (!allMessages.isEmpty()){
+                            System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+allMessages.size());
 
                             Model_ticket user=allMessages.get(0);
                             if (!control.equals(user.getHeure())){
                                 editorStock.putString("ancien", user.getHeure());
                                 editorStock.apply();
-                                System.out.println("DEDANANANANNANANANANANANDANQNQNSNNDANSDEDANS  "+control);
-
+                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+user.getHeure());
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    createNotificationChannel();
                                     envoyerNotification(user.getDate(), user.getNom(), user.getNumero(), user.getPrenom(), user.getMontant());
                                 }
                             }else {
+                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG moro "+user.getHeure());
                                 editorStock.putString("ancien", user.getHeure());
                                 editorStock.apply();
-                                System.out.println("DEHOEHEHEHEHEHEHEHEHEHORS  "+user.getHeure());
 
                             }
 
                         }else{
-                            Toast.makeText(getApplicationContext(), "allMessages.size()", Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        Toast.makeText(getApplicationContext(), "Nouvelle donnee mais rien", Toast.LENGTH_SHORT).show();
                     }
             }
 
@@ -165,6 +162,7 @@ public class MesServices extends Service {
     }
     @SuppressLint("ForegroundServiceType")
     private void envoyerNotification(String date1, String nom1, String numero1, String prenom1, String somme) {
+        System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+somme);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("Paiement effectué")

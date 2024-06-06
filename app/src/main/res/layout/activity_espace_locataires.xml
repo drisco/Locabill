@@ -30,7 +30,8 @@
                 android:id="@+id/nomEtPrenom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bamba Drissa"
+                android:text="Nom et prenom "
+                android:fontFamily="@font/gotham_medium"
                 android:textSize="18dp" />
 
             <TextView
@@ -38,9 +39,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Editer le Profil"
-                android:layout_marginTop="5dp"
+                android:background="@drawable/backgr_newrect"
+                android:layout_marginTop="10dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:fontFamily="@font/arial"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:elevation="1dp"
+                android:backgroundTint="#988C8C"
+                android:textColor="@color/white"
                 android:layout_marginStart="25dp"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
         </LinearLayout>
 
         <ImageView
@@ -68,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="25dp"
+
             android:orientation="vertical">
             <TextView
                 android:id="@+id/btnHistorique"
@@ -76,6 +87,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:text="Historique"
+                android:fontFamily="@font/gotham_medium"
                 android:onClick="showHistoriqueFragment"/>
             <ImageView
                 android:id="@+id/traitHis"
@@ -99,6 +111,7 @@
                 android:text="Paiement"
                 android:textSize="20dp"
                 android:textStyle="bold"
+                android:fontFamily="@font/gotham_medium"
                 android:onClick="showPaiementFragment"/>
 
             <ImageView

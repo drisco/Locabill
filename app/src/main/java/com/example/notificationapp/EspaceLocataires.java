@@ -37,9 +37,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -57,6 +64,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     SharedPreferences.Editor editor;
     DatabaseReference databaseReference;
     String idAdm,idLca,ville,numero,mdp ,somme1,nom,prenom,codepin;
+    TextView nomEtenom;
 
 
     @SuppressLint("MissingInflatedId")
@@ -66,6 +74,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_espace_locataires);
 
+        nomEtenom =findViewById(R.id.nomEtPrenom);
         profil =findViewById(R.id.profil);
         deconnexion =findViewById(R.id.deconnexion);
         nomEtPrenom =findViewById(R.id.nomEtPrenom);
@@ -89,7 +98,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         prenom = sharedPreferences.getString("prenom", "");
         mdp = sharedPreferences.getString("mdp", "");
         codepin = sharedPreferences.getString("codepin", "");
-        nomEtPrenom.setText(nom+" "+prenom);
+        nomEtPrenom.setText("Bonjour "+nom+" "+prenom);
         if (!idLca.isEmpty()){
             Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
             intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
@@ -100,7 +109,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             RappelPlaning.scheduleChaqueUneMunite(this);
             RappelPlaning.scheduleApartirde25jusquafin(this);
             RappelPlaning.scheduleChaquelundi(this);
-            RappelPlaning.scheduleTest(this);
+            
         }
         popup = new AlertPaiement(EspaceLocataires.this);
         popup.setCancelable(false);
@@ -155,7 +164,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             return insets;
         });
     }
-
     private void editLocaMethode(String nom, String prenom, String mdp,String numero) {
         DatabaseReference baselocal =databaseReference1.child(idAdm).child(ville).child(idLca);
         baselocal.child("nom").setValue(nom);

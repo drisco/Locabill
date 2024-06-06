@@ -15,8 +15,9 @@
         android:backgroundTint="#03A9F4">
         <ImageView
             android:id="@+id/m00"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            style="@style/imageShow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@drawable/back"
             android:layout_marginTop="25dp"
             android:layout_marginStart="15dp"
@@ -52,12 +53,21 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:layout_below="@+id/r1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Informations personnelles"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -163,12 +173,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Deconnexion et securité"
+                    android:text="Planifications et Annonces"
                     android:gravity="center"
                     android:layout_marginTop="25dp"
                     android:textStyle="bold"
                     android:textSize="16dp"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -179,7 +188,120 @@
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
                     <RelativeLayout
+                        android:id="@+id/planifier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+                        <ImageView
+                            android:id="@+id/m6"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/notifi"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/t6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_toEndOf="@+id/m6"
+                            android:text="Planifier un rappel automatique"
+                            android:textColor="@color/white"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"/>
+                    <RelativeLayout
+                        android:id="@+id/annonce"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+                        <ImageView
+                            android:id="@+id/m7"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/chat"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/t7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_toEndOf="@+id/m7"
+                            android:text="Problèmes dénnoncés"
+                            android:textColor="@color/white"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deconnexion et securité"
+                    android:gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/new_border"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+                        <ImageView
+                            android:id="@+id/m5"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/dial"
+                            app:tint="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/t5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_toEndOf="@+id/m5"
+                            android:text="Ajouter un code de vérrouillage"
+                            android:textColor="@color/white"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"/>
+                    <RelativeLayout
                         android:id="@+id/deco"
+                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -206,86 +328,8 @@
                             android:textStyle="bold" />
 
                     </RelativeLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@color/white"/>
-                    <RelativeLayout
-                        android:id="@+id/pin"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center">
-                        <ImageView
-                            android:id="@+id/m5"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="20dp"
-                            android:src="@drawable/dial"
-                            app:tint="@color/white"/>
 
-                        <TextView
-                            android:id="@+id/t5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@+id/m5"
-                            android:text="Ajouter un code de vérrouillage"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Planifications"
-                    android:gravity="center"
-                    android:layout_marginTop="25dp"
-                    android:textStyle="bold"
-                    android:textSize="16dp"/>
-
-                <RelativeLayout
-                    android:id="@+id/planifier"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/new_border"
-                    android:layout_gravity="center">
-                    <ImageView
-                        android:id="@+id/m6"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/notifi"
-                        app:tint="@color/white" />
-
-                    <TextView
-                        android:id="@+id/t6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="24dp"
-                        android:layout_toEndOf="@+id/m6"
-                        android:text="Planifier un rappel automatique"
-                        android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-
-
-
             </LinearLayout>
 
         </ScrollView>

@@ -8,42 +8,40 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/new_border"
         android:backgroundTint="@color/blue"
         android:layout_marginStart="15dp"
         android:elevation="10dp"
+        android:padding="25dp"
         android:layout_marginEnd="15dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textColor="@color/green"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
             android:layout_marginStart="0dp"
             android:layout_gravity="center"
             android:textStyle="bold"
-            android:fontFamily="serif"
-            android:textSize="16dp"
-            android:text="Enregistrement" />
+            android:textSize="18dp"
+            android:text="Inscription" />
 
         <TextView
             android:id="@+id/textView_nom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="0dp"
+            android:layout_margin="15dp"
             android:gravity="center"
-            android:layout_marginEnd="0dp"
             android:layout_gravity="center"
-            android:text="Êtes vous sûr de vouloir enregistrer ?\n vous ne pourrez plus \n revenir en arrière. Êtes vous sur ?"
+            android:text="Êtes vous sûr de vouloir enregistrer ?\n vous ne pourrez plus \n revenir en arrière."
             android:textSize="16dp"
-            android:textColor="@color/white"/>
+            android:textColor="#C8FFFFFF"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
@@ -52,28 +50,34 @@
 
             <TextView
                 android:id="@+id/retour"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 android:gravity="center"
                 android:layout_margin="5dp"
                 android:text="Annuler"
-                android:padding="10dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:background="@drawable/bg_rect"
                 android:backgroundTint="@color/red"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/conf"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 android:gravity="center"
                 android:layout_margin="5dp"
                 android:text="Comfirmer"
-                android:padding="10dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:background="@drawable/bg_rect"
                 android:backgroundTint="#2D9E32"
                 android:textStyle="bold"/>

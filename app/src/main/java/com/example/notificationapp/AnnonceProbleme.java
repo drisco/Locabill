@@ -10,12 +10,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +28,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.notificationapp.models.Annonce;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +45,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class AnnonceProbleme extends AppCompatActivity {
 
@@ -47,10 +58,16 @@ public class AnnonceProbleme extends AppCompatActivity {
     private LinearLayout imageContainer;
     private int incr;
     private List<Bitmap> selectedImages = new ArrayList<>();
-    Button buttonAddImage,buttonAdd;
+    Button buttonAdd;
+    TextView buttonAddImage,text;
+    ImageView play,pause,retour,vocal;
     EditText editTextTitle,editTextDescription;
     SharedPreferences sharedPreferences;
     String idAdm,idLca,ville,numero,nom,prenom;
+    private TextToSpeech tts;
+    private static final int REQUEST_MICROPHONE_PERMISSION = 123;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 100;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -62,6 +79,63 @@ public class AnnonceProbleme extends AppCompatActivity {
         editTextDescription = findViewById(R.id.editTextDescription);
         buttonAdd = findViewById(R.id.buttonAdd);
         buttonAddImage = findViewById(R.id.buttonAddImage);
+        text = findViewById(R.id.text);
+        play = findViewById(R.id.play);
+        pause = findViewById(R.id.pause);
+        retour = findViewById(R.id.rtour);
+        vocal = findViewById(R.id.vocal);
+
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = tts.setLanguage(Locale.FRENCH); // Définir la langue
+                    if (result!= TextToSpeech.LANG_MISSING_DATA && result!= TextToSpeech.LANG_NOT_SUPPORTED) {
+                        speakOutText(text.getText().toString()); // Appeler la méthode pour lire le texte
+                    } else {
+                        Log.e("TTS", "La langue n'est pas supportée");
+                    }
+                } else {
+                    Log.e("TTS", "Initialisation échouée");
+                }
+            }
+        });
+
+        vocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(AnnonceProbleme.this, android.Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(AnnonceProbleme.this, new String[]{android.Manifest.permission.RECORD_AUDIO}, REQUEST_MICROPHONE_PERMISSION);
+                } else {
+                    // La permission est déjà accordée, vous pouvez lancer la reconnaissance vocale
+                    startVoiceRecognition();
+                }
+            }
+        });
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AnnonceProbleme.this,EspaceLocataires.class));
+                finish();
+            }
+        });
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.stop();
+                play.setVisibility(View.GONE);
+                pause.setVisibility(View.VISIBLE);
+            }
+        });
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                speakOutText(text.getText().toString());
+                pause.setVisibility(View.GONE);
+                play.setVisibility(View.VISIBLE);
+            }
+        });
         sharedPreferences = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
 
         idAdm = sharedPreferences.getString("idAdmin", "");
@@ -95,6 +169,19 @@ public class AnnonceProbleme extends AppCompatActivity {
         });
 
     }
+    private void startVoiceRecognition() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 50000);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5500);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+    }
+
+    private void speakOutText(String msge) {
+        tts.speak(msge, TextToSpeech.QUEUE_FLUSH, null, null);
+    }
 
     private void addMethode(String titre, String description, List<Bitmap> selectedImages) {
         List<String> imageUris = new ArrayList<>();
@@ -104,7 +191,6 @@ public class AnnonceProbleme extends AppCompatActivity {
         StorageReference imageRef = storageRef.child("images/IMG_"+timestamp + ".jpg");
 
         for (Bitmap bitmap : selectedImages) {
-System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJERZ JROGJOEJRHJERSOI  RENOGEJGREJE0P J90TRUJRGBH0ZEI J9HGRJREHGETJ "+selectedImages);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] data = baos.toByteArray();
@@ -112,17 +198,13 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
             UploadTask uploadTask = imageRef.putBytes(data);
             uploadTask.continueWithTask(task -> {
                 if (!task.isSuccessful()) {
-                    System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJERZ JROGJOEJRHJERSOI  RENOGEJGREJE0P J90TRUJRGBH0ZEI J9HGRJREHGETJ "+"selectedImages");
                     throw task.getException();
                 }
                 return imageRef.getDownloadUrl();
             }).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
-                    System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJERZ JROGJOEJRHJERSOI  RENOGEJGREJE0P J90TRUJRGBH0ZEI J9HGRJREHGETJ "+"ZOOOOOOO");
                     imageUris.add(task.getResult().toString());
                     if (imageUris.size() == selectedImages.size()) {
-                        System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJERZ JROGJOEJRHJERSOI  RENOGEJGREJE0P J90TRUJRGBH0ZEI SIZESIZESIZE "+selectedImages.size());
-
                         saveImageUrisToDatabase(imageUris,titre,description);
                     }
                 }
@@ -140,7 +222,6 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
         myRef.setValue(data);
         startActivity(new Intent(AnnonceProbleme.this,EspaceLocataires.class));
         finish();
-        System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJERZ JROGJOEJRHJERSOI  RENOGEJGREJE0P J90TRUJRGBH0ZEI SIZESIZESIZE "+selectedImages.size());
 
     }
 
@@ -168,6 +249,7 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
 
         bottomSheetDialog.show();
     }
+
 
     private void requestCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -204,6 +286,13 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
             } else {
                 // La permission a été refusée, vous pouvez afficher un message à l'utilisateur
             }
+        }else if (requestCode == REQUEST_MICROPHONE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // La permission a été accordée, lancez la reconnaissance vocale
+                startVoiceRecognition();
+            } else {
+                // La permission a été refusée, informez l'utilisateur ou gérez la situation
+            }
         }
     }
     @Override
@@ -223,6 +312,10 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }else if(requestCode ==REQUEST_CODE_SPEECH_INPUT && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String spokenText = result.get(0);
+                editTextDescription.setText(spokenText);
             }
         }
     }
@@ -237,14 +330,14 @@ System.out.println("HEGHIUREH9TH REUH89HRZB HHTPJZ8HR9Z ERJ9RGHEGH09Z UENG9JGRJE
         for (Bitmap bitmap : selectedImages) {
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            layoutParams.setMargins(8, 0, 8, 0);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
+            layoutParams.setMargins(5, 0, 5, 0);
+            layoutParams.gravity = Gravity.CENTER;
             imageView.setLayoutParams(layoutParams);
+            Glide.with(this).load(bitmap)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(30, 0)))
+                    .into(imageView);
             imageContainer.addView(imageView);
-
         }
     }
 

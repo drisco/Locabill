@@ -145,7 +145,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
                     popup.setCancelable(false);
                     popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popup.show();
-                    DatabaseReference localiteReference = databaseReference.child(idAdmin).child(user.getLocalite());
+                    DatabaseReference localiteReference = databaseReference.child(user.getLocalite()).child(user.getId());
                     localiteReference.removeValue();
                     startActivity(new Intent(List_of_tenants.this,MainActivity.class));
                     finish();

@@ -2,10 +2,85 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/main"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".AnnonceInfos">
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:background="@color/blue"
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/headT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:text="Problèmes  dénoncés"/>
+        <ImageView
+            android:id="@+id/headI"
+            android:layout_width="25dp"
+            style="@style/imageShow"
+            android:layout_height="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/search"
+            app:tint="@color/white" />
+        <ImageView
+            android:id="@+id/searchannule"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/cancel"
+            app:tint="@color/white" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/searchannule"
+            android:layout_toEndOf="@+id/headI"
+            android:background="@drawable/border_black"
+            android:elevation="1dp"
+            android:backgroundTint="@color/white"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            app:iconifiedByDefault="false"
+            app:queryHint="Rechercher par ville,nom">
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Search Icon"
+                android:src="@drawable/search" />
+        </androidx.appcompat.widget.SearchView>
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:layout_below="@+id/head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView

@@ -4,21 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.notificationapp.models.Message;
@@ -36,7 +42,7 @@ public class DetailAdmin extends AppCompatActivity {
     TextView name,pseudo,number,modifier, code_pin,rappel,val;
     ImageView logout;
     EditText editTex,editTex1;
-    RelativeLayout deco,pin, planifier;
+    RelativeLayout deco,pin, planifier,annonce;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Button btnVal;
@@ -47,13 +53,17 @@ public class DetailAdmin extends AppCompatActivity {
     DatabaseReference databaseReference,databaseReferenceM;
     private BottomSheetDialog bottomSheetDialog;
 
-    private ImageView tvjour, tvsemaine, tvmois,tvmoistest,retour;
-    private EditText editTextJour, editTextSemaine, editTextMois,edmoistest,edmoistestnum;
+    private ImageView tvjour,tvmoistest,retour;
+    private EditText editTextJour,edmoistest,edmoistestnum;
+    TextView tvdate,tvheure;
+    ImageView ivdate,ivheure;
     private Spinner spinnerWeek, spinnerMonth;
     private ArrayAdapter<String> weekAdapter, monthAdapter;
     private List<String> weekDays, monthDays;
     private TextView recupsemaine, recupmois;
     LinearLayout lljour, llmois,llsemaine,llmoistest;
+    String codep;
+    AlertPaiement popup;
 
     SharedPreferences.Editor editor1;
     @SuppressLint("MissingInflatedId")
@@ -64,6 +74,7 @@ public class DetailAdmin extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("codepin");
         databaseReferenceM = FirebaseDatabase.getInstance().getReference().child("message");
 
+        annonce =findViewById(R.id.annonce);
         logout =findViewById(R.id.m4);
         deco =findViewById(R.id.deco);
         retour =findViewById(R.id.m00);
@@ -85,6 +96,7 @@ public class DetailAdmin extends AppCompatActivity {
         String prenom = sharedPreferences.getString("prenom", "");
         String numero = sharedPreferences.getString("numero", "");
         String mdp = sharedPreferences.getString("mdp", "");
+         codep = sharedPreferences.getString("codepin", "");
 
         name.setText(nom);
         pseudo.setText(prenom);
@@ -102,7 +114,7 @@ public class DetailAdmin extends AppCompatActivity {
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
-        modifier.setOnClickListener(new View.OnClickListener() {
+        annonce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DetailAdmin.this,AnnonceInfos.class));
@@ -120,28 +132,56 @@ public class DetailAdmin extends AppCompatActivity {
         pin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomSheetDialog = new BottomSheetDialog(DetailAdmin.this);
-                View bottomSheetView = getLayoutInflater().inflate(R.layout.codepopup, null);
-                bottomSheetDialog.setContentView(bottomSheetView);
-                editTex = bottomSheetView.findViewById(R.id.editTex);
-                editTex1 = bottomSheetView.findViewById(R.id.editTex1);
-                btnVal = bottomSheetView.findViewById(R.id.btnVal);
-                btnVal.setOnClickListener(new View.OnClickListener() {
+                popup = new AlertPaiement(DetailAdmin.this);
+                popup.setCancelable(true);
+                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popup.show();
+                if (!codep.isEmpty()){
+                    popup.setTitreText("Avertissement");
+                    popup.setMessageText("Voullez-vous vraiment changer votre code pin?");
+                    popup.setCancelText("OUI");
+                    popup.setCancelBackground(R.drawable.bg_circle_red);
+                    popup.setCancelTextColor(R.color.white);
+                }else{
+                    popup.setTitreText("Code pin");
+                    popup.setMessageText("Voullez-vous vraiment ajouter un code pin?");
+                    popup.setCancelText("OUI");
+                    popup.setCancelBackground(R.drawable.bg_circle_green);
+                    popup.setCancelTextColor(R.color.white);
+                }
+                popup.show();
+                popup.getRetour().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!editTex.getText().toString().isEmpty() || !editTex1.getText().toString().isEmpty()){
-                            if (!editTex.getText().toString().equals(editTex1.getText().toString())){
-                                Toast.makeText(DetailAdmin.this, "Verifier le code pin", Toast.LENGTH_SHORT).show();
-
-                            }else{
-                                addCode(editTex.getText().toString());
-                            }
-                        }else{
-                            Toast.makeText(DetailAdmin.this, "Remplisser tout les champs", Toast.LENGTH_SHORT).show();
+                        popup.cancel();
+                        bottomSheetDialog = new BottomSheetDialog(DetailAdmin.this);
+                        View bottomSheetView = getLayoutInflater().inflate(R.layout.codepopup, null);
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        editTex = bottomSheetView.findViewById(R.id.editTex);
+                        editTex1 = bottomSheetView.findViewById(R.id.editTex1);
+                        btnVal = bottomSheetView.findViewById(R.id.btnVal);
+                        if (!codep.isEmpty()){
+                            editTex.setText(codep);
+                            editTex1.setText(codep);
                         }
+                        btnVal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (!editTex.getText().toString().isEmpty() || !editTex1.getText().toString().isEmpty()){
+                                    if (!editTex.getText().toString().equals(editTex1.getText().toString())){
+                                        Toast.makeText(DetailAdmin.this, "Verifier le code pin", Toast.LENGTH_SHORT).show();
+
+                                    }else{
+                                        addCode(editTex.getText().toString());
+                                    }
+                                }else{
+                                    Toast.makeText(DetailAdmin.this, "Remplisser tout les champs", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        bottomSheetDialog.show();
                     }
                 });
-                bottomSheetDialog.show();
             }
         });
 
@@ -151,26 +191,75 @@ public class DetailAdmin extends AppCompatActivity {
                 bottomSheetDialog = new BottomSheetDialog(DetailAdmin.this);
                 View bottomSheetView = getLayoutInflater().inflate(R.layout.planifierpopup, null);
                 bottomSheetDialog.setContentView(bottomSheetView);
+                val = bottomSheetView.findViewById(R.id.val);
+                tvdate = bottomSheetView.findViewById(R.id.tvdate);
+                tvheure = bottomSheetView.findViewById(R.id.tvheure);
+                ivdate = bottomSheetView.findViewById(R.id.ivdate);
+                ivheure = bottomSheetView.findViewById(R.id.ivheure);
                 tvjour = bottomSheetView.findViewById(R.id.tvjour);
-                tvsemaine = bottomSheetView.findViewById(R.id.tvsemaine);
-                tvmois = bottomSheetView.findViewById(R.id.tvmois);
                 tvmoistest = bottomSheetView.findViewById(R.id.tvmoistest);
                 editTextJour = bottomSheetView.findViewById(R.id.edjour);
-                editTextSemaine = bottomSheetView.findViewById(R.id.edsemaine);
-                editTextMois = bottomSheetView.findViewById(R.id.edmois);
                 edmoistest = bottomSheetView.findViewById(R.id.edmoistest);
                 edmoistestnum = bottomSheetView.findViewById(R.id.edmoistestnum);
-                spinnerWeek = bottomSheetView.findViewById(R.id.spinnerWeek);
-                spinnerMonth = bottomSheetView.findViewById(R.id.spinnerMonth);
-                recupsemaine = bottomSheetView.findViewById(R.id.recupsemaine);
-                recupmois = bottomSheetView.findViewById(R.id.recupmois);
                 lljour = bottomSheetView.findViewById(R.id.lljour);
                 llmoistest = bottomSheetView.findViewById(R.id.llmoistest);
-                llmois = bottomSheetView.findViewById(R.id.llmois);
-                llsemaine = bottomSheetView.findViewById(R.id.llsemaine);
-                val = bottomSheetView.findViewById(R.id.val);
                 editor1.putString("selectedDayOfWeek", selectedDayOfWeek);
                 editor1.apply();
+
+                ivdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Calendar calendar = Calendar.getInstance();
+                        int year = calendar.get(Calendar.YEAR);
+                        int month = calendar.get(Calendar.MONTH);
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                DetailAdmin.this,
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        // Mettez à jour votre interface utilisateur avec la date sélectionnée
+                                        tvdate.setText(String.format("%02d-%02d-%04d", dayOfMonth, monthOfYear + 1, year));
+                                    }
+                                },
+                                year,
+                                month,
+                                day
+                        );
+                        datePickerDialog.show();
+                    }
+
+                });
+                ivheure.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Calendar c = Calendar.getInstance();
+                        int hour = c.get(Calendar.HOUR_OF_DAY);
+                        int minute = c.get(Calendar.MINUTE);
+                        int hourOfDay ; // Heure sélectionnée
+                        int minuteh ;
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                DetailAdmin.this,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                        @SuppressLint("DefaultLocale") String formattedHour = String.format("%02d", hourOfDay);
+                                        @SuppressLint("DefaultLocale") String formattedMinute = String.format("%02d", minute);
+                                        // Mettez à jour votre interface utilisateur avec l'heure sélectionnée
+                                        tvheure.setText(formattedHour + ":" + formattedMinute);
+                                    }
+                                },
+                                hour,
+                                minute,
+                                true
+                        );
+                        timePickerDialog.show();
+                    }
+
+                });
                 tvjour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -201,73 +290,12 @@ public class DetailAdmin extends AppCompatActivity {
                         }
                     }
                 });
-                tvsemaine.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Vérifiez si le TextView est actuellement visible ou non
-                        if (llsemaine.getVisibility() == View.VISIBLE) {
-                            // Le TextView est visible, alors cachez-le et affichez l'ImageView par défaut
-                            llsemaine.setVisibility(View.GONE);
-                            tvsemaine.setImageResource(R.drawable.base1); // Image par défaut
-                        } else {
-                            // Le TextView n'est pas visible, alors affichez-le et changez l'image de l'ImageView
-                            llsemaine.setVisibility(View.VISIBLE);
-                            tvsemaine.setImageResource(R.drawable.base2); // Nouvelle image
-                        }
-                    }
-                });
-                tvmois.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Vérifiez si le TextView est actuellement visible ou non
-                        if (llmois.getVisibility() == View.VISIBLE) {
-                            // Le TextView est visible, alors cachez-le et affichez l'ImageView par défaut
-                            llmois.setVisibility(View.GONE);
-                            tvmois.setImageResource(R.drawable.base1); // Image par défaut
-                        } else {
-                            // Le TextView n'est pas visible, alors affichez-le et changez l'image de l'ImageView
-                            llmois.setVisibility(View.VISIBLE);
-                            tvmois.setImageResource(R.drawable.base2); // Nouvelle image
-                        }
-                    }
-                });
 
-                spinnerWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                         selectedDayOfWeek = weekAdapter.getItem(position);
-                        recupsemaine.setText("A chaque " + selectedDayOfWeek+" le message sera envoyé");
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // Gérer le cas où rien n'est sélectionné
-                    }
-                });
-
-                spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                         selectedDayOfMonth = monthAdapter.getItem(position);
-                        recupmois.setText("A chaque  " + selectedDayOfMonth+" du mois le message sera envoyé");
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // Gérer le cas où rien n'est sélectionné
-                    }
-                });
-
-                // Définir les adaptateurs pour les Spinners
-                spinnerWeek.setAdapter(weekAdapter);
-                spinnerMonth.setAdapter(monthAdapter);
                 val.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        if (editTextMois.getText().toString().isEmpty()||editTextJour.getText().toString().isEmpty()||editTextSemaine.getText().toString().isEmpty()){
+                        if (editTextJour.getText().toString().isEmpty()){
                             if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
                                 Toast.makeText(DetailAdmin.this, "Aucun rappel n'est planifié", Toast.LENGTH_SHORT).show();
                                 bottomSheetDialog.dismiss();
@@ -281,38 +309,17 @@ public class DetailAdmin extends AppCompatActivity {
                             }
                         }else{
                             if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
-                                /*editor1.clear();
-                                editor1.apply();
-                                editor1.putString("messagejour", editTextJour.getText().toString());
-                                editor1.putString("messagesemaine", editTextSemaine.getText().toString());
-                                editor1.putString("messagemois", editTextMois.getText().toString());
-                                editor1.putString("selectedDayOfWeek", selectedDayOfWeek);
-                                editor1.putString("selectedDayOfMonth", selectedDayOfMonth);
-                                editor1.apply();*/
                                 Message msge=new Message("messagejour",editTextJour.getText().toString());
-                                Message msge1=new Message("messagesemaine",editTextSemaine.getText().toString());
-                                Message msge2=new Message("messagemois",editTextMois.getText().toString());
                                 databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
-                                databaseReferenceM.child(idAdmin).child("messagesemaine").setValue(msge1);
-                                databaseReferenceM.child(idAdmin).child("messagemois").setValue(msge2);
                                 bottomSheetDialog.dismiss();
                             }else{
-                                /*editor1.clear();
+                                editor1.clear();
                                 editor1.apply();
-                                editor1.putString("messagejour", editTextJour.getText().toString());
-                                editor1.putString("messagesemaine", editTextSemaine.getText().toString());
-                                editor1.putString("messagemois", editTextMois.getText().toString());
-                                editor1.putString("selectedDayOfWeek", selectedDayOfWeek);
-                                editor1.putString("selectedDayOfMonth", selectedDayOfMonth);
                                 editor1.putString("messageparseconde", edmoistest.getText().toString());
                                 editor1.putString("lesnumeros", edmoistestnum.getText().toString());
-                                editor1.apply();*/
+                                editor1.apply();
                                 Message msge=new Message("messagejour",editTextJour.getText().toString());
-                                Message msge1=new Message("messagesemaine",editTextSemaine.getText().toString());
-                                Message msge2=new Message("messagemois",editTextMois.getText().toString());
                                 databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
-                                databaseReferenceM.child(idAdmin).child("messagesemaine").setValue(msge1);
-                                databaseReferenceM.child(idAdmin).child("messagemois").setValue(msge2);
                                 bottomSheetDialog.dismiss();
                             }
                         }
@@ -338,14 +345,24 @@ public class DetailAdmin extends AppCompatActivity {
 
 
     private void addCode(String code) {
-        DatabaseReference localiteReference = databaseReference.child(idAdmin).push();
-        editor.putString("codepin", code);
-        editor.apply();
-        String nouvelId = localiteReference.getKey();
-        Model_code_pin codePin = new Model_code_pin(nouvelId,code);
-        localiteReference.setValue(codePin);
-        startActivity(new Intent(DetailAdmin.this, Login.class));
-        finish();
+        if (codep.isEmpty()){
+            DatabaseReference localiteReference = databaseReference.child(idAdmin).push();
+            editor.putString("codepin", code);
+            editor.apply();
+            String nouvelId = localiteReference.getKey();
+            Model_code_pin codePin = new Model_code_pin(nouvelId,code);
+            localiteReference.setValue(codePin);
+            startActivity(new Intent(DetailAdmin.this, Login.class));
+            finish();
+        }else{
+            DatabaseReference localiteReference = databaseReference.child(idAdmin);
+            localiteReference.child("code").setValue(code);
+            editor.putString("codepin", code);
+            editor.apply();
+            startActivity(new Intent(DetailAdmin.this, Login.class));
+            finish();
+        }
+
     }
 
     @Override

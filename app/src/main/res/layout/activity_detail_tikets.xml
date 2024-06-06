@@ -18,6 +18,13 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="0dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:elevation="-2dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/locabill"
+            app:tint="#65525C5E" />
 
         <TextView
             android:id="@+id/titre"

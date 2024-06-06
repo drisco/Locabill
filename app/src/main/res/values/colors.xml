@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="text_black">#000</color>
+    <color name="text_black">#77FFFFFF</color>
     <color name="blue">#00BCD4</color>
     <color name="green">#0FD317</color>
     <color name="red">#FF0000</color>
@@ -14,5 +14,5 @@
     <color name="magenta">#FF00FF</color>
     <color name="teal">#008080</color>
     <color name="amber">#FFC107</color>
-    <color name="indigo">#3F51B5</color>
+    <color name="indigo">#1531CD</color>
 </resources>

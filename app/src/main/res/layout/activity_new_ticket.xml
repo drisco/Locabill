@@ -42,7 +42,13 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="0dp">
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/locabill"
+                    android:layout_marginTop="-25dp"
+                    android:elevation="-2dp"
+                    android:tint="#65525C5E"/>
                 <TextView
                     android:id="@+id/titre"
                     android:layout_width="wrap_content"
@@ -56,16 +62,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/titre"
-                    android:layout_marginStart="50sp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="50sp"
+                    android:layout_marginStart="90sp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="90sp"
                     android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/l1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_below="@+id/titre"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="0dp"
@@ -150,7 +155,8 @@
                         android:id="@+id/userNom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bamba  "
+                        android:text="Bamba"
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -160,6 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Drissa  "
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -169,6 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="+2250504389406  "
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -178,6 +186,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="90000 FCFA  "
+                        android:textColor="@color/orange"
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -187,6 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Studio "
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -196,6 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text=" Moi click ici "
+                        android:fontFamily="@font/gotham_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -204,8 +216,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="180000 FCFA "
+                        android:textColor="@color/indigo"
                         android:layout_marginTop="10dp"
                         android:textSize="14sp"
+                        android:fontFamily="@font/gotham_medium"
                         android:textStyle="bold" />
                     <!--<TextView
                         android:id="@+id/caution"
@@ -225,7 +239,8 @@
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="25dp"
                     android:text="Somme en chiffre : "
-                    android:textSize="14sp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/freescrpt"
                     android:textStyle="bold" />
 
                 <TextView
@@ -251,24 +266,11 @@
                     android:textStyle="bold"
                     tools:ignore="DuplicateIds" />
 
-                <TextView
-                    android:id="@+id/cx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/qrImageView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Locabill vous rémercie !"
-                    android:textStyle="bold"
-                    tools:ignore="DuplicateIds" />
-
-
                 <ImageView
                     android:id="@+id/qrImageView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:elevation="-2dp"
                     android:layout_below="@+id/textViewPaymentDate"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
@@ -370,22 +372,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/buttonPrint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Actualiser"
-            android:layout_marginRight="8dp" />
 
-        <Button
+        <TextView
             android:id="@+id/buttonSendReceipt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Envoyer le reçu"
-            android:layout_marginLeft="8dp" />
+            android:text="Envoyer et Télecharger"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:fontFamily="@font/montserrat_extra_bold"
+            android:background="@drawable/new_border"
+            android:padding="10dp"/>
 
     </LinearLayout>
 

@@ -1,20 +1,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/buttonTakePhoto"
+    <View
+        android:layout_width="55dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="1dp"
+        android:background="#887E7E" />
+
+    <LinearLayout
+        android:layout_marginTop="25dp"
+        android:paddingBottom="25dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Prendre une photo"
-        android:layout_margin="16dp" />
-
-    <Button
-        android:id="@+id/buttonChooseFromGallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choisir depuis la galerie"
-        android:layout_margin="16dp" />
-
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_marginEnd="25dp"
+            android:id="@+id/buttonTakePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/ige0"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/camera"
+                app:tint="@color/blue" />
+            <TextView
+                android:layout_below="@+id/ige0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Appareil photo"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginStart="25dp"
+            android:id="@+id/buttonChooseFromGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/ige1"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/picture"/>
+            <TextView
+                android:layout_below="@+id/ige1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ma gallerie"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp" />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

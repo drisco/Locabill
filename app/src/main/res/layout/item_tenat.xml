@@ -22,6 +22,7 @@
             android:gravity="center"
             android:padding="15dp"
             android:text="azert"
+            android:fontFamily="@font/gotham_medium"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />

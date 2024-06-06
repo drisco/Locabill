@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -34,8 +35,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainBroadcastReceiver extends BroadcastReceiver {
-    private final String channelId = "countdown_notification_channel";
-    private final  int NOTIFICATION_ID = 123;
     SharedPreferences sharedPreferences;
     String idAdm;
     DatabaseReference databaseReference,databaseReference2,dtabaseMessage;
@@ -55,6 +54,7 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
 
          messageparseconde = sharedPreferences1.getString("messageparseconde", "");
          listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
+
         String action = intent.getAction();
         Bundle extras = intent.getExtras();
         String reference = extras.getString("reference");
@@ -72,6 +72,8 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
                         System.out.println("MON NOM CEST     JE SUIS ICI"+reference);
 
                         if (reference.equals("nouveaupaiement")){
+                            Toast.makeText(context, "verification1", Toast.LENGTH_SHORT).show();
+                            System.out.println("ERREURRRRRERREUURRRRRRURURRURURUURUURRRUUUUUEEEEEEEEEEEEEEEEUUUUUUUUUUUUUUUUUUUUEEEURRRRRRRRR "+context);
                             startMyService(context);
                         }else if (reference.equals("chaquefindumois")) {
                             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -107,11 +109,12 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
     //methode de text
     private void messageDeRappel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "notification_channel";
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle("Service")
-                    .setContentText(messageparseconde)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(messageparseconde))
+                    .setContentText("messageparseconde")
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText("messageparseconde"))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             // Créer une intention pour ouvrir l'activité appropriée lors de la clic de la notification
@@ -124,16 +127,19 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+            int NOTIFICATION_ID = 123;
             notificationManager.notify(NOTIFICATION_ID, builder.build());
+            System.out.println("UREHNRGEIUNIITRNINITRGHJIERGBJBGTRLIJPJTBLSNHHBIHO9ERBUINPBI9RSTH IUTRGLIHIUTRGBN9FR JIER0JSIUGHR9HZ0 GTUJGREIJUGTRHP0 JERHG9HJER " + messageparseconde);
         }
 
-        /*if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
+         if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
             recipients = recupererNumeros(listedesnumeros);
             for (String recipient : recipients) {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(recipient, null, messageparseconde, null, null);
             }
-        }*/
+          }
+
     }
 
     private List<String> recupererNumeros(String listedesnumeros) {
@@ -148,7 +154,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
 
     private void ajouterRecuAuto(Model_tenant tenant) {
         System.out.println("RAPELRAPELLELLELELELELELLELLELELELELELELL     BAH VOILA");
-
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
@@ -163,6 +168,7 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
 
     // Méthode pour démarrer le service
     private void startMyService(Context context) {
+        Toast.makeText(context, "starton", Toast.LENGTH_LONG).show();
         Intent serviceIntent = new Intent(context, MesServices.class);
         context.startService(serviceIntent);
     }

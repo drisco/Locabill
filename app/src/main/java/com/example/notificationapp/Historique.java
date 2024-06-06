@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
     RecyclerView recyclerView;
     PopupRegister popusCostum;
     RelativeLayout log;
+    ImageView headI;
 
 
     @SuppressLint("MissingInflatedId")
@@ -51,7 +53,16 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
         FirebaseApp.initializeApp(this);
         recyclerView= findViewById(R.id.recyclerView);
         log= findViewById(R.id.log);
+        headI= findViewById(R.id.headI);
         ticketsData = new ArrayList<>();
+
+        headI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Historique.this,MainActivity.class));
+                finish();
+            }
+        });
 
         // Référence à la base de données Firebase
         popusCostum = new PopupRegister(Historique.this);
@@ -88,16 +99,12 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
                     studentAdapter.notifyDataSetChanged();
                     studentAdapter.setClickListener(Historique.this);
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Gérer les erreurs ici
             }
         });
-
-
     }
 
     @Override
@@ -116,7 +123,6 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
         intent.putExtra("date", tiket.getDate());
         startActivity(intent);
         finish();
-        Toast.makeText(this, tiket.getId(), Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onBackPressed() {

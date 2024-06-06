@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
             RappelPlaning.schedulepaiement(this);
             RappelPlaning.scheduleChaquefindumois(this);
+            RappelPlaning.scheduleTest(this);
         }
 
         sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);

@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,7 @@ public class RegistLocataireFrament  extends Fragment {
     SharedPreferences.Editor editor;
     DatabaseReference reference, databaseReference1;
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class RegistLocataireFrament  extends Fragment {
         confCodesv =view.findViewById(R.id.confCode);
         phone =view.findViewById(R.id.phonep);
         dBtnRegister =view.findViewById(R.id.dBtnRegister);
+
         //createNotificationChannel();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
@@ -94,14 +97,12 @@ public class RegistLocataireFrament  extends Fragment {
 
                             confCodesv.setVisibility(View.VISIBLE);
                             SharedPreferences donnes = getContext().getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
-                            String code = donnes.getString("codeconfirm", "");
                             if (!confCode.getText().toString().isEmpty()){
                                 String ccode=confCode.getText().toString();
                                 if (ccode.equals(password)){
                                     popup.dismiss();
                                     editor.clear();
                                     editor.apply();
-
                                     editor.putString("idAdmin",idAdmin );
                                     editor.putString("id",id );
                                     editor.putString("ville", ville);

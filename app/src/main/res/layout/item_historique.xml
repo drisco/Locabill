@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="azert"
+        android:fontFamily="@font/gotham_medium"
         android:padding="15dp"
         android:gravity="center"
         android:textColor="@color/white"

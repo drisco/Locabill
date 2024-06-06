@@ -38,7 +38,7 @@
             android:textSize="18dp"
             android:gravity="end"
             android:layout_below="@id/textViewNom"
-            android:inputType="number"/>
+            android:inputType="numberPassword"/>
 
         <TextView
             android:id="@+id/textViewNom1"
@@ -57,7 +57,7 @@
             android:textSize="18dp"
             android:gravity="end"
             android:layout_below="@id/textViewNom"
-            android:inputType="number"/>
+            android:inputType="numberPassword"/>
 
         <Button
             android:id="@+id/btnVal"

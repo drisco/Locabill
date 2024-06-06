@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.notificationapp.LoginAdmin;
 import com.example.notificationapp.MainActivity;
+import com.example.notificationapp.PopupAbonnement;
 import com.example.notificationapp.PopupRegister;
 import com.example.notificationapp.PopusCostum;
 import com.example.notificationapp.R;
@@ -40,9 +41,11 @@ public class RegistProprieFragment  extends Fragment {
     private TextView loginTV;
     private TextView registerBtn;
     int incr;
+    PopupAbonnement popupA;
     PopusCostum popusCostum;
     PopupRegister popup;
     DatabaseReference databaseReference ;
+    String abonner;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -64,7 +67,6 @@ public class RegistProprieFragment  extends Fragment {
         confirmPwdEdt = view.findViewById(R.id.idEdtConfirmPassword);
         loginTV = view.findViewById(R.id.idTVLoginUser);
         registerBtn = view.findViewById(R.id.idBtnRegister);
-
 
         loginTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,20 +146,38 @@ public class RegistProprieFragment  extends Fragment {
                     // L'utilisateur existe déjà avec ce numéro de téléphone, affichez un message d'erreur
                     Toast.makeText(getContext(), "Ce numéro de téléphone est déjà associé à un compte.", Toast.LENGTH_SHORT).show();
                 } else {
-                    DatabaseReference localiteReference = databaseReference.push();
-                    String nouvelId = localiteReference.getKey();
-                    editor.putString("id", nouvelId);
-                    editor.putString("nom", userNames);
-                    editor.putString("prenom", userPrenom);
-                    editor.putString("numero", numeros);
-                    editor.putString("mdp", pwd);
-                    editor.putString("proprie", "proprie");
-                    editor.apply();
-                    Admin nouveauAdmin =new Admin(nouvelId,userNames,userPrenom,numeros,pwd, finalFormattedDate);
-                    localiteReference.setValue(nouveauAdmin);
-                    popup.cancel();
-                    startActivity(new Intent(getContext(), MainActivity.class));
-                    getActivity().finish();
+                        popupA = new PopupAbonnement(getActivity());
+                        popupA.setCancelable(false);
+                        popupA.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        popupA.show();
+                        popupA.getRetour().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                popup.cancel();
+                                popupA.dismiss();
+                                DatabaseReference localiteReference = databaseReference.push();
+                                String nouvelId = localiteReference.getKey();
+                                editor.putString("id", nouvelId);
+                                editor.putString("nom", userNames);
+                                editor.putString("prenom", userPrenom);
+                                editor.putString("numero", numeros);
+                                editor.putString("mdp", pwd);
+                                editor.putString("proprie", "proprie");
+                                editor.putString("abonner", abonner);
+                                editor.apply();
+                                Admin nouveauAdmin =new Admin(nouvelId,userNames,userPrenom,numeros,pwd, finalFormattedDate,"oui");
+                                localiteReference.setValue(nouveauAdmin);
+                                startActivity(new Intent(getContext(), MainActivity.class));
+                                getActivity().finish();
+                            }
+                        });
+                        popupA.getDismiss().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                popup.cancel();
+                                popupA.dismiss();
+                            }
+                        });
                 }
             }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/rounded_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="25dp"/>
+            <solid android:color="#03A9F4"/> <!-- Couleur de fond si l'image a de la transparence -->
+        </shape>
+    </item>
+    <item android:drawable="@drawable/fond__" /> <!-- Remplacez "your_image" par le nom de votre image -->
+</layer-list>

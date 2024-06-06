@@ -17,6 +17,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,16 +29,14 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notificationapp.models.Model_code_pin;
-import com.example.notificationapp.models.Model_tenant;
 import com.example.notificationapp.models.Model_ticket;
+import com.example.notificationapp.models.StatutRecu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,30 +53,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class New_ticket extends AppCompatActivity {
     NumberToWords numberToWords = new NumberToWords();
     private static final int PERMISSION_REQUEST_CODE = 140;
     private static final int PERMISSION_REQUEST_CO = 10;
-    DatabaseReference databaseReference, databaseReference1;
+    DatabaseReference databaseReference, databaseReference1,databaseReference2;
     int incr,intmontant,intavance;String id_2,lieu;
-
+    AlertPaiement popup;
     ImageView plus,moins;
     EditText edit;
     RelativeLayout show,recuId;
     ImageView qrImageView,retour1;
     TextView buttonPrintReceipt;
-    Button buttonSendReceipt;
+    TextView buttonSendReceipt;
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat monthYearFormat;
     TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer,avance;
     int count = 0;String qrContent,idAdmin,montantChiffre,resultat,numberInWords;
+    String prenom,prix,numero,type_de_maison,cautions,avances,date_,nom,verifie,dateFormatted;
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -87,6 +86,8 @@ public class New_ticket extends AppCompatActivity {
         idAdmin = donnes.getString("id", "");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("recu");
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
+        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
+
         plus = findViewById(R.id.plus);
         edit = findViewById(R.id.edit);
         retour1 = findViewById(R.id.retour1);
@@ -94,7 +95,9 @@ public class New_ticket extends AppCompatActivity {
         recuId = findViewById(R.id.recuId);
         payer = findViewById(R.id.payer);
         avance = findViewById(R.id.avance);
-
+        popup = new AlertPaiement(New_ticket.this);
+        popup.setCancelable(false);
+        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         buttonPrintReceipt = findViewById(R.id.buttonPrintReceipt);
         buttonSendReceipt = findViewById(R.id.buttonSendReceipt);
         qrImageView = findViewById(R.id.qrImageView);
@@ -108,8 +111,16 @@ public class New_ticket extends AppCompatActivity {
         s_chiffre = findViewById(R.id.s_chiffre);
         debut = findViewById(R.id.debut);
 
-        monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault()); // Format "Février 2024" pour la France
-        setupDatePicker();
+
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle  = sdf.format(heure);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
+         dateFormatted = sdf2.format(heure);
+        date.setText(heureActuelle);
+        debut.setText(dateFormatted);
+
         if (checkPermissionBoolean()) {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         } else {
@@ -141,17 +152,45 @@ public class New_ticket extends AppCompatActivity {
 
         Intent intent = getIntent();
         id_2 = intent.getStringExtra("id");
-        String nom = intent.getStringExtra("nom");
-
-        String prenom = intent.getStringExtra("prenom");
-        String prix = intent.getStringExtra("prix");
-        String numero = intent.getStringExtra("numero");
-        String type_de_maison = intent.getStringExtra("type_de_maison");
-        String debut_de_loca = intent.getStringExtra("debut_de_loca");
-        String cautions = intent.getStringExtra("caution");
-        String avances = intent.getStringExtra("avance");
-        String date_ = intent.getStringExtra("date");
+         nom = intent.getStringExtra("nom");
+         prenom = intent.getStringExtra("prenom");
+         prix = intent.getStringExtra("prix");
+         numero = intent.getStringExtra("numero");
+         type_de_maison = intent.getStringExtra("type_de_maison");
+         cautions = intent.getStringExtra("caution");
+         avances = intent.getStringExtra("avance");
+         date_ = intent.getStringExtra("date");
         lieu = intent.getStringExtra("lieu");
+
+        databaseReference1.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
+
+                        for (DataSnapshot autherSnap :citySnapshot.getChildren()){
+                            StatutRecu tenant = autherSnap.getValue(StatutRecu.class);
+                            if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
+                                verifie="retard";
+                                String date0=tenant.getDate();
+                                String id= tenant.getId();
+                                String statut= tenant.getStatut();
+                                String somme= tenant.getSomme();
+                                debut.setText(date0);
+                                Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
+                                methodePayerRetard(date0,id,somme);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Gérer les erreurs
+            }
+        });
         numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
 
         intmontant = Integer.parseInt(prix);
@@ -173,13 +212,6 @@ public class New_ticket extends AppCompatActivity {
         number.setText(numero);
         montant.setText(prix+ " FCFA");
         type.setText(type_de_maison);
-        debut.setText(debut_de_loca);
-
-        Date dates = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        String dateFormatted = sdf.format(dates);
-
-        date.setText(dateFormatted);
 
          // Générez le code QR à partir du contenu
         generateQRCode(id_2);
@@ -187,10 +219,54 @@ public class New_ticket extends AppCompatActivity {
         buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
-                        type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),date.getText().toString());
-                convertToPdfAndSend();
-                checkPermissions();
+                if (verifie !=null){
+                    convertToPdfAndSend();
+                    checkPermissions();
+                }else {
+                    DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2);
+                    localiteReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Model_ticket> allMessages = new ArrayList<>();
+                            if (snapshot.exists()) {
+                                boolean paiementEffectue = false;
+                                for (DataSnapshot citySnapshot : snapshot.getChildren()) {
+                                    Model_ticket ticket = citySnapshot.getValue(Model_ticket.class);
+                                    if (ticket != null && ticket.getDate() != null && ticket.getDate().equals(dateFormatted)) {
+                                        paiementEffectue = true;
+                                    }
+                                }
+                                if (paiementEffectue) {
+                                    popup.show();
+                                    popup.setMessageText("Vous avez déjà réglé le paiement de ce mois-ci"+" "+dateFormatted+" "+", merci beaucoup pour votre fiabilité");
+                                    popup.setCancelText("Retour");
+                                    popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            popup.dismiss();
+                                        }
+                                    });
+                                }else{
+                                    addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
+                                            type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),debut.getText().toString());
+                                    convertToPdfAndSend();
+                                    checkPermissions();
+                                }
+                            }else{
+                                addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
+                                        type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),debut.getText().toString());
+                                convertToPdfAndSend();
+                                checkPermissions();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
             }
         });
 
@@ -227,37 +303,43 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
-    private void setupDatePicker() {
-        // Créez une instance de DatePickerDialog
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+    private void methodePayerRetard(String date, String id, String somme) {
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String heureActuelle = sdf.format(heure);
+        DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2);
+        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
+        popup.show();
+        popup.setTitreText(" Loyer en retard");
+        popup.setTitreColor(R.color.orange);
+        popup.setRetard(" Mois non reglé : "+date);
+        popup.setMessageText("Cher locataire, il semble que vous ayez un mois de loyer en retard. Merci de régulariser cette situation au plus vite pour éviter toute complication future. ");
+        popup.setCancelText("Payer le mois");
+        popup.setCancelBackground(R.drawable.bg_circle_green);
+        popup.setCancelTextColor(R.color.white);
+        popup.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // Créer un objet Calendar et le définir sur la date sélectionnée
-                Calendar selectedDate = Calendar.getInstance();
-                selectedDate.set(year, monthOfYear, dayOfMonth);
-
-                // Formater la date sélectionnée en utilisant le format du mois et de l'année
-                String mattedDate = monthYearFormat.format(selectedDate.getTime());
-                debut.setText(mattedDate);
+            public void onClick(View view) {
+                Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type_de_maison, date_, cautions,avances ,numberInWords, date,heureActuelle);
+                localiteReference.child(id).setValue(nouveauLocataire);
+                databaseReference2.child(idAdmin).child(id_2).child(id).child("statut").setValue("payé");
+                popup.dismiss();
             }
-        }, year, month, dayOfMonth);
+        });
+
+
     }
 
-
-    private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String date) {
+    private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String dates) {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         sdf.applyPattern("dd-MM-yyyy HH:mm");
         String heureActuelle  = sdf.format(heure);
-
+        databaseReference1.child(lieu).child(id_2).child("statut").setValue("payé");
         databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, date,heureActuelle);
+        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, dates,date.getText().toString());
         localiteReference.setValue(nouveauLocataire);
     }
 

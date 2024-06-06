@@ -104,7 +104,7 @@ public class Creat_new_tenant extends AppCompatActivity {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault()); // Format "Février 2024" pour la France
+                SimpleDateFormat monthYearFormat = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault()); // Format "Février 2024" pour la France
                 datePickerDialog = new DatePickerDialog(Creat_new_tenant.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

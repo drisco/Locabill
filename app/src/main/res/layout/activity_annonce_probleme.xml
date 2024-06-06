@@ -1,47 +1,149 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <EditText
-        android:id="@+id/editTextTitle"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Titre" />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/rtour"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/back"
+            style="@style/imageShow"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"/>
 
-    <EditText
-        android:id="@+id/editTextDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description"
-        android:layout_marginTop="8dp" />
+        <ImageView
+            android:id="@+id/play"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/play"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"/>
+        <ImageView
+            android:id="@+id/pause"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/pause"
+            android:visibility="gone"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"/>
 
-    <Button
-        android:id="@+id/buttonAddImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ajouter des images"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:id="@+id/buttonAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ajouter des images"
-        android:layout_marginTop="16dp" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-        <LinearLayout
-            android:id="@+id/imageContainer"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:padding="10dp"
+            android:fontFamily="@font/gotham_medium"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:text="Signaler un problème"
+            android:textSize="16dp"/>
+    </RelativeLayout>
 
-    </HorizontalScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollIndicators="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:fontFamily="@font/gotham_book"
+                android:layout_margin="15dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:text="Bienvenue dans notre plateforme dédiée à l'entretien des maisons louées. Nous sommes là pour garantir un séjour agréable et sans souci pour nos locataires. Si vous rencontrez un problème ou un défaut dans votre logement, n'hésitez pas à le signaler via ce formulaire. Votre satisfaction est notre priorité."/>
+            <TextView
+                android:id="@+id/buttonAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ajouter des images"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                android:background="@drawable/new_border"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/blue"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="-15dp" />
+
+            <LinearLayout
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginTop="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/imageContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+                <EditText
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/editTextTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Titre" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editTextDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_toStartOf="@+id/vocal"
+                        android:background="@drawable/border_black"
+                        android:hint="Description"
+                        android:padding="5dp" />
+
+                    <ImageView
+                        android:id="@+id/vocal"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="25dp"
+                        android:src="@drawable/audio"
+                        android:visibility="visible" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/buttonAdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Soumettre"
+                    android:padding="15dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:backgroundTint="#453E3E"
+                    android:layout_margin="16dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/cancel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end"
+        style="@style/imageShow"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/cancel"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:paddingBottom="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_marginEnd="25dp"
+                android:id="@+id/wave"
+                style="@style/imageShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/ige0"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:src="@drawable/wave" />
+                <TextView
+                    android:layout_below="@+id/ige0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WAVE MONEY"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginStart="25dp"
+                android:id="@+id/orange"
+                style="@style/imageShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/ige1"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:src="@drawable/orange"/>
+                <TextView
+                    android:layout_below="@+id/ige1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ORANGE MONEY"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp" />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:paddingBottom="25dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_marginEnd="25dp"
+                android:id="@+id/moov"
+                style="@style/imageShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/ige01"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:src="@drawable/moov"/>
+                <TextView
+                    android:layout_below="@+id/ige01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MOOV MONEY"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginStart="25dp"
+                android:id="@+id/mtn"
+                style="@style/imageShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/ige11"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:src="@drawable/mtn"/>
+                <TextView
+                    android:layout_below="@+id/ige11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MTN MONEY"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

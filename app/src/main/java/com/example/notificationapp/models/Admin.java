@@ -7,18 +7,20 @@ public class Admin {
     private String numeros;
     private String pwd;
     private String date;
+    private String abner;
 
     // Constructeur par défaut requis pour Firebase
     public Admin() {
     }
 
-    public Admin(String id, String userName, String userPrenom, String numeros, String pwd, String date) {
+    public Admin(String id, String userName, String userPrenom, String numeros, String pwd, String date, String abner) {
         this.id = id;
         this.userName = userName;
         this.userPrenom = userPrenom;
         this.numeros = numeros;
         this.pwd = pwd;
         this.date = date;
+        this.abner = abner;
     }
 
     // Getters et setters
@@ -69,6 +71,14 @@ public class Admin {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getAbner() {
+        return abner;
+    }
+
+    public void setAbner(String abner) {
+        this.abner = abner;
     }
 }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,11 @@ import com.example.notificationapp.Bricefile;
 import com.example.notificationapp.EspaceLocataires;
 import com.example.notificationapp.List_of_tenants;
 import com.example.notificationapp.NumberToWords;
+import com.example.notificationapp.PopupMoney;
 import com.example.notificationapp.R;
 import com.example.notificationapp.UpdateTenant;
+import com.example.notificationapp.models.ApiResponse;
+import com.example.notificationapp.models.ClientData;
 import com.example.notificationapp.models.Model_ticket;
 import com.example.notificationapp.models.StatutRecu;
 import com.google.firebase.database.DataSnapshot;
@@ -28,36 +32,49 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class PaiementFragment extends Fragment {
     DatabaseReference databaseReference,databaseReference1,databaseReference2;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    ClientData client;
     String idAdm,idLca,ville,numero,date ,statut,id,somme,somme1,caution,avance,debutUsage,type,nom,prenom;
 
     Model_ticket tickets;
+
     TextView pyer;
     AlertPaiement popup;
+    PopupMoney popupMoney;
     private EspaceLocataires mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof EspaceLocataires) {
-            mActivity = (EspaceLocataires) context; // L'activité parent est EspaceLocataires
+            mActivity = (EspaceLocataires) context;
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mActivity = null; // Pour éviter les fuites de mémoire
+        mActivity = null;
     }
 
     @SuppressLint("MissingInflatedId")
@@ -83,6 +100,7 @@ public class PaiementFragment extends Fragment {
         debutUsage = sharedPreferences.getString("debutUsage", "");
         avance = sharedPreferences.getString("avance", "");
         type = sharedPreferences.getString("type", "");
+         client =new ClientData(200,type,idLca,numero,prenom,"https://mon_lien_de_callback.com");
 
         popup = new AlertPaiement(getActivity());
         popup.setCancelable(true);
@@ -91,6 +109,47 @@ public class PaiementFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 methodeDeVerification();
+                /*popupMoney = new PopupMoney(getActivity());
+                popupMoney.setCancelable(false);
+                popupMoney.getWindow().setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
+                popupMoney.show();
+                popupMoney.moov().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        methodeDeVerification();
+                    }
+                });
+                popupMoney.moov().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        methodeDeVerification();
+                    }
+                });
+                popupMoney.rtour().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        popupMoney.dismiss();
+                    }
+                });
+                popupMoney.wave().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        methodeDeVerification();
+                    }
+                });
+                popupMoney.mtn().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        methodeDeVerification();
+                    }
+                });
+                popupMoney.orange().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        methodeDeVerification();
+                    }
+                });*/
+
 
             }
         });
@@ -99,6 +158,7 @@ public class PaiementFragment extends Fragment {
     }
 
     private void methodeDeVerification() {
+        popupMoney.dismiss();
         databaseReference1.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -114,6 +174,7 @@ public class PaiementFragment extends Fragment {
                                 somme= tenant.getSomme();
                                 Toast.makeText(getContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
                                 methodePayerRetard(date,id,somme);
+                                break;
                             }else {
                                 Toast.makeText(getContext(), "Paiement normal0", Toast.LENGTH_SHORT).show();
                                 methodePourPayer();
@@ -153,7 +214,8 @@ public class PaiementFragment extends Fragment {
         popup.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, date,heureActuelle);
+                sendClientData(client);
+                /*Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, date,heureActuelle);
                 localiteReference.child(id).setValue(nouveauLocataire);
                 databaseReference1.child(idAdm).child(idLca).child(id).child("statut").setValue("payé");
                 popup.dismiss();
@@ -168,7 +230,7 @@ public class PaiementFragment extends Fragment {
                 intent.putExtra("mois", date);
                 intent.putExtra("date", heureActuelle);
                 startActivity(intent);
-                getActivity().finish();
+                getActivity().finish();*/
             }
         });
 
@@ -214,7 +276,8 @@ public class PaiementFragment extends Fragment {
                         popup.getRetour().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String nouvelId = localiteReference.push().getKey();
+                                sendClientData(client);
+                                /*String nouvelId = localiteReference.push().getKey();
                                 Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
                                 localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
                                 databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
@@ -230,7 +293,7 @@ public class PaiementFragment extends Fragment {
                                 intent.putExtra("mois", dateFormatted);
                                 intent.putExtra("date", heureActuelle);
                                 startActivity(intent);
-                                getActivity().finish();
+                                getActivity().finish();*/
                             }
                         });
                     }
@@ -243,7 +306,8 @@ public class PaiementFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(getContext(), "Paiement effectué avec succès", Toast.LENGTH_SHORT).show();
-                            String nouvelId = localiteReference.push().getKey();
+                            sendClientData(client);
+                            /*String nouvelId = localiteReference.push().getKey();
                             Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
                             localiteReference.child(nouvelId).setValue(nouveauLocataire);
                             databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
@@ -259,7 +323,7 @@ public class PaiementFragment extends Fragment {
                             intent.putExtra("mois", dateFormatted);
                             intent.putExtra("date", heureActuelle);
                             startActivity(intent);
-                            getActivity().finish();
+                            getActivity().finish();*/
                         }
                     });
                 }
@@ -272,6 +336,80 @@ public class PaiementFragment extends Fragment {
         });
     }
 
+    private void sendClientData(ClientData clientData) {
+        OkHttpClient client = new OkHttpClient();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(clientData);
+        System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G HUGUHLIEZ "+json);
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"), json);
+
+        Request request = new Request.Builder()
+                .url("https://www.pay.moneyfusion.net/locabill/596ff227835b9233/pay/")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Gérer l'échec de la requête
+                System.out.println("Erreur lors de l'envoi des données du client: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+                // Traiter la réponse ici
+                String responseBody = response.body().string();
+                ApiResponse apiResponse = gson.fromJson(responseBody, ApiResponse.class);
+
+                if (apiResponse.isStatut()) {
+                    // Le paiement est en cours, utilisez l'URL pour rediriger l'utilisateur vers le moyen de paiement
+                    redirectUser(apiResponse.getUrl());
+                    resultatstatus(apiResponse.getToken());
+
+                } else {
+                    // Gérer le cas où le statut n'est pas réussi
+                    System.out.println("Erreur lors du paiement: " + apiResponse.getMessage());
+                }
+            }
+        });
+    }
+
+    private void redirectUser(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+    private void resultatstatus(String token) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://www.pay.moneyfusion.net/paiementNotif/"+token)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Gérer l'échec de la requête
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+
+                // Traiter la réponse ici
+                String responseBody = response.body().string();
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G HUGUHLIEZ "+responseBody);
+            }
+        });
+    }
     private void goToHistoriqueFragment(View view) {
         if (mActivity != null) {
             mActivity.showHistoriqueFragment(view); // Appel de la méthode de l'activité pour afficher le fragment historique
