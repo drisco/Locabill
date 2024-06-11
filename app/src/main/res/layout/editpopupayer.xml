@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/locabill"
+            app:tint="@color/blue" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:text="Paiement "/>
+        <TextView
+            android:id="@+id/textViewNom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat_medium"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:text="Vous allez être redirigé vers notre site de paiement sécurisé où vous pourrez utiliser vos moyens de paiement préférés.Assurez-vous d'avoir suffisamment de fonds sur votre compte."/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_marginTop="25dp"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_marginEnd="20dp"
+                    android:id="@+id/wave"
+                    style="@style/imageShow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/ige0"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:src="@drawable/wave" />
+                    <TextView
+                        android:layout_below="@+id/ige0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="WAVE MONEY"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:layout_centerHorizontal="true"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/orange"
+                    style="@style/imageShow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/ige1"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:src="@drawable/orange"/>
+                    <TextView
+                        android:layout_below="@+id/ige1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ORANGEMONEY"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:layout_centerHorizontal="true"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp" />
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:paddingBottom="25dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_marginEnd="20dp"
+                    android:id="@+id/moov"
+                    style="@style/imageShow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/ige01"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:src="@drawable/moov"/>
+                    <TextView
+                        android:layout_below="@+id/ige01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MOOV MONEY"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:layout_centerHorizontal="true"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/mtn"
+                    style="@style/imageShow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/ige11"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:src="@drawable/mtn"/>
+                    <TextView
+                        android:layout_below="@+id/ige11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MTN MONEY"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:layout_centerHorizontal="true"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/btnmonney"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:background="@drawable/bg_rect"
+            android:text="Continuer"
+            android:backgroundTint="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

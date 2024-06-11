@@ -1,12 +1,14 @@
 package com.example.notificationapp;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -19,8 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,38 +36,52 @@ import com.example.notificationapp.fragments.PaiementFragment;
 import com.example.notificationapp.messervice.AlarmReceiver;
 import com.example.notificationapp.messervice.MainBroadcastReceiver;
 import com.example.notificationapp.messervice.RappelPlaning;
+import com.example.notificationapp.models.ApiResponse;
+import com.example.notificationapp.models.ClientData;
 import com.example.notificationapp.models.Model_code_pin;
+import com.example.notificationapp.models.Model_ticket;
+import com.example.notificationapp.models.StatutRecu;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     ImageView profil,deconnexion,traitPay,traitHis;
-    DatabaseReference databaseReference1;
+    ClientData client;
+
+    DatabaseReference databaseReference01,databaseReference1,databaseReference2;
     TextView nomEtPrenom,editer;
     private Fragment historiqueFragment;
     private BottomSheetDialog bottomSheetDialog;
     EditText editTex,editTex1,mdpedit,numeroet;
-    Button btnVal;
+    Button btnVal,btnmonney;
     int incr;
     private Fragment paiementFragment;
     SharedPreferences sharedPreferences;
     AlertPaiement popup;
     SharedPreferences.Editor editor;
-    DatabaseReference databaseReference;
-    String idAdm,idLca,ville,numero,mdp ,somme1,nom,prenom,codepin;
+    DatabaseReference databaseReference0;
+    String idAdm,idLca,ville,tokenpayer,numero,mdp,date ,statut,id,somme ,somme1,nom,prenom,codepin,caution,avance,debutUsage,type;
     TextView nomEtenom;
 
 
@@ -73,7 +91,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_espace_locataires);
-
         nomEtenom =findViewById(R.id.nomEtPrenom);
         profil =findViewById(R.id.profil);
         deconnexion =findViewById(R.id.deconnexion);
@@ -81,11 +98,14 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         editer =findViewById(R.id.editer);
         traitPay =findViewById(R.id.traitPay);
         traitHis =findViewById(R.id.traitHis);
+        btnmonney =findViewById(R.id.btnmonney);
         historiqueFragment = new HistoriqueFragment();
-        paiementFragment = new PaiementFragment();
+        //paiementFragment = new PaiementFragment();
         showHistoriqueFragment(null);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("codepin");
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
+        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("recu");
+        databaseReference0 = FirebaseDatabase.getInstance().getReference().child("codepin");
+        databaseReference01 = FirebaseDatabase.getInstance().getReference().child("localites");
         sharedPreferences = getSharedPreferences("codeconfirm",Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -98,7 +118,16 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         prenom = sharedPreferences.getString("prenom", "");
         mdp = sharedPreferences.getString("mdp", "");
         codepin = sharedPreferences.getString("codepin", "");
+        ville = sharedPreferences.getString("ville", "");
+        numero = sharedPreferences.getString("numero", "");
+        caution = sharedPreferences.getString("caution", "");
+        debutUsage = sharedPreferences.getString("debutUsage", "");
+        avance = sharedPreferences.getString("avance", "");
+        type = sharedPreferences.getString("type", "");
         nomEtPrenom.setText("Bonjour "+nom+" "+prenom);
+
+        client =new ClientData(200,type,idLca,numero,prenom,"redirectUrl");
+
         if (!idLca.isEmpty()){
             Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
             intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
@@ -112,7 +141,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             
         }
         popup = new AlertPaiement(EspaceLocataires.this);
-        popup.setCancelable(false);
+        popup.setCancelable(true);
         popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         deconnexion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +185,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             }
         });
 
-
+        //resultatstatus();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -165,7 +194,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         });
     }
     private void editLocaMethode(String nom, String prenom, String mdp,String numero) {
-        DatabaseReference baselocal =databaseReference1.child(idAdm).child(ville).child(idLca);
+        DatabaseReference baselocal =databaseReference01.child(idAdm).child(ville).child(idLca);
         baselocal.child("nom").setValue(nom);
         baselocal.child("prenom").setValue(prenom);
         baselocal.child("pasword").setValue(mdp);
@@ -182,13 +211,298 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     }
 
     // Méthode pour afficher le fragment Paiement
+    @SuppressLint("MissingInflatedId")
     public void showPaiementFragment(View view) {
-        traitHis.setVisibility(View.GONE);
-        traitPay.setVisibility(View.VISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, paiementFragment);
-        transaction.commit();
+        traitHis.setVisibility(View.VISIBLE);
+        //traitPay.setVisibility(View.VISIBLE);
+        bottomSheetDialog = new BottomSheetDialog(EspaceLocataires.this);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.editpopupayer, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        btnmonney = bottomSheetView.findViewById(R.id.btnmonney);
+        bottomSheetDialog.show();
+        btnmonney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                methodeDeVerification();
+            }
+        });
+
     }
+
+    private void methodeDeVerification() {
+        //popupMoney.dismiss();
+        databaseReference1.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
+
+                        for (DataSnapshot autherSnap :citySnapshot.getChildren()){
+                            StatutRecu tenant = autherSnap.getValue(StatutRecu.class);
+                            if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
+                                date=tenant.getDate();
+                                id= tenant.getId();
+                                statut= tenant.getStatut();
+                                somme= tenant.getSomme();
+                                Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
+                                methodePayerRetard(date,id,somme);
+                                break;
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Paiement normal0", Toast.LENGTH_SHORT).show();
+                                methodePourPayer();
+                            }
+                            break;
+                        }
+                        break;
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), "Paiement normal", Toast.LENGTH_SHORT).show();
+                    methodePourPayer();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Gérer les erreurs
+            }
+        });
+
+    }
+
+    private void methodePourPayer() {
+        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle  = sdf.format(heure);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
+        String dateFormatted = sdf2.format(heure);
+
+        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
+        localiteReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Model_ticket> allMessages = new ArrayList<>();
+                if (snapshot.exists()) {
+                    boolean paiementEffectue = false;
+                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
+                        Model_ticket ticket = citySnapshot.getValue(Model_ticket.class);
+                        if (ticket != null && ticket.getDate() != null && ticket.getDate().equals(dateFormatted)) {
+                            paiementEffectue = true;
+                        }
+                    }
+                    if (paiementEffectue) {
+                        popup.show();
+                        popup.setMessageText("Vous avez déjà réglé le paiement de ce mois-ci"+" "+dateFormatted+" "+", merci beaucoup pour votre fiabilité");
+                        popup.setCancelText("Retour");
+                        popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                sendClientData(client);
+                                popup.dismiss();
+                                //goToHistoriqueFragment(view);
+                            }
+                        });
+                    } else {
+                        popup.show();
+                        popup.setMessageText("Votre paiement de ce mois a été effectué avec succès, merci beaucoup pour votre fiabilité");
+                        popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                sendClientData(client);
+                                /*String nouvelId = localiteReference.push().getKey();
+                                Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
+                                localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
+                                databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
+                                popup.dismiss();
+                                Intent intent =new Intent(getContext(), Bricefile.class);
+                                intent.putExtra("id", idLca);
+                                intent.putExtra("nom", nom);
+                                intent.putExtra("prenom", prenom);
+                                intent.putExtra("prix", somme1);
+                                intent.putExtra("numero", numero);
+                                intent.putExtra("localite", ville);
+                                intent.putExtra("type_de_maison", type);
+                                intent.putExtra("mois", dateFormatted);
+                                intent.putExtra("date", heureActuelle);
+                                startActivity(intent);
+                                getActivity().finish();*/
+                            }
+                        });
+                    }
+                } else {
+                    // Aucune donnée n'existe, ajoutez les nouvelles données
+                    popup.show();
+                    popup.setMessageText("Votre paiement de ce mois a été effectué avec succès, merci beaucoup pour votre fiabilité ");
+                    popup.setCancelText("Payer maintenant");
+                    popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getApplicationContext(), "Paiement effectué avec succès", Toast.LENGTH_SHORT).show();
+                            sendClientData(client);
+                            /*String nouvelId = localiteReference.push().getKey();
+                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
+                            localiteReference.child(nouvelId).setValue(nouveauLocataire);
+                            databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
+                            popup.dismiss();
+                            Intent intent =new Intent(getContext(), Bricefile.class);
+                            intent.putExtra("id", idLca);
+                            intent.putExtra("nom", nom);
+                            intent.putExtra("prenom", prenom);
+                            intent.putExtra("prix", somme1);
+                            intent.putExtra("numero", numero);
+                            intent.putExtra("localite", ville);
+                            intent.putExtra("type_de_maison", type);
+                            intent.putExtra("mois", dateFormatted);
+                            intent.putExtra("date", heureActuelle);
+                            startActivity(intent);
+                            getActivity().finish();*/
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gérer les erreurs
+            }
+        });
+    }
+
+    private void sendClientData(ClientData clientData) {
+        OkHttpClient client = new OkHttpClient();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(clientData);
+        System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G HUGUHLIEZ "+json);
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"), json);
+
+        Request request = new Request.Builder()
+                .url("https://www.pay.moneyfusion.net/locabill/596ff227835b9233/pay/")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Gérer l'échec de la requête
+                System.out.println("Erreur lors de l'envoi des données du client: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+                // Traiter la réponse ici
+                String responseBody = response.body().string();
+                ApiResponse apiResponse = gson.fromJson(responseBody, ApiResponse.class);
+
+                if (apiResponse.isStatut()) {
+                    // Le paiement est en cours, utilisez l'URL pour rediriger l'utilisateur vers le moyen de paiement
+                    redirectUser(apiResponse.getUrl());
+
+                    tokenpayer=apiResponse.getToken();
+                    System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G TOKEN TOKEN TOKEN TOKEN  "+apiResponse.getToken());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            resultatstatus();
+                           }
+                    });
+                } else {
+                    // Gérer le cas où le statut n'est pas réussi
+                    System.out.println("Erreur lors du paiement: " + apiResponse.getMessage());
+                }
+            }
+        });
+    }
+
+    private void redirectUser(String url) {
+        /*CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+
+        // Ouvre l'URL dans ChromeCustomTabs
+        customTabsIntent.launchUrl(this, Uri.parse(url));*/
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    private void resultatstatus() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://www.pay.moneyfusion.net/paiementNotif/"+tokenpayer)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Gérer l'échec de la requête
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+
+                // Traiter la réponse ici
+                String responseBody = response.body().string();
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+            }
+        });
+    }
+
+
+    private void methodePayerRetard(String date, String id, String somme) {
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String heureActuelle = sdf.format(heure);
+        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
+        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
+        popup.show();
+        popup.setTitreText(" Loyer en retard");
+        popup.setTitreColor(R.color.orange);
+        popup.setRetard(" Mois non reglé : "+date);
+        popup.setMessageText("Cher locataire, il semble que vous ayez un mois de loyer en retard. Merci de régulariser cette situation au plus vite pour éviter toute complication future. ");
+        popup.setCancelText("Payer le mois");
+        popup.setCancelBackground(R.drawable.bg_circle_green);
+        popup.setCancelTextColor(R.color.white);
+        popup.getRetour().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendClientData(client);
+                /*Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, date,heureActuelle);
+                localiteReference.child(id).setValue(nouveauLocataire);
+                databaseReference1.child(idAdm).child(idLca).child(id).child("statut").setValue("payé");
+                popup.dismiss();
+                Intent intent =new Intent(getContext(), Bricefile.class);
+                intent.putExtra("id", id);
+                intent.putExtra("nom", nom);
+                intent.putExtra("prenom", prenom);
+                intent.putExtra("prix", somme);
+                intent.putExtra("numero", numero);
+                intent.putExtra("localite", ville);
+                intent.putExtra("type_de_maison", type);
+                intent.putExtra("mois", date);
+                intent.putExtra("date", heureActuelle);
+                startActivity(intent);
+                getActivity().finish();*/
+            }
+        });
+
+
+    }
+
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -286,7 +600,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     }
 
     private void addCodeUpd(String code) {
-        DatabaseReference localiteReference = databaseReference.child(idLca);
+        DatabaseReference localiteReference = databaseReference0.child(idLca);
         localiteReference.child("code").setValue(code);
         editor.putString("codepin", codepin);
         editor.apply();
@@ -295,7 +609,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     private void addCode(String codepin) {
         bottomSheetDialog.dismiss();
-        DatabaseReference localiteReference = databaseReference.child(idLca).push();
+        DatabaseReference localiteReference = databaseReference0.child(idLca).push();
         editor.putString("codepin", codepin);
         editor.apply();
         String nouvelId = localiteReference.getKey();

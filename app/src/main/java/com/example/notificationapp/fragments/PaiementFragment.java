@@ -49,11 +49,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 public class PaiementFragment extends Fragment {
     DatabaseReference databaseReference,databaseReference1,databaseReference2;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ClientData client;
+    String tokenpayer;
     String idAdm,idLca,ville,numero,date ,statut,id,somme,somme1,caution,avance,debutUsage,type,nom,prenom;
 
     Model_ticket tickets;
@@ -153,12 +155,12 @@ public class PaiementFragment extends Fragment {
 
             }
         });
-
+        resultatstatus();
         return  view;
     }
 
     private void methodeDeVerification() {
-        popupMoney.dismiss();
+        //popupMoney.dismiss();
         databaseReference1.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -266,8 +268,9 @@ public class PaiementFragment extends Fragment {
                         popup.getRetour().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                sendClientData(client);
                                 popup.dismiss();
-                                goToHistoriqueFragment(view);
+                                //goToHistoriqueFragment(view);
                             }
                         });
                     } else {
@@ -370,7 +373,10 @@ public class PaiementFragment extends Fragment {
                 if (apiResponse.isStatut()) {
                     // Le paiement est en cours, utilisez l'URL pour rediriger l'utilisateur vers le moyen de paiement
                     redirectUser(apiResponse.getUrl());
-                    resultatstatus(apiResponse.getToken());
+
+                    tokenpayer=apiResponse.getToken();
+                    System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G TOKEN TOKEN TOKEN TOKEN  "+apiResponse.getToken());
+
 
                 } else {
                     // Gérer le cas où le statut n'est pas réussi
@@ -384,10 +390,10 @@ public class PaiementFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
-    private void resultatstatus(String token) {
+    private void resultatstatus() {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://www.pay.moneyfusion.net/paiementNotif/"+token)
+                .url("https://www.pay.moneyfusion.net/paiementNotif/"+tokenpayer)
                 .get()
                 .build();
 
@@ -406,7 +412,10 @@ public class PaiementFragment extends Fragment {
 
                 // Traiter la réponse ici
                 String responseBody = response.body().string();
-                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G HUGUHLIEZ "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
+                System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G RESULTAT "+responseBody);
             }
         });
     }
