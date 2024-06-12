@@ -280,7 +280,7 @@ public class PaiementFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 sendClientData(client);
-                                /*String nouvelId = localiteReference.push().getKey();
+                                String nouvelId = localiteReference.push().getKey();
                                 Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
                                 localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
                                 databaseReference.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
@@ -296,7 +296,7 @@ public class PaiementFragment extends Fragment {
                                 intent.putExtra("mois", dateFormatted);
                                 intent.putExtra("date", heureActuelle);
                                 startActivity(intent);
-                                getActivity().finish();*/
+                                getActivity().finish();
                             }
                         });
                     }

@@ -7,6 +7,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -52,15 +53,13 @@ import java.util.Locale;
 
 public class Bricefile extends AppCompatActivity {
 
-    private CountDownTimer countdownTimer;
+    SharedPreferences sharedPreferencesToken;
+    SharedPreferences.Editor editorToken;
     private TextView countdownText;
-    private final long initialTimeInMillis = 2 * 60 * 1000; // 2 minutes en millisecondes
-    private final String channelId = "countdown_notification_channel";
     private static final int PERMISSION_REQUEST_CO = 10;
-    private SharedPreferences sharedPreferences;
     private int incr;
     TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer,avance;
-    ImageView qrImageView;
+    ImageView back;
 
     LinearLayout bn;
 
@@ -70,6 +69,10 @@ public class Bricefile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_bricefile);
+        sharedPreferencesToken = getSharedPreferences("tokenpaiement", Context.MODE_PRIVATE);
+        editorToken = sharedPreferencesToken.edit();
+        editorToken.clear();
+        editorToken.apply();
         if (checkPermissionBoolean()) {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         } else {
@@ -84,7 +87,7 @@ public class Bricefile extends AppCompatActivity {
         date = findViewById(R.id.date);
         s_chiffre = findViewById(R.id.s_chiffre);
         debut = findViewById(R.id.debut);
-        qrImageView = findViewById(R.id.qrImageView);
+        back = findViewById(R.id.back);
         Intent intent = getIntent();
         String id_2 = intent.getStringExtra("id");
         String nom = intent.getStringExtra("nom");
@@ -106,8 +109,6 @@ public class Bricefile extends AppCompatActivity {
         type.setText(type_de_maison);
         debut.setText(mois);
         date.setText(date_);
-        generateQRCode(id_2);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         bn = findViewById(R.id.bn);
         bn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +119,18 @@ public class Bricefile extends AppCompatActivity {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Bricefile.this,EspaceLocataires.class));
+                finish();
+            }
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
     private void convertToPdfAndSend() {
@@ -199,20 +212,6 @@ public class Bricefile extends AppCompatActivity {
         int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void generateQRCode(String id2) {
-        try {
-            MultiFormatWriter formatWriter = new MultiFormatWriter();
-            BitMatrix matrix = formatWriter.encode(id2, BarcodeFormat.QR_CODE, 300, 300);
-            BarcodeEncoder barcode = new BarcodeEncoder();
-            Bitmap bitmap = barcode.createBitmap(matrix);
-            qrImageView.setImageBitmap(bitmap);
-            // Vous pouvez ajouter ici d'autres actions si nécessaire
-        } catch (WriterException e) {
-            e.printStackTrace();
-            // Gérez les exceptions ici
-        }
     }
 
     @Override

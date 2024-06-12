@@ -20,19 +20,20 @@
             android:layout_margin="15dp"
             android:src="@drawable/locabill" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/nomEtPrenom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/editer"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
+            android:layout_toStartOf="@+id/deconnexion"
             android:layout_toEndOf="@+id/profil"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/nomEtPrenom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nom et prenom "
-                android:fontFamily="@font/gotham_medium"
-                android:textSize="18dp" />
+            android:fontFamily="@font/gotham_medium"
+            android:text="Nom et prenom salut mec comment tu va jesquere  que tous va mieux "
+            android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/editer"
@@ -40,18 +41,20 @@
                 android:layout_height="wrap_content"
                 android:text="Editer le Profil"
                 android:background="@drawable/backgr_newrect"
-                android:layout_marginTop="10dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
+                android:paddingStart="15dp"
+                android:layout_marginTop="-20dp"
+                android:layout_below="@+id/profil"
+                android:paddingEnd="15dp"
                 android:fontFamily="@font/arial"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:elevation="1dp"
-                android:backgroundTint="#988C8C"
+                android:layout_marginBottom="5dp"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#100F0F"
                 android:textColor="@color/white"
-                android:layout_marginStart="25dp"
                 android:textSize="14dp" />
-        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/deconnexion"
