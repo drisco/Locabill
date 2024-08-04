@@ -62,6 +62,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     ImageView profil,deconnexion,traitPay,traitHis;
     ClientData client;
+    PopupRegister popusCostum;
 
     DatabaseReference databaseReference01,databaseReference1,databaseReference2;
     TextView nomEtPrenom,editer;
@@ -85,6 +86,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_espace_locataires);
+
         nomEtenom =findViewById(R.id.nomEtPrenom);
         profil =findViewById(R.id.profil);
         deconnexion =findViewById(R.id.deconnexion);
@@ -123,8 +125,14 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         nomEtPrenom.setText("Bonjour "+nom+" "+prenom);
 
          tokenData = sharedPreferencesToken.getString("token", "");
+
             if (!tokenData.isEmpty()){
+                popusCostum = new PopupRegister(EspaceLocataires.this);
+                popusCostum.setCancelable(false);
+                popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popusCostum.show();
                 resultatstatus(tokenData);
+
             }
         client =new ClientData(200,type,idLca,numero,prenom,"redirectUrl");
 
@@ -193,6 +201,94 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             return insets;
         });
     }
+
+    private void resultatstatus(String tokenData) {
+
+        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle  = sdf.format(heure);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
+        String dateFormatted = sdf2.format(heure);
+
+        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
+        Gson gson = new Gson();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://www.pay.moneyfusion.net/paiementNotif/"+tokenData)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Gérer l'échec de la requête
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }else{
+                    // Traiter la réponse ici
+                    String responseBody = response.body().string();
+                    StatutRecu statutRecu = gson.fromJson(responseBody, StatutRecu.class);
+                    System.out.println("AAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASUCCESS VALEURRRRR  "+statutRecu.getStatut());
+
+                    if (statutRecu.getStatut().equals("true")){
+                        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASUCCESS TOKEN TOKEN  "+tokenData);
+                        String dateR = sharedPreferencesToken.getString("dateR", "");
+                        String idR = sharedPreferencesToken.getString("idR", "");
+                        String statutR = sharedPreferencesToken.getString("statutR", "");
+                        if (dateR.isEmpty() && idR.isEmpty() ){
+                            String nouvelId = localiteReference.push().getKey();
+                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
+                            localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
+                            databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
+                            popup.dismiss();
+                            popusCostum.dismiss();
+                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
+                            intent.putExtra("id", idLca);
+                            intent.putExtra("nom", nom);
+                            intent.putExtra("prenom", prenom);
+                            intent.putExtra("prix", somme1);
+                            intent.putExtra("numero", numero);
+                            intent.putExtra("localite", ville);
+                            intent.putExtra("type_de_maison", type);
+                            intent.putExtra("mois", dateFormatted);
+                            intent.putExtra("date", heureActuelle);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Model_ticket nouveauLocataire = new Model_ticket(idR, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, dateR,heureActuelle);
+                            localiteReference.child(id).setValue(nouveauLocataire);
+                            databaseReference1.child(idAdm).child(idLca).child(idR).child("statut").setValue("payé");
+                            popup.dismiss();
+                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
+                            intent.putExtra("id", idR);
+                            intent.putExtra("nom", nom);
+                            intent.putExtra("prenom", prenom);
+                            intent.putExtra("prix", somme);
+                            intent.putExtra("numero", numero);
+                            intent.putExtra("localite", ville);
+                            intent.putExtra("type_de_maison", type);
+                            intent.putExtra("mois", dateR);
+                            intent.putExtra("date", heureActuelle);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }else {
+                        editorToken.clear();
+                        editorToken.apply();
+                    }
+                }
+
+            }
+        });
+    }
+
     private void editLocaMethode(String nom, String prenom, String mdp,String numero) {
         DatabaseReference baselocal =databaseReference01.child(idAdm).child(ville).child(idLca);
         baselocal.child("nom").setValue(nom);
@@ -402,7 +498,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                     // Le paiement est en cours, utilisez l'URL pour rediriger l'utilisateur vers le moyen de paiement
                     redirectUser(apiResponse.getUrl());
 
-                    editorToken.clear();
+                    //editorToken.clear();
                     editorToken.putString("token", apiResponse.getToken());
                     editorToken.apply();
                     System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G TOKEN TOKEN TOKEN TOKEN  "+apiResponse.getToken());
@@ -421,89 +517,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         startActivity(intent);
         finish();
     }
-
-    private void resultatstatus(String tokenData) {
-        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
-        Date heure = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        sdf.applyPattern("dd-MM-yyyy HH:mm");
-        String heureActuelle  = sdf.format(heure);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
-        String dateFormatted = sdf2.format(heure);
-
-        DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
-        Gson gson = new Gson();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://www.pay.moneyfusion.net/paiementNotif/"+tokenData)
-                .get()
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // Gérer l'échec de la requête
-                System.out.println(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                }else{
-                    // Traiter la réponse ici
-                    String responseBody = response.body().string();
-                    StatutRecu statutRecu = gson.fromJson(responseBody, StatutRecu.class);
-                    if (statutRecu.getStatut().equals("true")){
-                        String dateR = sharedPreferencesToken.getString("dateR", "");
-                        String idR = sharedPreferencesToken.getString("idR", "");
-                        String statutR = sharedPreferencesToken.getString("statutR", "");
-                        if (dateR.isEmpty() && idR.isEmpty() ){
-                            String nouvelId = localiteReference.push().getKey();
-                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
-                            localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
-                            databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                            popup.dismiss();
-                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
-                            intent.putExtra("id", idLca);
-                            intent.putExtra("nom", nom);
-                            intent.putExtra("prenom", prenom);
-                            intent.putExtra("prix", somme1);
-                            intent.putExtra("numero", numero);
-                            intent.putExtra("localite", ville);
-                            intent.putExtra("type_de_maison", type);
-                            intent.putExtra("mois", dateFormatted);
-                            intent.putExtra("date", heureActuelle);
-                            startActivity(intent);
-                            finish();
-                        }else {
-                            Model_ticket nouveauLocataire = new Model_ticket(idR, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, dateR,heureActuelle);
-                            localiteReference.child(id).setValue(nouveauLocataire);
-                            databaseReference1.child(idAdm).child(idLca).child(idR).child("statut").setValue("payé");
-                            popup.dismiss();
-                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
-                            intent.putExtra("id", idR);
-                            intent.putExtra("nom", nom);
-                            intent.putExtra("prenom", prenom);
-                            intent.putExtra("prix", somme);
-                            intent.putExtra("numero", numero);
-                            intent.putExtra("localite", ville);
-                            intent.putExtra("type_de_maison", type);
-                            intent.putExtra("mois", dateR);
-                            intent.putExtra("date", heureActuelle);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }else {
-                        editorToken.clear();
-                        editorToken.apply();
-                    }
-                }
-
-            }
-        });
-    }
-
 
     @SuppressLint("MissingInflatedId")
     @Override

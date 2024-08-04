@@ -144,6 +144,7 @@ public class LoginAdmin extends AppCompatActivity {
                             editor.putString("proprie", "proprie");
                             editor.putString("codepin", codePinValue);
                             editor.apply();
+                            popup.dismiss();
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                             finish();
                         } else {

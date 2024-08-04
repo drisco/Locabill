@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue"
     tools:context=".EspaceLocataires">
 
     <RelativeLayout
@@ -29,10 +30,11 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="25dp"
+            android:textColor="@color/white"
             android:layout_toStartOf="@+id/deconnexion"
             android:layout_toEndOf="@+id/profil"
             android:fontFamily="@font/gotham_medium"
-            android:text="Nom et prenom salut mec comment tu va jesquere  que tous va mieux "
+            android:text="Nom et prenom salut mec comment "
             android:textSize="18dp" />
 
             <TextView
@@ -69,68 +71,77 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:elevation="2dp"
+        android:layout_marginBottom="-20dp"
+        android:background="@drawable/bg_rect"
+        android:backgroundTint="@color/white"
         android:layout_below="@id/profilback"
-        android:layout_marginTop="1dp">
-
-        <LinearLayout
-            android:id="@+id/LLHist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="25dp"
-
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/btnHistorique"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:text="Historique"
-                android:fontFamily="@font/gotham_medium"
-                android:onClick="showHistoriqueFragment"/>
-            <ImageView
-                android:id="@+id/traitHis"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/trait"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/LLpay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/LLHist"
-            android:layout_marginStart="25dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/btnPaiement"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Paiement"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:fontFamily="@font/gotham_medium"
-                android:onClick="showPaiementFragment"/>
-
-            <ImageView
-                android:id="@+id/traitPay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_gravity="center"
-                android:src="@drawable/trait"/>
-        </LinearLayout>
-
-</RelativeLayout>
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/container"/>
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="1dp"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:id="@+id/LLHist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/btnHistorique"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:text="Historique"
+                    android:fontFamily="@font/gotham_medium"
+                    android:onClick="showHistoriqueFragment"/>
+                <ImageView
+                    android:id="@+id/traitHis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/trait"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLpay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/LLHist"
+                android:layout_marginStart="25dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/btnPaiement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paiement"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/gotham_medium"
+                    android:onClick="showPaiementFragment"/>
+
+                <ImageView
+                    android:id="@+id/traitPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:src="@drawable/trait"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/container"/>
+    </RelativeLayout>
 
 </RelativeLayout>

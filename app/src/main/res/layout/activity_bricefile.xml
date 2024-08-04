@@ -27,6 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/border_black"
         android:paddingStart="10dp"
         android:layout_centerVertical="true"
@@ -81,7 +83,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Prénom : "
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="14sp"
@@ -90,7 +92,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Numéro : "
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="14sp"
@@ -99,7 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Montant payé : "
                 android:textSize="14sp"
                 android:fontFamily="@font/montserrat_bold"
@@ -108,7 +110,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Type de maison : "
                 android:textSize="14sp"
                 android:fontFamily="@font/montserrat_bold"
@@ -118,7 +120,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Mois payé : "
                 android:textSize="14sp"
                 android:fontFamily="@font/montserrat_bold"
@@ -162,7 +164,7 @@
                 android:id="@+id/userPrenom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Drissa  "
 
                 android:textSize="14sp"
@@ -172,7 +174,7 @@
                 android:id="@+id/number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="+2250504389406  "
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -181,7 +183,7 @@
                 android:id="@+id/montant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="90000 FCFA  "
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -190,7 +192,7 @@
                 android:id="@+id/type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Studio "
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -199,7 +201,7 @@
                 android:id="@+id/debut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text=" Moi click ici "
                 android:textSize="14sp"
                 android:textStyle="bold" />
