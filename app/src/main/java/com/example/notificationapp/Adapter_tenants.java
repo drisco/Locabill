@@ -16,7 +16,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.notificationapp.models.Model_tenant;
+import com.example.notificationapp.models.Model_ticket;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHolder>{
 
@@ -47,56 +57,74 @@ public class Adapter_tenants extends RecyclerView.Adapter<Adapter_tenants.ViewHo
     @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("recu");
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites");
+        Date heure = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.applyPattern("dd-MM-yyyy HH:mm");
+        String heureActuelle = sdf.format(heure);
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
+        String dateFormatted = sdf2.format(heure);
         Model_tenant user = mData.get(position);
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+dateFormatted);
+        if (user.getNom().length() > 8) {
+            holder.nom.setText("Nom : " + user.getNom().substring(0, user.getNom().offsetByCodePoints(0, 8)) + "...");
+        } else {
+            holder.nom.setText("Nom : " + user.getNom());
+        }
+        if (user.getPrenom().length() > 8) {
+            holder.prenom.setText("Prénom : " + user.getPrenom().substring(0, user.getPrenom().offsetByCodePoints(0, 8)) + "...");
+        } else {
+            holder.prenom.setText("Prénom : " + user.getPrenom());
+        }
+        holder.numero.setText("Numéro : " + user.getNumero());
+        holder.caution.setText("Caution : " + user.getCaution());
+        holder.avance.setText("Avance : " + user.getAvance());
+        holder.type.setText("Type : " + user.getType_de_maison());
+        holder.date.setText("Date : " + user.getDebut_de_loca());
+        holder.adresse.setText("Prix : " + user.getPrix());
 
-        if(user.getNom().length()>8){
-            holder.nom.setText("Nom : "+user.getNom().substring(0,user.getNom().offsetByCodePoints(0,8))+"...");
-        }else{
-            holder.nom.setText("Nom : "+user.getNom());
-        }
-        if(user.getPrenom().length()>8){
-            holder.prenom.setText("Prénom : "+user.getPrenom().substring(0,user.getPrenom().offsetByCodePoints(0,8))+"...");
-        }else{
-            holder.prenom.setText("Prénom : "+user.getPrenom());
-        }
-        holder.numero.setText("Numéro : "+user.getNumero());
-        holder.caution.setText("Caution : "+user.getCaution());
-        holder.avance.setText("Avance : "+user.getAvance());
-        holder.type.setText("Type : "+user.getType_de_maison());
-        holder.date.setText("Date : "+user.getDebut_de_loca());
-        holder.adresse.setText("Prix : "+user.getPrix());
-        if (user.getStatut().equals("payé")){
+        databaseReference.child(user.getIdProprie()).child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean dateExists = false;
+                System.out.println("DHUSIHGISLGLHZDQHKHSGSSDHHSHQ.HDSHGJSGH "+"BAMBA"+snapshot);
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    System.out.println("DHUSIHGISLGLHZDQHKHSGSSDHHSHQ.HDSHGJSGH "+"FOR"+data);
+                    Model_ticket tenant = data.getValue(Model_ticket.class);
+                    if (tenant != null &&  tenant.getDate().equals(dateFormatted)) {
+
+                        dateExists = true;
+                        break;
+                    }
+                }
+
+                if (dateExists) {
+                    System.out.println("DHUSIHGISLGLHZDQHKHSGSSDHHSHQ.HDSHGJSGH "+"BAMBA");
+                    databaseReference1.child(user.getIdProprie()).child(user.getLocalite()).child(user.getId()).child("statut").setValue("payé");
+                } else {
+                    System.out.println("DHUSIHGISLGLHZDQHKHSGSSDHHSHQ.HDSHGJSGH "+"DRESSA");
+                    databaseReference1.child(user.getIdProprie()).child(user.getLocalite()).child(user.getId()).child("statut").setValue("impayé");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gérer les erreurs
+            }
+        });
+
+        if ( user.getStatut().equals("payé")){
             holder.statut.setText(user.getStatut());
-        }else{
+            holder.statut.setTextColor(Color.GREEN);
+        }else {
             holder.statut.setText(user.getStatut());
             holder.statut.setTextColor(Color.RED);
         }
-
-
-/*
-        holder.relative_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,MoreTenant.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("nom", user.getNom());
-                bundle.putString("prenom", user.getPrenom());
-                bundle.putString("avance", user.getAvance());
-                bundle.putString("caution", user.getCaution());
-                bundle.putString("numero", user.getNumero());
-                bundle.putString("debut", user.getDebut_de_loca());
-                bundle.putString("type", user.getType_de_maison());
-                bundle.putString("prix", user.getPrix());
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-                ((Activity)context).finish();
-            }
-        });
-*/
-
-
-
     }
+
 
     // total number of rows
     @Override

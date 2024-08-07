@@ -94,17 +94,14 @@ public class MesServices extends Service {
                 if (snapshot.exists()){
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
 
-                        for (DataSnapshot child : childSnapshot.getChildren()){
-                            Model_ticket ticket = child.getValue(Model_ticket.class);
+                            Model_ticket ticket = childSnapshot.getValue(Model_ticket.class);
                             allMessages.add(ticket);
-                            if (child.getChildrenCount() == 1) {
-                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+child.getChildrenCount());
+                            if (childSnapshot.getChildrenCount() == 1) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     createNotificationChannel();
                                         envoyerNotification(ticket.getDate(), ticket.getNom(), ticket.getNumero(), ticket.getPrenom(), ticket.getMontant());
                                     }
                                 }else{
-                                System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+child.getChildrenCount());
 
                                 Collections.sort(allMessages, new Comparator<Model_ticket>() {
                                         @Override
@@ -116,7 +113,7 @@ public class MesServices extends Service {
                                 }
                             }
 
-                        }
+
 
                         if (!allMessages.isEmpty()){
                             System.out.println("UDFHGJREUGDJKRGUHLIIRGHFIGHNHEFIDHGFVHUIEFHDGIVUHHFEIDUHGVUFHDGIHEFUIDHGVURHIFDGJIURHEFJIDUGJUIFDJG "+allMessages.size());

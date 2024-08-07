@@ -60,7 +60,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
         String reference = extras.getString("reference");
         sharedPreferences = context.getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdm = sharedPreferences.getString("id", "");
-        System.out.println("MON NOM CEST     JE SUIS ICI "+reference+" "+idAdm);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdm);
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
@@ -72,9 +71,7 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
                         System.out.println("MON NOM CEST     JE SUIS ICI"+reference);
 
                         if (reference.equals("nouveaupaiement")){
-                            Toast.makeText(context, "verification1", Toast.LENGTH_SHORT).show();
-                            System.out.println("ERREURRRRRERREUURRRRRRURURRURURUURUURRRUUUUUEEEEEEEEEEEEEEEEUUUUUUUUUUUUUUUUUUUUEEEURRRRRRRRR "+context);
-                            startMyService(context);
+                            //startMyService(context);
                         }else if (reference.equals("chaquefindumois")) {
                             databaseReference.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -129,7 +126,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
             }
             int NOTIFICATION_ID = 123;
             notificationManager.notify(NOTIFICATION_ID, builder.build());
-            System.out.println("UREHNRGEIUNIITRNINITRGHJIERGBJBGTRLIJPJTBLSNHHBIHO9ERBUINPBI9RSTH IUTRGLIHIUTRGBN9FR JIER0JSIUGHR9HZ0 GTUJGREIJUGTRHP0 JERHG9HJER " + messageparseconde);
         }
 
          if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
@@ -153,7 +149,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void ajouterRecuAuto(Model_tenant tenant) {
-        System.out.println("RAPELRAPELLELLELELELELELLELLELELELELELELL     BAH VOILA");
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
@@ -167,9 +162,8 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
     }
 
     // Méthode pour démarrer le service
-    private void startMyService(Context context) {
-        Toast.makeText(context, "starton", Toast.LENGTH_LONG).show();
+    /*private void startMyService(Context context) {
         Intent serviceIntent = new Intent(context, MesServices.class);
         context.startService(serviceIntent);
-    }
+    }*/
 }

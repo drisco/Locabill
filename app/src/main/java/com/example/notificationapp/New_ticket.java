@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -53,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +64,7 @@ public class New_ticket extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 140;
     private static final int PERMISSION_REQUEST_CO = 10;
     DatabaseReference databaseReference, databaseReference1,databaseReference2;
-    int incr,intmontant,intavance;String id_2,lieu;
+    int incr,intmontant,intavance;String id_2,lieu,statut;
     AlertPaiement popup;
     ImageView plus,moins;
     EditText edit;
@@ -73,7 +75,7 @@ public class New_ticket extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat monthYearFormat;
-    TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer,avance;
+    TextView userNom,userPrenom,number,montant1,type,date,debut,s_chiffre,payer,avance;
     int count = 0;String qrContent,idAdmin,montantChiffre,resultat,numberInWords;
     String prenom,prix,numero,type_de_maison,cautions,avances,date_,nom,verifie,dateFormatted;
 
@@ -105,7 +107,7 @@ public class New_ticket extends AppCompatActivity {
         userNom = findViewById(R.id.userNom);
         userPrenom = findViewById(R.id.userPrenom);
         number = findViewById(R.id.number);
-        montant = findViewById(R.id.montant);
+        montant1 = findViewById(R.id.montant);
         type = findViewById(R.id.type);
         date = findViewById(R.id.date);
         s_chiffre = findViewById(R.id.s_chiffre);
@@ -120,6 +122,10 @@ public class New_ticket extends AppCompatActivity {
          dateFormatted = sdf2.format(heure);
         date.setText(heureActuelle);
         debut.setText(dateFormatted);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        String previousMonth = dateFormat.format(calendar.getTime());
 
         if (checkPermissionBoolean()) {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
@@ -161,36 +167,66 @@ public class New_ticket extends AppCompatActivity {
          avances = intent.getStringExtra("avance");
          date_ = intent.getStringExtra("date");
         lieu = intent.getStringExtra("lieu");
+        statut = intent.getStringExtra("statut");
 
-        databaseReference1.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot citySnapshot : snapshot.getChildren()) {
 
-                        for (DataSnapshot autherSnap :citySnapshot.getChildren()){
-                            StatutRecu tenant = autherSnap.getValue(StatutRecu.class);
-                            if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
+        if (statut.equals("payé")){
+            recuId.setVisibility(View.GONE);
+            popup.show();
+            popup.setCancelable(false);
+            popup.setTitreText(" Félicitation!!");
+            popup.setTitreColor(R.color.green);
+            popup.setRetard("  : ");
+            popup.setMessageText("Vous avez déjà réglé le paiement de "+" "+date_+" "+", merci beaucoup pour votre fiabilité");
+            popup.setCancelText("Retour");
+            popup.setCancelBackground(R.drawable.backgr_newrect);
+            popup.setCancelTextColor(R.color.white);
+            popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(New_ticket.this, List_of_tenants.class));
+                    finish();
+                    popup.dismiss();
+                }
+            });
+        }else {
+            databaseReference1.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
+
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean previousMonthExists = false;
+                    String somme = "";
+                    if (snapshot.exists()){
+
+                        for (DataSnapshot autherSnap :snapshot.getChildren()){
+                            Model_ticket tenant = autherSnap.getValue(Model_ticket.class);
+                            if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
                                 verifie="retard";
-                                String date0=tenant.getDate();
-                                String id= tenant.getId();
-                                String statut= tenant.getStatut();
-                                String somme= tenant.getSomme();
-                                debut.setText(date0);
+                                previousMonthExists = true;
+                                VoirLeRecus();
+                                somme= tenant.getMontant();
                                 Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
-                                methodePayerRetard(date0,id,somme);
+
                                 break;
                             }
                         }
+                    }else {
+                        VoirLeRecus();
+                    }
+                    if (!previousMonthExists) {
+                        recuId.setVisibility(View.GONE);
+                        methodePayerRetard(previousMonth,prix);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Gérer les erreurs
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Gérer les erreurs
+                }
+            });
+
+        }
         numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
 
         intmontant = Integer.parseInt(prix);
@@ -203,18 +239,6 @@ public class New_ticket extends AppCompatActivity {
             resultat=avances;
             avance.setText(avances+ " FCFA");
         }
-
-
-        s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
-        montantChiffre=s_chiffre.getText().toString();
-        userNom.setText(nom);
-        userPrenom.setText(prenom);
-        number.setText(numero);
-        montant.setText(prix+ " FCFA");
-        type.setText(type_de_maison);
-
-         // Générez le code QR à partir du contenu
-        generateQRCode(id_2);
 
         buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,13 +271,13 @@ public class New_ticket extends AppCompatActivity {
                                         }
                                     });
                                 }else{
-                                    addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
+                                    addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant1.getText().toString(),number.getText().toString(),
                                             type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),debut.getText().toString());
                                     convertToPdfAndSend();
                                     checkPermissions();
                                 }
                             }else{
-                                addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant.getText().toString(),number.getText().toString(),
+                                addRecuData(userNom.getText().toString(),userPrenom.getText().toString(),montant1.getText().toString(),number.getText().toString(),
                                         type.getText().toString(),debut.getText().toString(),cautions,avance.getText().toString(),debut.getText().toString());
                                 convertToPdfAndSend();
                                 checkPermissions();
@@ -303,12 +327,28 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
-    private void methodePayerRetard(String date, String id, String somme) {
+    private void VoirLeRecus() {
+
+        s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
+        montantChiffre=s_chiffre.getText().toString();
+        userNom.setText(nom);
+        userPrenom.setText(prenom);
+        number.setText(numero);
+        montant1.setText(prix+ " FCFA");
+        type.setText(type_de_maison);
+        debut.setText(dateFormatted);
+
+        // Générez le code QR à partir du contenu
+        generateQRCode(id_2);
+
+    }
+
+    private void methodePayerRetard(String date, String montant) {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String heureActuelle = sdf.format(heure);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2);
-        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
+        //String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
         popup.show();
         popup.setTitreText(" Loyer en retard");
         popup.setTitreColor(R.color.orange);
@@ -320,9 +360,22 @@ public class New_ticket extends AppCompatActivity {
         popup.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Model_ticket nouveauLocataire = new Model_ticket(id, nom,prenom , somme, numero, type_de_maison, date_, cautions,avances ,numberInWords, date,heureActuelle);
-                localiteReference.child(id).setValue(nouveauLocataire);
-                databaseReference2.child(idAdmin).child(id_2).child(id).child("statut").setValue("payé");
+                recuId.setVisibility(View.VISIBLE);
+                s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
+                montantChiffre=s_chiffre.getText().toString();
+                userNom.setText(nom);
+                userPrenom.setText(prenom);
+                number.setText(numero);
+                montant1.setText(prix+ " FCFA");
+                type.setText(type_de_maison);
+                debut.setText(date);
+                // Générez le code QR à partir du contenu
+                generateQRCode(id_2);
+                DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
+                String nouvelId = localiteReference.getKey();
+                Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom,prenom , montant, numero, type_de_maison, date_, cautions,avances ,"", date,heureActuelle);
+                localiteReference.setValue(nouveauLocataire);
+                databaseReference1.child(idAdmin).child(lieu).child(id_2).child("statut").setValue("payé");
                 popup.dismiss();
             }
         });
@@ -335,8 +388,8 @@ public class New_ticket extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         sdf.applyPattern("dd-MM-yyyy HH:mm");
         String heureActuelle  = sdf.format(heure);
-        databaseReference1.child(lieu).child(id_2).child("statut").setValue("payé");
-        databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
+        databaseReference1.child(idAdmin).child(lieu).child(id_2).child("statut").setValue("payé");
+        //databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
         Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, dates,date.getText().toString());
@@ -371,9 +424,9 @@ public class New_ticket extends AppCompatActivity {
     }
 
     private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             // Demander la permission d'envoyer des SMS
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_CODE);
         } else {
             // Si les autorisations sont déjà accordées, envoyer un SMS
             sendSMS();

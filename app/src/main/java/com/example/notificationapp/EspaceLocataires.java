@@ -46,6 +46,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -98,7 +99,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         historiqueFragment = new HistoriqueFragment();
         //paiementFragment = new PaiementFragment();
         showHistoriqueFragment(null);
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("recu");
         databaseReference0 = FirebaseDatabase.getInstance().getReference().child("codepin");
         databaseReference01 = FirebaseDatabase.getInstance().getReference().child("localites");
@@ -244,9 +244,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                         String statutR = sharedPreferencesToken.getString("statutR", "");
                         if (dateR.isEmpty() && idR.isEmpty() ){
                             String nouvelId = localiteReference.push().getKey();
-                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateFormatted, heureActuelle);
+                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateR, heureActuelle);
                             localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
-                            databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
                             popup.dismiss();
                             popusCostum.dismiss();
                             Intent intent =new Intent(getApplicationContext(), Bricefile.class);
@@ -257,14 +256,14 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                             intent.putExtra("numero", numero);
                             intent.putExtra("localite", ville);
                             intent.putExtra("type_de_maison", type);
-                            intent.putExtra("mois", dateFormatted);
+                            intent.putExtra("mois", dateR);
                             intent.putExtra("date", heureActuelle);
                             startActivity(intent);
                             finish();
                         }else {
                             Model_ticket nouveauLocataire = new Model_ticket(idR, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, dateR,heureActuelle);
                             localiteReference.child(id).setValue(nouveauLocataire);
-                            databaseReference1.child(idAdm).child(idLca).child(idR).child("statut").setValue("payé");
+                            databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
                             popup.dismiss();
                             Intent intent =new Intent(getApplicationContext(), Bricefile.class);
                             intent.putExtra("id", idR);
@@ -328,35 +327,37 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     private void methodeDeVerification() {
         //popupMoney.dismiss();
-        databaseReference1.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        String previousMonth = dateFormat.format(calendar.getTime());
+
+        databaseReference2.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 boolean previousMonthExists = false;
+
                 if (snapshot.exists()){
                     for (DataSnapshot citySnapshot : snapshot.getChildren()) {
 
-                        for (DataSnapshot autherSnap :citySnapshot.getChildren()){
-                            StatutRecu tenant = autherSnap.getValue(StatutRecu.class);
-                            if (tenant != null && tenant.getStatut() != null && tenant.getStatut().equals("impayé")) {
-                                date=tenant.getDate();
-                                id= tenant.getId();
-                                statut= tenant.getStatut();
-                                somme= tenant.getSomme();
-                                editorToken.putString("dateR", date);
-                                editorToken.putString("idR", id);
-                                editorToken.putString("sommeR", somme);
-                                editorToken.putString("statutR", statut);
-                                editorToken.apply();
-                                methodePayerRetard(date,id,somme);
-                                break;
-                            }else {
-                                methodePourPayer();
-                            }
+                        Model_ticket tenant = citySnapshot.getValue(Model_ticket.class);
+
+                        if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
+                            previousMonthExists = true;
+                            methodePourPayer();
                             break;
                         }
-                        break;
+
                     }
                 }else {
                     methodePourPayer();
+                }
+
+                if (!previousMonthExists) {
+                    editorToken.putString("dateR", previousMonth);
+                    editorToken.apply();
+                    methodePayerRetard(previousMonth);
                 }
             }
 
@@ -397,7 +398,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                         popup.getRetour().setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                //sendClientData(client);
                                 bottomSheetDialog.dismiss();
                                 popup.dismiss();
                                 //goToHistoriqueFragment(view);
@@ -437,12 +437,12 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             }
         });
     }
-    private void methodePayerRetard(String date, String id, String somme) {
-        Date heure = new Date();
+    private void methodePayerRetard(String date) {
+        /*Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String heureActuelle = sdf.format(heure);
         DatabaseReference localiteReference = databaseReference2.child(idAdm).child(idLca);
-        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));
+        String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme));*/
         popup.show();
         popup.setTitreText(" Loyer en retard");
         popup.setTitreColor(R.color.orange);
@@ -454,6 +454,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         popup.getRetour().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popup.dismiss();
+
                 bottomSheetDialog.dismiss();
                 sendClientData(client);
 
@@ -537,7 +539,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                     editor.clear();
                     editor.apply();
                     popup.dismiss();
-                    startActivity(new Intent(EspaceLocataires.this,RegisterAdmin.class));
+                    startActivity(new Intent(EspaceLocataires.this,LoginAdmin.class));
                     finish();
                 }
             });

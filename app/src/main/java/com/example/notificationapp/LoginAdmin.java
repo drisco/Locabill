@@ -118,13 +118,11 @@ public class LoginAdmin extends AppCompatActivity {
                         databaseReference1.child(user.getId()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                                    Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
-                                    if (codePin != null) {
-                                        codePinValue = codePin.getCode();
-                                        editor.putString("codepin", codePinValue);
-                                        editor.apply();
-                                    }
+                                Model_code_pin codePin = dataSnapshot.getValue(Model_code_pin.class);
+                                if (codePin != null) {
+                                    codePinValue = codePin.getCode();
+                                    editor.putString("codepin", codePinValue);
+                                    editor.apply();
                                 }
                             }
                             @Override

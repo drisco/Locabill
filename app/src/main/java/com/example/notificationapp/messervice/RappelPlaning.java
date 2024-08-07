@@ -66,7 +66,6 @@ public class RappelPlaning {
     }
 
     public static void scheduleChaquelundi(Context context) {
-        System.out.println("RAPELRAPELLELLELELELELELLELLELELELELELELLELELELELEL");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // Créer une intention pour lancer le BroadcastReceiver

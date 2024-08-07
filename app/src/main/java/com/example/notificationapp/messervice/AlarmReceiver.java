@@ -42,7 +42,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         sharedPreferences = context.getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
         idAdm = sharedPreferences.getString("idAdmin", "");
         idls = sharedPreferences.getString("id", "");
-        System.out.println("MON NOM CEST     JE SUIS ICI AZZAZAZAZAAZAZAZAZAZAZAZAZAZ "+idAdm+" "+idls);
         Bundle extras = intent.getExtras();
         String reference = extras.getString("reference");
 
@@ -77,7 +76,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 tenant1 = dataSnapshot.getValue(Message.class);
                                 tenants.add(tenant1);
                                 messageDeRappel(context,tenant1);
-                                System.out.println("MON NOM CEST     JE SUIS ICI AZZAZAZAZAAZAZAZAZAZAZAZAZAZ 00000000"+idAdm+" "+idls);
 
                             }
                         }
@@ -138,7 +136,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            System.out.println("MAIS QUEST CE QUIL Y A MAIS CA VA "+builder.toString());
 
             notificationManager.notify(NOTIFICATION_ID, builder.build());
         }
@@ -152,7 +149,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void messagedulundi(Context context, Message tenant) {
-        System.out.println("MON NOM CEST     JE SUIS ICI AZZAZAZAZAAZAZAZAZAZAZAZAZAZ WXWWWXWWXWWX"+idAdm+" "+idls);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)

@@ -54,7 +54,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
     TextView empty;
     ImageView retour2;
     RelativeLayout log;
-    DatabaseReference databaseReference,databaseReference2;
+    DatabaseReference databaseReference;
     Model_tenant tenant;
 
     @SuppressLint("MissingInflatedId")
@@ -69,7 +69,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
         idAdmin = donnes.getString("id", "");
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
-        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
         retour2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,6 +190,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             intent.putExtra("lieu", user.getLocalite());
             intent.putExtra("avance", user.getAvance());
             intent.putExtra("date", user.getDate());
+            intent.putExtra("statut", user.getStatut());
             startActivity(intent);
             finish();
 
