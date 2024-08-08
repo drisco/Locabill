@@ -34,7 +34,7 @@ public class LoginAdmin extends AppCompatActivity {
     int incr;
     PopupRegister popup;
     DatabaseReference databaseReference, databaseReference1;
-    String codePinValue;
+    String codePinValue,codePinId;
     @Override
     @SuppressLint("MissingInflatedId")
 
@@ -118,12 +118,20 @@ public class LoginAdmin extends AppCompatActivity {
                         databaseReference1.child(user.getId()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Model_code_pin codePin = dataSnapshot.getValue(Model_code_pin.class);
-                                if (codePin != null) {
-                                    codePinValue = codePin.getCode();
-                                    editor.putString("codepin", codePinValue);
-                                    editor.apply();
+                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                    Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
+                                    if (codePin != null) {
+                                        codePinValue = codePin.getCode();
+                                        codePinId = codePin.getId();
+                                        editor.putString("codepin", codePinValue);
+                                        editor.putString("codepinId", codePinId);
+                                        editor.apply();
+
+                                    }
+                                    break;
                                 }
+
+
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -133,6 +141,7 @@ public class LoginAdmin extends AppCompatActivity {
 
                         // Vérifiez si le mot de passe correspond
                         if (user != null && user.getPwd().equals(password)) {
+
                             popup.dismiss();
                             editor.putString("id", user.getId());
                             editor.putString("nom", user.getUserName());
@@ -141,6 +150,7 @@ public class LoginAdmin extends AppCompatActivity {
                             editor.putString("mdp", user.getPwd());
                             editor.putString("proprie", "proprie");
                             editor.putString("codepin", codePinValue);
+                            editor.putString("codepinId", codePinId);
                             editor.apply();
                             popup.dismiss();
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));

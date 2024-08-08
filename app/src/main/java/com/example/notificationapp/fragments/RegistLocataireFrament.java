@@ -50,7 +50,7 @@ public class RegistLocataireFrament  extends Fragment {
     private final int notificationId = 1;
     Model_tenant utilisateur;
     TextView dBtnRegister;
-    String idAdmin, id,ville,nom,prenom,numero,somme,caution,avance,debutUsage,type,codeloca,password;
+    String idAdmin, id,ville,nom,prenom,numero,somme,caution,avance,debutUsage,type,codeloca,codeLocalId,password;
     PopupRegister popup;
     private final int PERMISSION_REQUEST_CODE = 100;
     SharedPreferences sharedPreferences;
@@ -115,6 +115,7 @@ public class RegistLocataireFrament  extends Fragment {
                                     editor.putString("numero", numero);
                                     editor.putString("somme", somme);
                                     editor.putString("codepin", codeloca);
+                                    editor.putString("codepinId", codeLocalId);
                                     editor.putString("mdp", password);
                                     editor.apply();
                                     Toast.makeText(getContext(), nom+prenom, Toast.LENGTH_SHORT).show();
@@ -207,6 +208,7 @@ public class RegistLocataireFrament  extends Fragment {
                                                         Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
                                                         if (codePin != null) {
                                                             codeloca = codePin.getCode();
+                                                            codeLocalId = codePin.getId();
                                                         }
                                                         break;
                                                     }

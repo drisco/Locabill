@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -65,6 +67,7 @@ public class AnnonceProbleme extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String idAdm,idLca,ville,numero,nom,prenom;
     private TextToSpeech tts;
+    PopupRegister popup;
     private static final int REQUEST_MICROPHONE_PERMISSION = 123;
     private static final int REQUEST_CODE_SPEECH_INPUT = 100;
 
@@ -158,6 +161,10 @@ public class AnnonceProbleme extends AppCompatActivity {
             public void onClick(View v) {
                 if (!editTextTitle.getText().toString().isEmpty() || !editTextDescription.getText().toString().isEmpty()){
                     if (!selectedImages.isEmpty()){
+                        popup = new PopupRegister(AnnonceProbleme.this);
+                        popup.setCancelable(false);
+                        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        popup.show();
                         addMethode(editTextTitle.getText().toString(),editTextDescription.getText().toString(),selectedImages);
                     }else{
                         Toast.makeText(AnnonceProbleme.this, "Image obligatoire", Toast.LENGTH_SHORT).show();
@@ -214,15 +221,16 @@ public class AnnonceProbleme extends AppCompatActivity {
     }
 
     private void saveImageUrisToDatabase(List<String> imageUris, String titre, String description) {
+        System.out.println("ERAZAZERAERAERAERAERAERAERAEAEAEEEAZREAZREAZRAZERAZERAERZERAZEREERAZZEREZERZERZER WHAT'S THE PROBLEM");
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String dateAndTime = sdf.format(new Date());
         DatabaseReference myRef=databaseRef.child(idAdm).child(idLca).push();
         String nouvelId = myRef.getKey();
         Annonce data =new Annonce(nouvelId,nom,prenom,ville,numero,titre,description,dateAndTime,imageUris);
         myRef.setValue(data);
+        popup.dismiss();
         startActivity(new Intent(AnnonceProbleme.this,EspaceLocataires.class));
         finish();
-
     }
 
     @SuppressLint("MissingInflatedId")

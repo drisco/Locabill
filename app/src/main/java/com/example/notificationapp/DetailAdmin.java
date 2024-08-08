@@ -62,7 +62,7 @@ public class DetailAdmin extends AppCompatActivity {
     private List<String> weekDays, monthDays;
     private TextView recupsemaine, recupmois;
     LinearLayout lljour, llmois,llsemaine,llmoistest;
-    String codep;
+    String codep,codepinId;
     AlertPaiement popup;
 
     SharedPreferences.Editor editor1;
@@ -96,8 +96,8 @@ public class DetailAdmin extends AppCompatActivity {
         String prenom = sharedPreferences.getString("prenom", "");
         String numero = sharedPreferences.getString("numero", "");
         String mdp = sharedPreferences.getString("mdp", "");
-         codep = sharedPreferences.getString("codepin", "");
-
+        codep = sharedPreferences.getString("codepin", "");
+        codepinId = sharedPreferences.getString("codepinId", "");
         name.setText(nom);
         pseudo.setText(prenom);
         number.setText(numero);
@@ -355,7 +355,7 @@ public class DetailAdmin extends AppCompatActivity {
             startActivity(new Intent(DetailAdmin.this, Login.class));
             finish();
         }else{
-            DatabaseReference localiteReference = databaseReference.child(idAdmin);
+            DatabaseReference localiteReference = databaseReference.child(idAdmin).child(codepinId);
             localiteReference.child("code").setValue(code);
             editor.putString("codepin", code);
             editor.apply();

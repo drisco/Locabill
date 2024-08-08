@@ -65,7 +65,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     ClientData client;
     PopupRegister popusCostum;
 
-    DatabaseReference databaseReference01,databaseReference1,databaseReference2;
+    DatabaseReference databaseReference01,databaseReference0,databaseReference1,databaseReference2;
+    //databaseReference0
     TextView nomEtPrenom,editer;
     private Fragment historiqueFragment;
     private BottomSheetDialog bottomSheetDialog;
@@ -76,8 +77,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     SharedPreferences sharedPreferences,sharedPreferencesToken;
     AlertPaiement popup;
     SharedPreferences.Editor editor,editorToken;
-    DatabaseReference databaseReference0;
-    String idAdm,idLca,ville,tokenData,numero,mdp,date ,statut,id,somme ,somme1,nom,prenom,codepin,caution,avance,debutUsage,type;
+    String idAdm,idLca,ville,tokenData,numero,mdp,date ,statut,id,somme ,somme1,nom,prenom,codepin,codepinId,caution,avance,debutUsage,type;
     TextView nomEtenom;
 
 
@@ -116,6 +116,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         prenom = sharedPreferences.getString("prenom", "");
         mdp = sharedPreferences.getString("mdp", "");
         codepin = sharedPreferences.getString("codepin", "");
+        codepinId = sharedPreferences.getString("codepinId", "");
         ville = sharedPreferences.getString("ville", "");
         numero = sharedPreferences.getString("numero", "");
         caution = sharedPreferences.getString("caution", "");
@@ -616,9 +617,9 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     }
 
     private void addCodeUpd(String code) {
-        DatabaseReference localiteReference = databaseReference0.child(idLca);
+        DatabaseReference localiteReference = databaseReference0.child(idLca).child(codepinId);
         localiteReference.child("code").setValue(code);
-        editor.putString("codepin", codepin);
+        editor.putString("codepin", code);
         editor.apply();
         bottomSheetDialog.dismiss();
     }
