@@ -326,6 +326,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     }
 
+    //METHODE DE VERIFICATION PAIEMENT EN RETARD OU PAIEMENT NORMALE
     private void methodeDeVerification() {
         //popupMoney.dismiss();
 
@@ -350,16 +351,16 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                             break;
                         }
 
+                        if (!previousMonthExists) {
+                            editorToken.putString("dateR", previousMonth);
+                            editorToken.apply();
+                            methodePayerRetard(previousMonth);
+                        }
                     }
                 }else {
                     methodePourPayer();
                 }
 
-                if (!previousMonthExists) {
-                    editorToken.putString("dateR", previousMonth);
-                    editorToken.apply();
-                    methodePayerRetard(previousMonth);
-                }
             }
 
             @Override
@@ -370,6 +371,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     }
 
+    //MEHODE DE PAIEMENT EN COURS
     private void methodePourPayer() {
         String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
         Date heure = new Date();
@@ -438,6 +440,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             }
         });
     }
+
+    // PAIEMENT EN RETARD METHODE
     private void methodePayerRetard(String date) {
         /*Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -466,7 +470,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     }
 
-
+// SEND REQUEST BUILLING METHOD
     private void sendClientData(ClientData clientData) {
         OkHttpClient client = new OkHttpClient();
 
@@ -513,6 +517,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         });
     }
 
+    // REDIRECT ON WEBSITE METHOD
     private void redirectUser(String url) {
 
         Intent intent = new Intent(this, TestActivity.class);
@@ -521,6 +526,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         finish();
     }
 
+    //CLICK ITEMS METHOD
     @SuppressLint("MissingInflatedId")
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -615,7 +621,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         }
         return true;
     }
-
+//UPDATE CODEPIN METHOD
     private void addCodeUpd(String code) {
         DatabaseReference localiteReference = databaseReference0.child(idLca).child(codepinId);
         localiteReference.child("code").setValue(code);
@@ -623,7 +629,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         editor.apply();
         bottomSheetDialog.dismiss();
     }
-
+//ADD CODEPIN METHOD
     private void addCode(String codepin) {
         bottomSheetDialog.dismiss();
         DatabaseReference localiteReference = databaseReference0.child(idLca).push();

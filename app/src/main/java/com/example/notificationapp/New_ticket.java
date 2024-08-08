@@ -87,7 +87,7 @@ public class New_ticket extends AppCompatActivity {
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("recu");
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites").child(idAdmin);
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites");
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
 
         plus = findViewById(R.id.plus);
@@ -190,7 +190,7 @@ public class New_ticket extends AppCompatActivity {
                 }
             });
         }else {
-            databaseReference1.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
+            databaseReference.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
 
 
                 @Override
@@ -198,26 +198,29 @@ public class New_ticket extends AppCompatActivity {
                     boolean previousMonthExists = false;
                     String somme = "";
                     if (snapshot.exists()){
-
+                     System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS DEDANS: "+previousMonthExists);
                         for (DataSnapshot autherSnap :snapshot.getChildren()){
                             Model_ticket tenant = autherSnap.getValue(Model_ticket.class);
                             if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
                                 verifie="retard";
                                 previousMonthExists = true;
+                                System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS MILIEU: "+previousMonthExists);
                                 VoirLeRecus();
                                 somme= tenant.getMontant();
                                 Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
-
                                 break;
+                            }
+                            if (!previousMonthExists) {
+                                System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS VERID: "+previousMonthExists);
+                                recuId.setVisibility(View.GONE);
+                                methodePayerRetard(previousMonth,prix);
                             }
                         }
                     }else {
+                        System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS DEHOERS: "+previousMonthExists);
                         VoirLeRecus();
                     }
-                    if (!previousMonthExists) {
-                        recuId.setVisibility(View.GONE);
-                        methodePayerRetard(previousMonth,prix);
-                    }
+
                 }
 
                 @Override
@@ -327,6 +330,7 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
+    //METHODE DE
     private void VoirLeRecus() {
 
         s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
@@ -343,6 +347,7 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
+    // METHODE DE PAIEMENT EN RETARD
     private void methodePayerRetard(String date, String montant) {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -383,6 +388,8 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
+
+    // METHODE DE RECUPERATION DE DONNEES
     private void addRecuData(String nom, String prenom, String montant, String numero, String type, String debutLoca, String caution, String avance, String dates) {
         Date heure = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -396,11 +403,14 @@ public class New_ticket extends AppCompatActivity {
         localiteReference.setValue(nouveauLocataire);
     }
 
+
+    //METHODE DE DEMANDE DE PERMISSION
     private void requestPermission() {
         // requesting permissions if not provided.
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CO);
     }
 
+    //METHODE DE DEMANDE DE PERMISSION
     private boolean checkPermissionBoolean() {
         // checking of permissions.
         int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
@@ -408,6 +418,8 @@ public class New_ticket extends AppCompatActivity {
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
     }
 
+
+    //METHODE DE GENERATION DE QRCODE
     private void generateQRCode(String id) {
 
         try {
@@ -423,6 +435,7 @@ public class New_ticket extends AppCompatActivity {
         }
     }
 
+    //METHODE DE DEMANDE DE PERMISSION
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             // Demander la permission d'envoyer des SMS
@@ -432,6 +445,8 @@ public class New_ticket extends AppCompatActivity {
             sendSMS();
         }
     }
+
+    //METHODE POUR CONVERTIR LE RECU EN PDF
     private void convertToPdfAndSend() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -497,6 +512,8 @@ public class New_ticket extends AppCompatActivity {
             Toast.makeText(this, "Erreur lors de la génération du fichier PDF"+e, Toast.LENGTH_SHORT).show();
         }
     }
+
+    //METHODE DE LENVOIE DE RECU VIA WHATSAPP
     private void sendPdfViaWhatsApp(File pdfFile, String phoneNumberWithCountryCode) {
         if (pdfFile.exists()) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -516,6 +533,8 @@ public class New_ticket extends AppCompatActivity {
         }
     }
 
+
+    //METHODE DE PERMISSION
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -544,6 +563,8 @@ public class New_ticket extends AppCompatActivity {
             }
         }
     }
+
+    //METHODE DE LENVOIE DE SMS
     private void sendSMS() {
 
         String message="Bonjour Monsieur/Madame "+ userPrenom.getText().toString()+ " Votre reçu de paiement du mois à été envoyé sur votre whatsapp";
@@ -558,6 +579,8 @@ public class New_ticket extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    //METHODE DE RETOUR EN ARRIERE
     @Override
     public void onBackPressed() {
         incr++;

@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5BC0EB"
     tools:context=".DetailAdmin">
 
     <RelativeLayout
         android:id="@+id/r1"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="-20dp"
-        android:background="@drawable/bg_rect"
-        android:backgroundTint="#03A9F4">
+        android:layout_marginTop="-20dp">
         <ImageView
             android:id="@+id/m00"
             style="@style/imageShow"
@@ -46,9 +45,10 @@
 
     <LinearLayout
         android:layout_below="@+id/r1"
-        android:layout_above="@+id/upda"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg_rect"
+        android:backgroundTint="@color/white"
         android:orientation="vertical">
         <ScrollView
             android:layout_width="match_parent"
@@ -74,6 +74,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
+                    android:backgroundTint="#5BC0EB"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
@@ -184,6 +185,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
+                    android:backgroundTint="#5BC0EB"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
@@ -263,6 +265,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
+                    android:backgroundTint="#5BC0EB"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
@@ -330,25 +333,28 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/upda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modifier mon profil"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:background="@drawable/new_border"
+                    android:backgroundTint="#5BC0EB"
+                    android:layout_marginTop="50dp"/>
             </LinearLayout>
 
         </ScrollView>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/upda"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Modifier mon profil"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        android:background="@drawable/new_border"
-        android:layout_marginTop="50dp"/>
+
 </RelativeLayout>

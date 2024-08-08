@@ -9,26 +9,28 @@
     <RelativeLayout
         android:id="@+id/yout1"
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
+        android:background="#5BC0EB"
+        android:layout_marginTop="-1dp"
+        android:padding="10dp"
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/retour3"
             style="@style/imageShow"
             android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:src="@drawable/back"
-            app:tint="@color/blue" />
+            android:layout_marginStart="10dp"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/locataireTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:layout_toEndOf="@+id/retour3"
-            android:text="Enregistrement du Nouveau Locataire"
-            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            android:text=" Inscrire un Locataire"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -50,15 +52,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="16dp"
-                android:text="Nom"/>
+                android:text="Nom: "/>
 
             <EditText
                 android:id="@+id/editTextNom"
                 android:layout_width="match_parent"
                 android:background="@drawable/border_black"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:padding="8dp"
+                android:hint="Entrer le nom"
                 android:gravity="end"
                 android:layout_below="@id/textViewNom"
                 android:inputType="text"/>
@@ -69,16 +74,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextNom"
-                android:text="Prenom"/>
+                android:text="Prénom: "/>
 
             <EditText
                 android:id="@+id/editTextPrenom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/border_black"
                 android:padding="8dp"
                 android:gravity="end"
+                android:hint="Entrer le prénom"
                 android:layout_below="@id/textViewPrenom"
                 android:inputType="text"/>
 
@@ -88,16 +97,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextPrenom"
-                android:text="Prix"/>
+                android:text="Prix: "/>
 
             <!-- Numero -->
             <EditText
                 android:id="@+id/editTextPrix"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_below="@id/textViewPrix"
                 android:gravity="end"
+                android:hint="Entrer le prix du loyer"
                 android:background="@drawable/border_black"
                 android:inputType="numberDecimal"
                 android:padding="8dp" />
@@ -107,16 +120,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextPrix"
-                android:text="Numero"/>
+                android:text="Numero: "/>
 
             <EditText
                 android:id="@+id/editTextNumero"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/border_black"
                 android:padding="8dp"
                 android:gravity="end"
+                android:hint="Entrer numero du locataire"
                 android:layout_below="@id/textViewNumero"
                 android:inputType="phone"/>
 
@@ -126,12 +143,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextNumero"
-                android:text="Ville/Commune"/>
+                android:text="Ville/Commune: "/>
             <RelativeLayout
                 android:id="@+id/r1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/border_black"
                 android:layout_below="@id/textViewCommune"
                 >
@@ -158,15 +178,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/r1"
-                android:text="Type de maison"/>
+                android:text="Type de maison: "/>
 
             <EditText
                 android:id="@+id/editTextTypeMaison"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/border_black"
                 android:padding="8dp"
+                android:hint="Entrer le type de la maison"
                 android:gravity="end"
                 android:layout_below="@id/textViewTypeMaison"
                 android:inputType="text"/>
@@ -177,27 +201,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextTypeMaison"
-                android:text="Debut de loca"/>
+                android:text="Debut de loca: "/>
 
             <TextView
                 android:id="@+id/editTextDebutLoca"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_below="@id/textViewDebutLoca"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@+id/pick"
                 android:background="@drawable/border_black"
                 android:gravity="end"
                 android:text=""
+                android:hint="10-Aout-2024"
                 android:padding="8dp" />
             <ImageView
                 android:id="@+id/pick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_below="@id/textViewDebutLoca"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/add"/>
+                android:layout_marginTop="5dp"
+                android:src="@drawable/calendar"/>
 
             <!-- Caution -->
             <TextView
@@ -205,16 +233,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextDebutLoca"
                 android:text="Caution"/>
 
             <EditText
                 android:id="@+id/editTextCaution"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/border_black"
                 android:padding="8dp"
                 android:gravity="end"
+                android:hint="Entrer le caution payé"
                 android:layout_below="@id/textViewCaution"
                 android:inputType="numberDecimal"/>
 
@@ -224,15 +256,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
                 android:layout_below="@id/editTextCaution"
-                android:text="Avance"/>
+                android:text="Avance: "/>
 
             <EditText
                 android:id="@+id/editTextAvance"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:padding="8dp"
                 android:gravity="end"
+                android:hint="Entrer l'avance payée"
                 android:background="@drawable/border_black"
                 android:layout_below="@id/textViewAvance"
                 android:inputType="numberDecimal"/>
