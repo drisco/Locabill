@@ -55,6 +55,16 @@ public class Adapter_historique extends RecyclerView.Adapter<Adapter_historique.
         return cityItems != null ? cityItems.size() : 0;
     }
 
+    public void setFilterUser(List<Model_ticket> filterUser) {
+        this.cityItems=filterUser;
+        notifyDataSetChanged();
+    }
+
+    public void userNotFound(List<Model_ticket> filterUser) {
+        this.cityItems=filterUser;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView  montant1,userPrenom1,userNom1,date2;
         RelativeLayout ritem;

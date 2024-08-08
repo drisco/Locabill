@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     <RelativeLayout
         android:id="@+id/head"
         android:layout_width="match_parent"
@@ -18,7 +19,9 @@
             android:gravity="center"
             android:layout_centerVertical="true"
             android:textStyle="bold"
-            android:text="Liste de tout les reçus"/>
+            android:textColor="@color/white"
+            android:text="Historique des paiements"/>
+
         <ImageView
             android:id="@+id/headI"
             style="@style/imageShow"
@@ -38,6 +41,29 @@
             android:layout_centerVertical="true"
             android:src="@drawable/search"
             app:tint="@color/white" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchB"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/search"
+            android:layout_toEndOf="@+id/headI"
+            android:background="@drawable/bg_rect"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:focusable="false"
+            android:paddingStart="-10dp"
+            android:textColorHint="@color/white"
+            app:closeIcon="@drawable/backspace"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search"
+            app:searchHintIcon="@null"
+            tools:ignore="MissingConstraints" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/log"
@@ -61,6 +87,15 @@
             android:layout_height="180dp"
             android:src="@drawable/vide"/>
     </RelativeLayout>
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Aucun resultat"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="18sp"
+        android:layout_gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/head"

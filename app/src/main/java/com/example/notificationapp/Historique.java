@@ -2,6 +2,7 @@ package com.example.notificationapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notificationapp.models.CityItem;
@@ -35,12 +37,17 @@ import java.util.List;
 public class Historique extends AppCompatActivity implements Adapter_historique.ItemClickListener {
     List<Model_ticket> ticketsData;
     Adapter_historique studentAdapter;
+    androidx.appcompat.widget.SearchView recherche;
     int incr;
     String idAdmin;
     RecyclerView recyclerView;
     PopupRegister popusCostum;
+
     RelativeLayout log;
+    TextView message,title;
     ImageView headI;
+    ImageView iconSearch;
+    boolean isSearchBarVisible = false;
 
 
     @SuppressLint("MissingInflatedId")
@@ -48,13 +55,37 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historique);
+        recherche = findViewById(R.id.searchB);
         SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         idAdmin = donnes.getString("id", "");
         FirebaseApp.initializeApp(this);
         recyclerView= findViewById(R.id.recyclerView);
         log= findViewById(R.id.log);
         headI= findViewById(R.id.headI);
+        message= findViewById(R.id.message);
         ticketsData = new ArrayList<>();
+        iconSearch = findViewById(R.id.search);
+        title = findViewById(R.id.headT);
+
+        iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inversez l'état actuel de la variable
+                isSearchBarVisible = !isSearchBarVisible;
+
+                if (isSearchBarVisible) {
+                    // Afficher la barre de recherche
+                    iconSearch.setImageResource(R.drawable.close);
+                    title.setVisibility(View.GONE);
+                    recherche.setVisibility(View.VISIBLE);
+                } else {
+                    // Masquer la barre de recherche
+                    iconSearch.setImageResource(R.drawable.search);
+                    title.setVisibility(View.VISIBLE);
+                    recherche.setVisibility(View.GONE);
+                }
+            }
+        });
 
         headI.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +136,42 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
                 // Gérer les erreurs ici
             }
         });
+
+        recherche.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+        });
+    }
+
+    private void filterList(String newText) {
+        List<Model_ticket> filterUser = new ArrayList<>();
+        for(Model_ticket user : ticketsData) {
+            String nomUser = user.getNom().trim().toLowerCase();
+            String dateUser = user.getDate().trim().toLowerCase();
+            String searchText = newText.trim().toLowerCase();
+
+            if(nomUser.contains(searchText) || dateUser.contains(searchText)) {
+                filterUser.add(user);
+            }
+        }
+        if (!ticketsData.isEmpty()){
+            if(filterUser.isEmpty()){
+                message.setVisibility(View.VISIBLE);
+                studentAdapter.userNotFound(filterUser);
+
+            }else{
+                studentAdapter.setFilterUser(filterUser);
+                message.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -118,7 +185,7 @@ public class Historique extends AppCompatActivity implements Adapter_historique.
         intent.putExtra("prix", tiket.getMontant());
         intent.putExtra("numero", tiket.getNumero());
         intent.putExtra("type_de_maison", tiket.getType());
-        intent.putExtra("debut_de_loca", tiket.getDebutLoca());
+        intent.putExtra("debut_de_loca", tiket.getHeure());
         intent.putExtra("chiffre", tiket.getMontantChiffre());
         intent.putExtra("date", tiket.getDate());
         startActivity(intent);

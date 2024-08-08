@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,12 +25,16 @@ public class DetailTikets extends AppCompatActivity {
     TextView userNom,userPrenom,number,montant,type,date,debut,s_chiffre,payer;
     ImageView qrImageView1;
 
+
+    int incr;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail_tikets);
+
 
         userNom = findViewById(R.id.userNom);
         userPrenom = findViewById(R.id.userPrenom);
@@ -49,16 +54,18 @@ public class DetailTikets extends AppCompatActivity {
         String prix = intent.getStringExtra("prix");
         String numero = intent.getStringExtra("numero");
         String type_de_maison = intent.getStringExtra("type_de_maison");
-        String debut_de_loca = intent.getStringExtra("debut_de_loca");
+        String debut_de_loca = intent.getStringExtra("date");
         String chiffre = intent.getStringExtra("chiffre");
+        String heuredate = intent.getStringExtra("debut_de_loca");
 
         s_chiffre.setText(chiffre);
         userNom.setText(nom);
         userPrenom.setText(prenom);
         number.setText(numero);
-        montant.setText(prix+ " FCFA");
+        montant.setText("Montatnt en chiffre: "+prix+ " FCFA");
         type.setText(type_de_maison);
         debut.setText(debut_de_loca);
+        date.setText(heuredate);
 
         String qrContent=id;
         try {
@@ -72,10 +79,23 @@ public class DetailTikets extends AppCompatActivity {
             e.printStackTrace();
             // Gérez les exceptions ici
         }
+
+        ;
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        incr++;
+        if (incr==1){
+            super.onBackPressed();
+            startActivity(new Intent(DetailTikets.this,Historique.class));
+            finish();
+        }
     }
 }
