@@ -1,96 +1,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
+        android:padding="10dp"
+        android:background="@color/blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/rtour"
+            style="@style/imageShow"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/back"
-            style="@style/imageShow"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"/>
+            android:src="@drawable/back"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/play"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/play"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/play"
+            app:tint="@color/white"/>
+
         <ImageView
             android:id="@+id/pause"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/pause"
             android:visibility="gone"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"/>
+            app:tint="@color/white"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:fontFamily="@font/gotham_medium"
-            android:textColor="@color/black"
             android:gravity="center"
+            android:padding="10dp"
             android:text="Signaler un problème"
-            android:textSize="16dp"/>
+            android:textColor="@color/black"
+            android:textSize="16dp" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollIndicators="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:fontFamily="@font/gotham_book"
                 android:layout_margin="15dp"
-                android:textColor="@color/black"
+                android:fontFamily="@font/gotham_book"
                 android:gravity="center"
-                android:textSize="16dp"
-                android:text="Bienvenue dans notre plateforme dédiée à l'entretien des maisons louées. Nous sommes là pour garantir un séjour agréable et sans souci pour nos locataires. Si vous rencontrez un problème ou un défaut dans votre logement, n'hésitez pas à le signaler via ce formulaire. Votre satisfaction est notre priorité."/>
+                android:padding="10dp"
+                android:text="Bienvenue dans notre plateforme dédiée à l'entretien des maisons louées. Nous sommes là pour garantir un séjour agréable et sans souci pour nos locataires. Si vous rencontrez un problème ou un défaut dans votre logement, n'hésitez pas à le signaler via ce formulaire. Votre satisfaction est notre priorité."
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+            
+
+
             <TextView
                 android:id="@+id/buttonAddImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ajouter des images"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:textColor="@color/white"
-                android:background="@drawable/new_border"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/blue"
+                android:layout_gravity="center"
+                android:layout_marginTop="-15dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="-15dp" />
+                android:background="@drawable/new_border"
+                android:backgroundTint="@color/blue"
+                android:paddingStart="15dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:text="Ajouter images"
+                android:textColor="@color/white" />
 
             <LinearLayout
-                android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_rect"
+                    android:backgroundTint="#6FFFFFFF"
+                    android:padding="10dp"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/imageContainer"
@@ -101,12 +118,13 @@
                 </HorizontalScrollView>
 
                 <EditText
-                    android:layout_marginTop="25dp"
                     android:id="@+id/editTextTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="Titre" />
+                    android:layout_marginTop="25dp"
+                    android:hint="Titre"
+                    android:inputType="text" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -139,11 +157,11 @@
                     android:id="@+id/buttonAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Soumettre"
-                    android:padding="15dp"
+                    android:layout_marginTop="35dp"
+                    android:backgroundTint="@color/blue"
                     android:fontFamily="@font/gotham_medium"
-                    android:backgroundTint="#453E3E"
-                    android:layout_marginTop="35dp" />
+                    android:padding="15dp"
+                    android:text="Soumettre" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

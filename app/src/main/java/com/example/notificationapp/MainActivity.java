@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (!idAdmin.isEmpty()){
             Intent intent = new Intent(getApplicationContext(), MainBroadcastReceiver.class);
             intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
-            RappelPlaning.schedulepaiement(this);
+            //RappelPlaning.schedulepaiement(this);
             RappelPlaning.scheduleChaquefindumois(this);
             RappelPlaning.scheduleTest(this);
         }

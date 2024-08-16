@@ -68,7 +68,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
         if (!idAdm.isEmpty()){
 
                     if (reference != null) {
-                        System.out.println("MON NOM CEST     JE SUIS ICI"+reference);
 
                         if (reference.equals("nouveaupaiement")){
                             //startMyService(context);

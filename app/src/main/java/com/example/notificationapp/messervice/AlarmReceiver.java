@@ -1,6 +1,8 @@
 package com.example.notificationapp.messervice;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -44,6 +47,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         idls = sharedPreferences.getString("id", "");
         Bundle extras = intent.getExtras();
         String reference = extras.getString("reference");
+        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+idAdm+reference);
+        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 100");
+        createNotificationChannel(context);
 
         if (!idls.isEmpty()){
             if (reference !=null){
@@ -85,6 +91,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                         }
                     });
                 } else if (reference.equals("chaqueuneminute")) {
+
+
                     dtabaseMessage.child(idAdm).child("messagejour").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -94,6 +102,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 tenant1 = dataSnapshot.getValue(Message.class);
                                 tenants.add(tenant1);
                                 messagedulundi(context,tenant1);
+                                Toast.makeText(context, "YES YES", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -118,6 +127,22 @@ public class AlarmReceiver extends BroadcastReceiver {
         }*/
 
     }
+
+    private void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Nom_notification";
+            String description = "description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
     private void messageDeRappel(Context context, Message tenant) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channelId)
@@ -151,9 +176,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void messagedulundi(Context context, Message tenant) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ADMIN== "+idAdm);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle("Semaine fruiteuse")
+                    .setSmallIcon(R.drawable.locabill)
+                    .setContentTitle("Rappel de Paiement de Loyer")
                     .setContentText(tenant.getMessage())
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(tenant.getMessage()))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);

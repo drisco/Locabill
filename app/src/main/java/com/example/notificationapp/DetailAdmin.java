@@ -185,6 +185,8 @@ public class DetailAdmin extends AppCompatActivity {
             }
         });
 
+
+        //PLANIFICATION DE RAPPEL
         planifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -308,7 +310,7 @@ public class DetailAdmin extends AppCompatActivity {
                                 bottomSheetDialog.dismiss();
                             }
                         }else{
-                            if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
+                            if (edmoistest.getText().toString().isEmpty()|| edmoistestnum.getText().toString().isEmpty()){
                                 Message msge=new Message("messagejour",editTextJour.getText().toString());
                                 databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
                                 bottomSheetDialog.dismiss();

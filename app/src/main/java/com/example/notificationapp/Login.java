@@ -63,7 +63,14 @@ public class Login extends AppCompatActivity {
         SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
         String idloca = loca.getString("id", "");
          codeloca = loca.getString("codepin", "");
-
+        String somme = loca.getString("codepin", "");
+        if (codeloca.isEmpty() &&  !somme.isEmpty()){
+            startActivity(new Intent(Login.this,EspaceLocataires.class));
+            finish();
+        }else if(!codeloca.isEmpty() &&  !somme.isEmpty()){
+            startActivity(new Intent(Login.this,EspaceLocataires.class));
+            finish();
+        }
 
         tvInputTip = findViewById(R.id.tv_input_tip);
         iv_lock = findViewById(R.id.iv_lock);

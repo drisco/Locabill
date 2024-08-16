@@ -221,7 +221,6 @@ public class AnnonceProbleme extends AppCompatActivity {
     }
 
     private void saveImageUrisToDatabase(List<String> imageUris, String titre, String description) {
-        System.out.println("ERAZAZERAERAERAERAERAERAERAEAEAEEEAZREAZREAZRAZERAZERAERZERAZEREERAZZEREZERZERZER WHAT'S THE PROBLEM");
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String dateAndTime = sdf.format(new Date());
         DatabaseReference myRef=databaseRef.child(idAdm).child(idLca).push();
@@ -335,19 +334,30 @@ public class AnnonceProbleme extends AppCompatActivity {
 
     private void refreshImageContainer() {
         imageContainer.removeAllViews();
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;  // Obtenir la largeur de l'écran
+        int imageWidth = (screenWidth / 4) - 20;  // Diviser par 3 pour afficher 3 images côte à côte (ajuster selon vos besoins)
+
         for (Bitmap bitmap : selectedImages) {
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
-            layoutParams.setMargins(5, 0, 5, 0);
-            layoutParams.gravity = Gravity.CENTER;
+
+            // Paramètres pour chaque image
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(imageWidth, 250);
+            layoutParams.setMargins(10, 0, 10, 0);
+            layoutParams.gravity = Gravity.CENTER;// Ajuster la marge si nécessaire
             imageView.setLayoutParams(layoutParams);
-            Glide.with(this).load(bitmap)
+
+            // Appliquer les bordures arrondies avec Glide
+            Glide.with(this)
+                    .load(bitmap)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(30, 0)))
                     .into(imageView);
+
+            // Ajouter l'image au conteneur
             imageContainer.addView(imageView);
         }
     }
+
 
     @Override
     public void onBackPressed() {

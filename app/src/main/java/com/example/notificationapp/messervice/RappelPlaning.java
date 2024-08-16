@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -24,7 +25,6 @@ public class RappelPlaning {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000, pendingIntent);
     }
     public static void scheduleChaquefindumois(Context context) {
-        System.out.println("RAPELRAPELLELLELELELELELLELLELELELELELELLELELELELEL");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MainBroadcastReceiver.class);
         intent.setAction("com.example.notificationapp.ACTION_CUSTOM");
@@ -48,6 +48,8 @@ public class RappelPlaning {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
+
+    // CEST CETTE METHODE QUI FONCTIONNE ACTUELLEMENT QUI ENVOI DES NOTIFICATION
     public static void scheduleChaqueUneMunite(Context context) {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -59,10 +61,10 @@ public class RappelPlaning {
         // Calculer le temps pour la première diffusion
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MINUTE, 1);
 
         // Planifier les répétitions toutes les 5 minutes
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),   5 * 60 * 1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),    60 * 1000, pendingIntent);
     }
 
     public static void scheduleChaquelundi(Context context) {

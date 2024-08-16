@@ -147,7 +147,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             RappelPlaning.scheduleChaqueUneMunite(this);
             RappelPlaning.scheduleApartirde25jusquafin(this);
             RappelPlaning.scheduleChaquelundi(this);
-            
+
         }
         popup = new AlertPaiement(EspaceLocataires.this);
         popup.setCancelable(true);
@@ -236,10 +236,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                     // Traiter la réponse ici
                     String responseBody = response.body().string();
                     StatutRecu statutRecu = gson.fromJson(responseBody, StatutRecu.class);
-                    System.out.println("AAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASUCCESS VALEURRRRR  "+statutRecu.getStatut());
 
                     if (statutRecu.getStatut().equals("true")){
-                        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASUCCESS TOKEN TOKEN  "+tokenData);
                         String dateR = sharedPreferencesToken.getString("dateR", "");
                         String idR = sharedPreferencesToken.getString("idR", "");
                         String statutR = sharedPreferencesToken.getString("statutR", "");
