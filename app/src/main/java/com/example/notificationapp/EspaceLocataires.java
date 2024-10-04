@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +34,9 @@ import com.example.notificationapp.messervice.MainBroadcastReceiver;
 import com.example.notificationapp.messervice.RappelPlaning;
 import com.example.notificationapp.models.ApiResponse;
 import com.example.notificationapp.models.ClientData;
+import com.example.notificationapp.models.ModelContract;
 import com.example.notificationapp.models.Model_code_pin;
 import com.example.notificationapp.models.Model_ticket;
-import com.example.notificationapp.models.StatutRecu;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,6 +70,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     DatabaseReference databaseReference01,databaseReference0,databaseReference1,databaseReference2;
     //databaseReference0
     TextView nomEtPrenom,editer;
+    DatabaseReference databaseRef;
     private Fragment historiqueFragment;
     private BottomSheetDialog bottomSheetDialog;
     EditText editTex,editTex1,mdpedit,numeroet;
@@ -125,17 +128,19 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         type = sharedPreferences.getString("type", "");
         nomEtPrenom.setText("Bonjour "+nom+" "+prenom);
 
+        // METHODE DE LANCEMENT DE CONTRAT DE BAIL
+        checkIfContractExists(idAdm,idLca);
          tokenData = sharedPreferencesToken.getString("token", "");
 
             if (!tokenData.isEmpty()){
                 popusCostum = new PopupRegister(EspaceLocataires.this);
                 popusCostum.setCancelable(false);
                 popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                popusCostum.show();
+                //popusCostum.show();
                 resultatstatus(tokenData);
 
             }
-        client =new ClientData(200,type,idLca,numero,prenom,"redirectUrl");
+        client =new ClientData(200,type,idLca,numero,prenom,"https://www.moneyfusion.net/dashboard/history");
 
         if (!idLca.isEmpty()){
             Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
@@ -162,6 +167,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
             }
         });
+
+        // FONCTION POUR MODIFIER LES DONNEES DE LOCATAIRE
         editer.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("CutPasteId")
             @Override
@@ -203,6 +210,89 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         });
     }
 
+
+    // METHODE POUR VERIFIER LE CONTRAT DE BAIL SIL EXISTE
+    private void checkIfContractExists(String userId, String idLca) {
+         databaseRef = FirebaseDatabase.getInstance().getReference("contrats").child(userId);
+
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Le contrat existe
+                    ModelContract contract = dataSnapshot.getValue(ModelContract.class);
+                    if (contract != null && contract.getEstSigne()) {
+                        // Afficher le BottomSheet si le contrat existe
+
+                        showBottomSheet(contract);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseDatabase", "Erreur lors de la vérification du contrat", databaseError.toException());
+            }
+        });
+    }
+
+
+    // LA VUE DE SHEETBOTTOM POUR AFFICHER LE CONTRAT DE BAILL
+    private void showBottomSheet(ModelContract contract) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setCancelable(false);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_contract, null);
+
+        Button viewContractButton = bottomSheetView.findViewById(R.id.viewContractButton);
+        databaseRef = FirebaseDatabase.getInstance().getReference("contrats").child(idLca);
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Le contrat existe
+                    ModelContract contraL = dataSnapshot.getValue(ModelContract.class);
+                    if ( contraL.getEstSigne()) {
+                        bottomSheetDialog.dismiss();
+                    }else {
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        bottomSheetDialog.show();
+                        // Lorsqu'on appuie sur le bouton, aller à une autre activité pour voir le contrat
+                        viewContractButton.setOnClickListener(v -> {
+                            Intent intent = new Intent(EspaceLocataires.this, ViewContractActivity.class);
+                            intent.putExtra("contrat", contract.getContrat());
+                            intent.putExtra("signatureUrl", contract.getSignatureUrl());
+                            startActivity(intent);
+                            finish();
+                            bottomSheetDialog.dismiss();
+                        });
+                    }
+                } else {
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
+                    // Lorsqu'on appuie sur le bouton, aller à une autre activité pour voir le contrat
+                    viewContractButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(EspaceLocataires.this, ViewContractActivity.class);
+                        intent.putExtra("contrat", contract.getContrat());
+                        intent.putExtra("signatureUrl", contract.getSignatureUrl());
+                        startActivity(intent);
+                        finish();
+                        bottomSheetDialog.dismiss();
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseDatabase", "Erreur lors de la vérification du contrat", databaseError.toException());
+            }
+        });
+
+    }
+
+
+
+    // METHODE POUR LE RESULTAT DU PAIEMENT
     private void resultatstatus(String tokenData) {
 
         String numberInWords = NumberToWords.convertToWords(Integer.parseInt(somme1));
@@ -235,52 +325,65 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                 }else{
                     // Traiter la réponse ici
                     String responseBody = response.body().string();
-                    StatutRecu statutRecu = gson.fromJson(responseBody, StatutRecu.class);
 
-                    if (statutRecu.getStatut().equals("true")){
-                        String dateR = sharedPreferencesToken.getString("dateR", "");
-                        String idR = sharedPreferencesToken.getString("idR", "");
-                        String statutR = sharedPreferencesToken.getString("statutR", "");
-                        if (dateR.isEmpty() && idR.isEmpty() ){
-                            String nouvelId = localiteReference.push().getKey();
-                            Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateR, heureActuelle);
-                            localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
-                            popup.dismiss();
-                            popusCostum.dismiss();
-                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
-                            intent.putExtra("id", idLca);
-                            intent.putExtra("nom", nom);
-                            intent.putExtra("prenom", prenom);
-                            intent.putExtra("prix", somme1);
-                            intent.putExtra("numero", numero);
-                            intent.putExtra("localite", ville);
-                            intent.putExtra("type_de_maison", type);
-                            intent.putExtra("mois", dateR);
-                            intent.putExtra("date", heureActuelle);
-                            startActivity(intent);
-                            finish();
+                    PaiementDetails statutRecu = gson.fromJson(responseBody, PaiementDetails.class);
+                    if (statutRecu.getData() !=null && !statutRecu.getMessage().equals("paiement introuvable !!!!")){
+
+                        if (statutRecu.getData().getStatut().equals("paid")){
+                            String dateR = sharedPreferencesToken.getString("dateR", "");
+                            String idR = sharedPreferencesToken.getString("idR", "");
+                            String statutR = sharedPreferencesToken.getString("statutR", "");
+                            if (dateR.isEmpty() && idR.isEmpty() ){
+                                String nouvelId = localiteReference.push().getKey();
+                                Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, somme1, numero, type, debutUsage, caution, avance, numberInWords, dateR, heureActuelle);
+                                localiteReference.child(nouvelId).setValue(nouveauLocataire); // Utiliser child(nouvelId) pour ajouter un nouvel élément
+                                popup.dismiss();
+                                popusCostum.dismiss();
+                                Intent intent =new Intent(getApplicationContext(), Bricefile.class);
+                                intent.putExtra("id", idLca);
+                                intent.putExtra("nom", nom);
+                                intent.putExtra("prenom", prenom);
+                                intent.putExtra("prix", somme1);
+                                intent.putExtra("numero", numero);
+                                intent.putExtra("localite", ville);
+                                intent.putExtra("type_de_maison", type);
+                                intent.putExtra("mois", dateR);
+                                intent.putExtra("date", heureActuelle);
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                popusCostum.dismiss();
+                                Model_ticket nouveauLocataire = new Model_ticket(idR, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, dateR,heureActuelle);
+                                localiteReference.child(id).setValue(nouveauLocataire);
+                                databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
+                                popup.dismiss();
+                                Intent intent =new Intent(getApplicationContext(), Bricefile.class);
+                                intent.putExtra("id", idR);
+                                intent.putExtra("nom", nom);
+                                intent.putExtra("prenom", prenom);
+                                intent.putExtra("prix", somme);
+                                intent.putExtra("numero", numero);
+                                intent.putExtra("localite", ville);
+                                intent.putExtra("type_de_maison", type);
+                                intent.putExtra("mois", dateR);
+                                intent.putExtra("date", heureActuelle);
+                                startActivity(intent);
+                                finish();
+                            }
                         }else {
-                            Model_ticket nouveauLocataire = new Model_ticket(idR, nom,prenom , somme, numero, type, debutUsage, caution,avance ,numberInWords, dateR,heureActuelle);
-                            localiteReference.child(id).setValue(nouveauLocataire);
-                            databaseReference01.child(idAdm).child(ville).child(idLca).child("statut").setValue("payé");
-                            popup.dismiss();
-                            Intent intent =new Intent(getApplicationContext(), Bricefile.class);
-                            intent.putExtra("id", idR);
-                            intent.putExtra("nom", nom);
-                            intent.putExtra("prenom", prenom);
-                            intent.putExtra("prix", somme);
-                            intent.putExtra("numero", numero);
-                            intent.putExtra("localite", ville);
-                            intent.putExtra("type_de_maison", type);
-                            intent.putExtra("mois", dateR);
-                            intent.putExtra("date", heureActuelle);
-                            startActivity(intent);
-                            finish();
+                            popusCostum.dismiss();
+                            System.out.println("STATUT EST FALSE FLASEJKEJJFJKJEJ FALSE FALSE FALSE FALSE "+statutRecu);
+                            editorToken.clear();
+                            editorToken.apply();
                         }
                     }else {
+                        popusCostum.dismiss();
+                        System.out.println("STATUT EST FALSE FLASEJKEJJFJKJEJ FALSE FALSE FALSE FALSE "+statutRecu);
                         editorToken.clear();
                         editorToken.apply();
                     }
+
+
                 }
 
             }
@@ -501,12 +604,12 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
                 if (apiResponse.isStatut()) {
                     // Le paiement est en cours, utilisez l'URL pour rediriger l'utilisateur vers le moyen de paiement
+                    System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G TOKEN TOKEN TOKEN TOKEN  "+apiResponse.getUrl());
                     redirectUser(apiResponse.getUrl());
 
                     //editorToken.clear();
                     editorToken.putString("token", apiResponse.getToken());
                     editorToken.apply();
-                    System.out.println("N?FBVHFBHBFGHGJGHHG JRGHKGH HLRGHIUG HHLGULHIURG G TOKEN TOKEN TOKEN TOKEN  "+apiResponse.getToken());
                 } else {
                     // Gérer le cas où le statut n'est pas réussi
                     System.out.println("Erreur lors du paiement: " + apiResponse.getMessage());
@@ -518,10 +621,14 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     // REDIRECT ON WEBSITE METHOD
     private void redirectUser(String url) {
 
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+// Démarrez l'activité de navigateur pour ouvrir l'URL
+        startActivity(browserIntent);
+        /*Intent intent = new Intent(this, TestActivity.class);
         intent.putExtra("url", url);
         startActivity(intent);
-        finish();
+        finish();*/
     }
 
     //CLICK ITEMS METHOD
@@ -552,7 +659,15 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
             startActivity(new Intent(EspaceLocataires.this, AnnonceProbleme.class));
             finish();
 
-        } else if (item.getItemId()==R.id.codep){
+        } else if (item.getItemId()==R.id.contrat) {
+            Intent intent =new Intent(EspaceLocataires.this, VoirContrat.class);
+            intent.putExtra("idAdm", idAdm);
+            intent.putExtra("idLca", idLca);
+            intent.putExtra("veri", "veriLoca");
+            startActivity(intent);
+            finish();
+
+        }else if (item.getItemId()==R.id.codep){
             bottomSheetDialog = new BottomSheetDialog(EspaceLocataires.this);
             View bottomSheetView = getLayoutInflater().inflate(R.layout.codepopup, null);
             bottomSheetDialog.setContentView(bottomSheetView);

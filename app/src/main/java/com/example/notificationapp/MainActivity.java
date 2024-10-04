@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     RelativeLayout rl1,rl2,rlt2;
     SharedPreferences sharedPreferences1;
-    CircleImageView profil;
+    ImageView profil;
     ImageView r2;
     String idAdmin;
     EditText etToken;
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, DetailAdmin.class));
+                finish();
             }
         });
 

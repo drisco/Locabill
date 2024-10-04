@@ -30,6 +30,7 @@ public class TestActivity extends AppCompatActivity {
 
 // Récupération de la référence au WebView
         WebView webView = findViewById(R.id.web);
+        webView.setWebViewClient(new WebViewClient());
 
 // Configuration du WebView
         webView.getSettings().setJavaScriptEnabled(true);

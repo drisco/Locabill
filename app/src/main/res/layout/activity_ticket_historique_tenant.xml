@@ -3,23 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".TicketHistoriqueTenant">
 
     <RelativeLayout
         android:id="@+id/yout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/backgr_newrect"
+        android:layout_marginTop="-10dp"
+        android:backgroundTint="@color/blue"
+        android:layout_height="70dp">
         <ImageView
             android:id="@+id/retour2"
             style="@style/imageShow"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/back"/>
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/fleche"
+            android:layout_marginStart="16dp"
+            app:tint="@color/white"/>
         <TextView
             android:id="@+id/locataireTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="Historique"
             android:layout_centerHorizontal="true"
             android:textSize="24sp"
@@ -29,7 +36,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_below="@+id/yout1"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

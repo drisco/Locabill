@@ -100,7 +100,7 @@ public class New_ticket extends AppCompatActivity {
         popup = new AlertPaiement(New_ticket.this);
         popup.setCancelable(false);
         popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        buttonPrintReceipt = findViewById(R.id.buttonPrintReceipt);
+       // buttonPrintReceipt = findViewById(R.id.buttonPrintReceipt);
         buttonSendReceipt = findViewById(R.id.buttonSendReceipt);
         qrImageView = findViewById(R.id.qrImageView);
 

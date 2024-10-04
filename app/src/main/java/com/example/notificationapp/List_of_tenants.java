@@ -194,6 +194,14 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             startActivity(intent);
             finish();
 
+        }else if (item.getItemId()==R.id.voir){
+            Intent intent =new Intent(List_of_tenants.this,VoirContrat.class);
+            intent.putExtra("idAdm", user.getIdProprie());
+            intent.putExtra("idLca", user.getId());
+            intent.putExtra("veri", "veripro");
+            startActivity(intent);
+            finish();
+
         }else if (item.getItemId()==R.id.historique){
             Intent intent =new Intent(List_of_tenants.this,HistoriqueListeRecuGeneree.class);
             intent.putExtra("id", user.getId());

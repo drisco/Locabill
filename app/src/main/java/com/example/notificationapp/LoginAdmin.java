@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.notificationapp.models.Admin;
 import com.example.notificationapp.models.Model_code_pin;
+import com.example.notificationapp.models.Model_tenant;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginAdmin extends AppCompatActivity {
     private TextInputEditText numero, passwordEdt;
     TextView btnlogin,register;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences,sharedPreferencesLoc;
+    SharedPreferences.Editor editor,editorLoc;
     int incr;
     PopupRegister popup;
-    DatabaseReference databaseReference, databaseReference1;
+    Model_tenant utilisateur;
+
+    DatabaseReference databaseReference, databaseReference1,reference;
+    String idAdmin, id,ville,nom,prenom,numeros,somme,caution,avance,debutUsage,type,codeloca,codeLocalId,passwords;
+
     String codePinValue,codePinId;
     @Override
     @SuppressLint("MissingInflatedId")
@@ -44,14 +49,20 @@ public class LoginAdmin extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        sharedPreferencesLoc = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
+        editorLoc = sharedPreferencesLoc.edit();
 
         String idAdmin = sharedPreferences.getString("id", "");
         String nom = sharedPreferences.getString("nom", "");
         String numeroAd = sharedPreferences.getString("numero", "");
         String codepin = sharedPreferences.getString("codepin", "");
-        SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
+        String codepinLo = sharedPreferencesLoc.getString("codepin", "");
+        String idloca = sharedPreferencesLoc.getString("id", "");
+
+        System.out.println("BCVBVCBVBVXBVBVBVXBVBVXBVBBBBBBXXXXXXXXXXXXXXXXXXXX "+codepinLo);
+        /*SharedPreferences loca = getSharedPreferences("codeconfirm", Context.MODE_PRIVATE);
         String idloca = loca.getString("id", "");
-        String code = loca.getString("codepin", "");
+        String code = loca.getString("codepin", "");*/
 
 
         if (!idAdmin.isEmpty() || !nom.isEmpty()||!numeroAd.isEmpty()){
@@ -65,7 +76,7 @@ public class LoginAdmin extends AppCompatActivity {
 
         }else {
             if (!idloca.isEmpty()){
-                if (!code.isEmpty()){
+                if (!codepinLo.isEmpty()){
                     startActivity(new Intent(LoginAdmin.this,Login.class));
                     finish();
                 }else {
@@ -81,6 +92,8 @@ public class LoginAdmin extends AppCompatActivity {
         btnlogin = findViewById(R.id.idBtnLogin);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("codepin");
+        reference = FirebaseDatabase.getInstance().getReference().child("localites");
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,9 +175,107 @@ public class LoginAdmin extends AppCompatActivity {
                         }
                     }
                 } else {
-                    popup.dismiss();
-                    // Aucun utilisateur avec ce numéro de téléphone n'a été trouvé, affichez un message d'erreur
-                    Toast.makeText(getApplicationContext(), "Aucun utilisateur trouvé avec ce numéro de téléphone.", Toast.LENGTH_SHORT).show();
+                    reference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            if (dataSnapshot.exists()){
+                                boolean paiementEffectue = false;
+                                boolean isNumber = false;
+
+
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    // Récupérer les données de l'utilisateur
+                                    for (DataSnapshot noeud2 :snapshot.getChildren()){
+                                        for (DataSnapshot noeud3 :noeud2.getChildren()){
+                                            utilisateur = noeud3.getValue(Model_tenant.class);
+                                            // Faire ce que vous voulez avec les données de l'utilisateur
+                                            if (utilisateur != null) {
+                                                paiementEffectue = true;
+                                                popup.dismiss();
+                                                if (utilisateur.getNumero().equals(number)){
+                                                    passwords= utilisateur.getPasword();
+                                                    idAdmin=utilisateur.getIdProprie();
+                                                    id=utilisateur.getId();
+                                                    ville=utilisateur.getLocalite();
+                                                    numeros=utilisateur.getNumero();
+                                                    somme=utilisateur.getPrix();
+                                                    nom=utilisateur.getNom();
+                                                    prenom=utilisateur.getPrenom();
+                                                    type=utilisateur.getType_de_maison();
+                                                    caution=utilisateur.getCaution();
+                                                    avance=utilisateur.getAvance();
+                                                    debutUsage=utilisateur.getDebut_de_loca();
+                                                    databaseReference1.child(id).addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                                Model_code_pin codePin = childSnapshot.getValue(Model_code_pin.class);
+                                                                if (codePin != null) {
+                                                                    codeloca = codePin.getCode();
+                                                                    codeLocalId = codePin.getId();
+                                                                }
+                                                                break;
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            System.out.println("Erreur : " + databaseError.getMessage());
+                                                        }
+                                                    });
+
+                                                    if (password.equals(passwords)){
+                                                        popup.dismiss();
+                                                        editorLoc.clear();
+                                                        editorLoc.apply();
+                                                        editorLoc.putString("idAdmin",idAdmin );
+                                                        editorLoc.putString("id",id );
+                                                        editorLoc.putString("ville", ville);
+                                                        editorLoc.putString("nom", nom);
+                                                        editorLoc.putString("prenom", prenom);
+                                                        editorLoc.putString("caution", caution);
+                                                        editorLoc.putString("avance", avance);
+                                                        editorLoc.putString("debutUsage", debutUsage);
+                                                        editorLoc.putString("type", type);
+                                                        editorLoc.putString("numero", numeros);
+                                                        editorLoc.putString("somme", somme);
+                                                        editorLoc.putString("codepin", codeloca);
+                                                        editorLoc.putString("codepinId", codeLocalId);
+                                                        editorLoc.putString("mdp", password);
+                                                        editorLoc.apply();
+
+                                                        startActivity(new Intent(LoginAdmin.this,EspaceLocataires.class));
+                                                        finish();
+
+                                                    }else {
+                                                        popup.dismiss();
+                                                        Toast.makeText(LoginAdmin.this, "Le mot de passe est incorrect", Toast.LENGTH_SHORT).show();
+                                                    }
+
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (paiementEffectue){
+
+                                }else{
+                                    popup.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Aucun utilisateur trouvé avec ce numéro de téléphone.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            // Pour chaque enfant de "idNoeud3"
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Gestion des erreurs
+                            popup.dismiss();
+                            Log.e("TAG", "Erreur lors de la récupération des données", databaseError.toException());
+                        }
+                    });
+
                 }
             }
 

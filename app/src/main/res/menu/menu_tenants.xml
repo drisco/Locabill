@@ -10,6 +10,9 @@
         android:id="@+id/modifier"
         android:title="Modifier" />
     <item
+        android:id="@+id/voir"
+        android:title="Voir contrat" />
+    <item
         android:id="@+id/supprimer"
         android:title="Supprimer" />
 </menu>

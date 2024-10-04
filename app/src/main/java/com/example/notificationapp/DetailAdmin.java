@@ -1,5 +1,6 @@
 package com.example.notificationapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -13,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,11 +29,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.notificationapp.models.Message;
+import com.example.notificationapp.models.ModelContract;
 import com.example.notificationapp.models.Model_code_pin;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,8 +46,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class DetailAdmin extends AppCompatActivity {
-    TextView name,pseudo,number,modifier, code_pin,rappel,val;
-    ImageView logout;
+    TextView name,pseudo,number, code_pin,rappel,val;
+    RelativeLayout logout,modifier,upda;
     EditText editTex,editTex1;
     RelativeLayout deco,pin, planifier,annonce;
     SharedPreferences sharedPreferences;
@@ -74,9 +81,9 @@ public class DetailAdmin extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("codepin");
         databaseReferenceM = FirebaseDatabase.getInstance().getReference().child("message");
 
+        upda =findViewById(R.id.upda);
         annonce =findViewById(R.id.annonce);
-        logout =findViewById(R.id.m4);
-        deco =findViewById(R.id.deco);
+        logout =findViewById(R.id.logout);
         retour =findViewById(R.id.m00);
         pin =findViewById(R.id.pin);
         planifier =findViewById(R.id.planifier);
@@ -121,6 +128,30 @@ public class DetailAdmin extends AppCompatActivity {
                 finish();
             }
         });
+
+        upda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("contrats").child(idAdmin);
+                databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Toast.makeText(DetailAdmin.this, "Le contrat existe dejà", Toast.LENGTH_SHORT).show();
+                        }else{
+                            startActivity(new Intent(DetailAdmin.this,ContratLoyer.class));
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("FirebaseDatabase", "Erreur lors de la vérification du contrat", databaseError.toException());
+                    }
+                });
+            }
+        });
+
         retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -334,7 +365,7 @@ public class DetailAdmin extends AppCompatActivity {
             }
         });
 
-        deco.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 editor.clear();

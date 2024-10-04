@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5BC0EB"
+    android:background="#03A9F4"
     tools:context=".DetailAdmin">
 
     <RelativeLayout
@@ -17,7 +17,7 @@
             style="@style/imageShow"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/back"
+            android:src="@drawable/fleche"
             android:layout_marginTop="25dp"
             android:layout_marginStart="15dp"
             app:tint="@color/white" />
@@ -31,7 +31,7 @@
             app:civ_border_overlay="true"
             app:civ_border_width="2dp"
             android:layout_centerHorizontal="true"/>
-        <TextView
+        <!--<TextView
             android:layout_below="@+id/iv1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,27 +39,31 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="16dp"/>
+            android:textSize="16dp"/>-->
 
     </RelativeLayout>
 
     <LinearLayout
+        android:layout_marginBottom="-25dp"
         android:layout_below="@+id/r1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_rect"
         android:backgroundTint="@color/white"
         android:orientation="vertical">
+
         <ScrollView
+            android:paddingTop="10dp"
+            android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:layout_below="@+id/r1">
+                android:orientation="vertical">
+
+                <!-- Informations personnelles -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -67,17 +71,19 @@
                     android:gravity="center"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
-                    android:textSize="16dp"/>
+                    android:textSize="18dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
-                    android:backgroundTint="#5BC0EB"
+                    android:backgroundTint="#F0F0F0"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
@@ -90,7 +96,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/person"
-                            app:tint="@color/white" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/t1"
@@ -98,18 +104,19 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@+id/m1"
-                            android:text="Donald trump"
+                            android:text="Donald Trump"
                             android:layout_marginStart="24dp"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/white"/>
+                        android:background="@color/black"/>
+
                     <RelativeLayout
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
@@ -122,7 +129,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/person"
-                            app:tint="@color/white" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/t2"
@@ -132,16 +139,17 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@+id/m2"
                             android:text="Macky Sall"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/white"/>
+                        android:background="@color/black"/>
+
                     <RelativeLayout
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
@@ -154,7 +162,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/phone"
-                            app:tint="@color/white" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/t3"
@@ -164,13 +172,13 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@+id/m3"
                             android:text="+225 05 04 38 94 06"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
                 </LinearLayout>
 
+                <!-- Planifications et Annonces -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,17 +186,19 @@
                     android:gravity="center"
                     android:layout_marginTop="25dp"
                     android:textStyle="bold"
-                    android:textSize="16dp"/>
+                    android:textSize="18dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
-                    android:backgroundTint="#5BC0EB"
+                    android:backgroundTint="#F0F0F0"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
+
                     <RelativeLayout
                         android:id="@+id/planifier"
                         android:layout_width="match_parent"
@@ -201,7 +211,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/notifi"
-                            app:tint="@color/white" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/t6"
@@ -211,16 +221,17 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@+id/m6"
                             android:text="Planifier un rappel automatique"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/white"/>
+                        android:background="@color/black"/>
+
                     <RelativeLayout
                         android:id="@+id/annonce"
                         android:layout_marginTop="10dp"
@@ -234,7 +245,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/chat"
-                            app:tint="@color/white" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/t7"
@@ -244,28 +255,30 @@
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@+id/m7"
                             android:text="Problèmes dénnoncés"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-
                     </RelativeLayout>
-
                 </LinearLayout>
+
+                <!-- Déconnexion et sécurité -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Deconnexion et securité"
+                    android:text="Deconnexion et sécurité"
                     android:gravity="center"
                     android:layout_marginTop="25dp"
                     android:textStyle="bold"
-                    android:textSize="16dp"/>
+                    android:textSize="18dp"/>
+
                 <LinearLayout
+                    android:layout_marginBottom="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/new_border"
-                    android:backgroundTint="#5BC0EB"
+                    android:backgroundTint="#F0F0F0"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
@@ -282,7 +295,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/dial"
-                            app:tint="@color/white"/>
+                            app:tint="@color/black"/>
 
                         <TextView
                             android:id="@+id/t5"
@@ -291,70 +304,83 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="24dp"
                             android:layout_toEndOf="@+id/m5"
-                            android:text="Ajouter un code de vérrouillage"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
-                            android:textStyle="bold" />
+                            android:text="Ajouter un code PIN"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:textStyle="bold"/>
+                    </RelativeLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/black"/>
+                    <RelativeLayout
+                        android:id="@+id/upda"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+                        <ImageView
+                            android:id="@+id/m9"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/help"
+                            app:tint="@color/black" />
+
+                        <TextView
+                            android:id="@+id/t9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="24dp"
+                            android:layout_toEndOf="@+id/m9"
+                            android:text="Ajouter le contrat"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:textStyle="bold"/>
                     </RelativeLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/white"/>
+                        android:background="@color/black"/>
                     <RelativeLayout
-                        android:id="@+id/deco"
+                        android:id="@+id/logout"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:layout_gravity="center">
                         <ImageView
-                            android:id="@+id/m4"
+                            android:id="@+id/m8"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
                             android:src="@drawable/logout"
-                            app:tint="@color/white"/>
+                            app:tint="@color/black" />
 
                         <TextView
-                            android:id="@+id/t4"
+                            android:id="@+id/t8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@+id/m4"
-                            android:text="Je me déconnecte"
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
-                            android:textStyle="bold" />
-
+                            android:layout_toEndOf="@+id/m8"
+                            android:text="Se déconnecter"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:textStyle="bold"/>
                     </RelativeLayout>
 
+
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/upda"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Modifier mon profil"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_margin="20dp"
-                    android:gravity="center"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="16dp"
-                    android:background="@drawable/new_border"
-                    android:backgroundTint="#5BC0EB"
-                    android:layout_marginTop="50dp"/>
             </LinearLayout>
-
         </ScrollView>
     </LinearLayout>
+
 
 
 </RelativeLayout>

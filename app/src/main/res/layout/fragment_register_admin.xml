@@ -5,6 +5,7 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -165,7 +166,7 @@
                 android:padding="15dp"
                 android:background="@drawable/new_border"
                 android:backgroundTint="@color/blue"
-                android:text="Register"
+                android:text="Enregistrer"
                 android:textAllCaps="false" />
 
             <!--text view for displaying a text on

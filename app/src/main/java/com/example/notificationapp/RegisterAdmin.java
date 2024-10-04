@@ -17,7 +17,7 @@ import com.example.notificationapp.fragments.RegistProprieFragment;
 
 public class RegisterAdmin extends AppCompatActivity {
     ImageView retour,traitPay,traitHis;
-    private Fragment regisLocataireFragment;
+   // private Fragment regisLocataireFragment;
     private Fragment registProrietFragment;
     int incr;
 
@@ -30,7 +30,7 @@ public class RegisterAdmin extends AppCompatActivity {
         traitHis =findViewById(R.id.traitHis);
         retour =findViewById(R.id.retour);
 
-        regisLocataireFragment = new RegistLocataireFrament();
+        //regisLocataireFragment = new RegistLocataireFrament();
         registProrietFragment = new RegistProprieFragment();
         showPropriétaireFragment(null);
         retour.setOnClickListener(new View.OnClickListener() {
@@ -50,13 +50,13 @@ public class RegisterAdmin extends AppCompatActivity {
     }
 
     // Méthode pour afficher le fragment Paiement
-    public void showLocataireFragment(View view) {
+    /*public void showLocataireFragment(View view) {
         traitHis.setVisibility(View.GONE);
         traitPay.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainerA, regisLocataireFragment);
         transaction.commit();
-    }
+    }*/
     @Override
     public void onBackPressed() {
         super.onBackPressed();

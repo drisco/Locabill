@@ -266,25 +266,5 @@ public class RegistLocataireFrament  extends Fragment {
 
         return randomString;
     }
-/*
-    private void sendNotification(String codepin) {
-        editor.putString("codeconfirm", codepin);
-        editor.apply();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                    .setSmallIcon(R.drawable.locabill)
-                    .setContentTitle("Code de confirmation")
-                    .setContentText(codepin)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-
-                return;
-            }
-            notificationManager.notify(notificationId, builder.build());
-        }
-    }
-*/
 }

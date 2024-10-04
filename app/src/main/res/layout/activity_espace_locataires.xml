@@ -107,7 +107,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/trait"/>
+                    android:src="@drawable/trait"
+                    app:tint="@color/blue" />
             </LinearLayout>
 
             <LinearLayout

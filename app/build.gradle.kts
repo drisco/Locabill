@@ -54,6 +54,10 @@ dependencies {
     implementation ("jp.wasabeef:glide-transformations:4.3.0")
     implementation ("com.squareup.okhttp3:okhttp:4.10.0")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("com.google.mlkit:text-recognition:16.0.1")
+/*
+    implementation ("com.kyanogen.signatureview:signature-view:1.2")
+*/
     //implementation ("com.google.android.gms:play-services-chrome tab:1.2.0")
     //implementation ("androidx.browser:browser:1.8.0")
 

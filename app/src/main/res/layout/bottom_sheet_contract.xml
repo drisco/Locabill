@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contrat trouvé"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Votre propriétaire a déjà signé le contrat de bail. En tant que locataire, il est essentiel que vous le signiez également pour valider l'accord. Veuillez lire attentivement les termes avant de procéder à la signature."
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/viewContractButton"
+        android:layout_width="match_parent"
+        android:background="@drawable/backgr_newrect"
+        android:layout_height="wrap_content"
+        android:text="Voir le contrat" />
+</LinearLayout>

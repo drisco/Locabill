@@ -7,10 +7,10 @@
         android:id="@+id/probleme"
         android:title="problème" />
     <item
+        android:id="@+id/contrat"
+        android:title="Voir le contrat" />
+    <item
         android:id="@+id/deco"
         android:title="Se deconnecter" />
 
-    <!--<item
-        android:id="@+id/supprimer"
-        android:title="Supprimer" />-->
 </menu>
