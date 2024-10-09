@@ -52,6 +52,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,16 +67,15 @@ public class New_ticket extends AppCompatActivity {
     DatabaseReference databaseReference, databaseReference1,databaseReference2;
     int incr,intmontant,intavance;String id_2,lieu,statut;
     AlertPaiement popup;
-    ImageView plus,moins;
-    EditText edit;
-    RelativeLayout show,recuId;
+
+    RelativeLayout recuId;
     ImageView qrImageView,retour1;
     TextView buttonPrintReceipt;
     TextView buttonSendReceipt;
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat monthYearFormat;
-    TextView userNom,userPrenom,number,montant1,type,date,debut,s_chiffre,payer,avance;
+    TextView userNom,userPrenom,number,montant1,type,date,debut,s_chiffre,avance;
     int count = 0;String qrContent,idAdmin,montantChiffre,resultat,numberInWords;
     String prenom,prix,numero,type_de_maison,cautions,avances,date_,nom,verifie,dateFormatted;
 
@@ -90,12 +90,12 @@ public class New_ticket extends AppCompatActivity {
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("localites");
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("statutdumois");
 
-        plus = findViewById(R.id.plus);
+        /*plus = findViewById(R.id.plus);
         edit = findViewById(R.id.edit);
-        retour1 = findViewById(R.id.retour1);
         show = findViewById(R.id.show);
+        payer = findViewById(R.id.payer);*/
         recuId = findViewById(R.id.recuId);
-        payer = findViewById(R.id.payer);
+        retour1 = findViewById(R.id.retour1);
         avance = findViewById(R.id.avance);
         popup = new AlertPaiement(New_ticket.this);
         popup.setCancelable(false);
@@ -133,6 +133,7 @@ public class New_ticket extends AppCompatActivity {
             requestPermission();
 
         }
+/*
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +148,7 @@ public class New_ticket extends AppCompatActivity {
                 }
             }
         });
+*/
         retour1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,26 +200,26 @@ public class New_ticket extends AppCompatActivity {
                     boolean previousMonthExists = false;
                     String somme = "";
                     if (snapshot.exists()){
-                     System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS DEDANS: "+previousMonthExists);
+
                         for (DataSnapshot autherSnap :snapshot.getChildren()){
                             Model_ticket tenant = autherSnap.getValue(Model_ticket.class);
                             if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
                                 verifie="retard";
                                 previousMonthExists = true;
-                                System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS MILIEU: "+previousMonthExists);
+
                                 VoirLeRecus();
                                 somme= tenant.getMontant();
                                 Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
                                 break;
                             }
                             if (!previousMonthExists) {
-                                System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS VERID: "+previousMonthExists);
+
                                 recuId.setVisibility(View.GONE);
                                 methodePayerRetard(previousMonth,prix);
                             }
                         }
                     }else {
-                        System.out.println("SQSQSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS DEHOERS: "+previousMonthExists);
+
                         VoirLeRecus();
                     }
 
@@ -243,7 +245,7 @@ public class New_ticket extends AppCompatActivity {
             avance.setText(avances+ " FCFA");
         }
 
-        buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
+        buttonSendReceipt.setOnClickListener(new View.OnClickListener() {anch
             @Override
             public void onClick(View view) {
                 if (verifie !=null){
@@ -292,11 +294,29 @@ public class New_ticket extends AppCompatActivity {
 
                         }
                     });
+                }
+                String formattedNumber = numero.startsWith("+") ? numero : "+225" + numero; // Remplacer par votre indicatif
 
+                try {
+                    String message = "Bonjour"+nom+" "+prenom+",\n\nVotre reçu de loyer est maintenant disponible sur l'application. Veuillez vous connecter pour le consulter.\n\nCordialement.";
+
+                    // Encodage du message pour les URL
+                    String encodedMessage = URLEncoder.encode(message, "UTF-8");
+
+                    // Ouvre WhatsApp avec le numéro de téléphone fourni et un message préécrit
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    String url = "https://api.whatsapp.com/send?phone=" + formattedNumber + "&text=" + encodedMessage;
+                    intent.setData(Uri.parse(url));
+                    intent.setPackage("com.whatsapp"); // pour s'assurer que cela s'ouvre avec WhatsApp
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // Si WhatsApp n'est pas installé, informez l'utilisateur
+                    Toast.makeText(New_ticket.this, "WhatsApp n'est pas installé sur votre appareil", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+/*
         edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -327,6 +347,7 @@ public class New_ticket extends AppCompatActivity {
                 }
             }
         });
+*/
 
     }
 
@@ -378,7 +399,7 @@ public class New_ticket extends AppCompatActivity {
                 generateQRCode(id_2);
                 DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
                 String nouvelId = localiteReference.getKey();
-                Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom,prenom , montant, numero, type_de_maison, date_, cautions,avances ,"", date,heureActuelle);
+                Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom,prenom , prix, numero, type_de_maison, date_, cautions,avances ,"", date,heureActuelle);
                 localiteReference.setValue(nouveauLocataire);
                 databaseReference1.child(idAdmin).child(lieu).child(id_2).child("statut").setValue("payé");
                 popup.dismiss();
@@ -399,7 +420,7 @@ public class New_ticket extends AppCompatActivity {
         //databaseReference1.child(lieu).child(id_2).child("avance").setValue(resultat);
         DatabaseReference localiteReference = databaseReference.child(idAdmin).child(id_2).push();
         String nouvelId = localiteReference.getKey();
-        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, montant, numero, type, debutLoca, caution, resultat,numberInWords, dates,date.getText().toString());
+        Model_ticket nouveauLocataire = new Model_ticket(nouvelId, nom, prenom, prix, numero, type, debutLoca, caution, resultat,numberInWords, dates,date.getText().toString());
         localiteReference.setValue(nouveauLocataire);
     }
 

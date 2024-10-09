@@ -28,22 +28,13 @@ public class TestActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String textReceived = intent.getStringExtra("url");
 
-// Récupération de la référence au WebView
         WebView webView = findViewById(R.id.web);
-        webView.setWebViewClient(new WebViewClient());
 
-// Configuration du WebView
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true); // Active le stockage DOM
-        /*webView.getSettings().setLoadsImagesAutomatically(true); // Charge automatiquement les images
-        webView.getSettings().setBuiltInZoomControls(true); */// Active le zoom intégré
-        //webView.getSettings().setDisplayZoomControls(true); // Désactive les contrôles de zoom
-       // webView.getSettings().setSupportMultipleWindows(true); // Supporte les fenêtres multiples
-       // webView.getSettings().setMediaPlaybackRequiresUserGesture(false); // Permet le lecture audio sans geste utilisateur
 
-       // Chargement de l'URL reçue
         webView.loadUrl(textReceived);
-        
+
 
     }
 

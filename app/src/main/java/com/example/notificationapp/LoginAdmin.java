@@ -34,7 +34,7 @@ public class LoginAdmin extends AppCompatActivity {
     SharedPreferences.Editor editor,editorLoc;
     int incr;
     PopupRegister popup;
-    Model_tenant utilisateur;
+
 
     DatabaseReference databaseReference, databaseReference1,reference;
     String idAdmin, id,ville,nom,prenom,numeros,somme,caution,avance,debutUsage,type,codeloca,codeLocalId,passwords;
@@ -104,15 +104,15 @@ public class LoginAdmin extends AppCompatActivity {
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (numero.getText().toString().isEmpty()|| passwordEdt.getText().toString().isEmpty()){
-
-                }else {
+                if (!numero.getText().toString().isEmpty()|| !passwordEdt.getText().toString().isEmpty()){
                     popup = new PopupRegister(LoginAdmin.this);
                     popup.setCancelable(false);
                     popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popup.show();
                     login(numero.getText().toString(),passwordEdt.getText().toString());
-                    popup.dismiss();
+
+                }else {
+                    Toast.makeText(LoginAdmin.this, "Veuillez remplir tout les champs", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -165,7 +165,6 @@ public class LoginAdmin extends AppCompatActivity {
                             editor.putString("codepin", codePinValue);
                             editor.putString("codepinId", codePinId);
                             editor.apply();
-                            popup.dismiss();
                             startActivity(new Intent(LoginAdmin.this,MainActivity.class));
                             finish();
                         } else {
@@ -180,7 +179,6 @@ public class LoginAdmin extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.exists()){
-                                boolean paiementEffectue = false;
                                 boolean isNumber = false;
 
 
@@ -188,12 +186,12 @@ public class LoginAdmin extends AppCompatActivity {
                                     // Récupérer les données de l'utilisateur
                                     for (DataSnapshot noeud2 :snapshot.getChildren()){
                                         for (DataSnapshot noeud3 :noeud2.getChildren()){
-                                            utilisateur = noeud3.getValue(Model_tenant.class);
+                                            Model_tenant utilisateur = noeud3.getValue(Model_tenant.class);
                                             // Faire ce que vous voulez avec les données de l'utilisateur
                                             if (utilisateur != null) {
-                                                paiementEffectue = true;
                                                 popup.dismiss();
                                                 if (utilisateur.getNumero().equals(number)){
+
                                                     passwords= utilisateur.getPasword();
                                                     idAdmin=utilisateur.getIdProprie();
                                                     id=utilisateur.getId();
@@ -255,15 +253,11 @@ public class LoginAdmin extends AppCompatActivity {
 
                                                 }
                                             }
+                                            break;
                                         }
                                     }
                                 }
-                                if (paiementEffectue){
 
-                                }else{
-                                    popup.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Aucun utilisateur trouvé avec ce numéro de téléphone.", Toast.LENGTH_SHORT).show();
-                                }
                             }
                             // Pour chaque enfant de "idNoeud3"
                         }

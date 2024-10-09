@@ -213,17 +213,19 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
     // METHODE POUR VERIFIER LE CONTRAT DE BAIL SIL EXISTE
     private void checkIfContractExists(String userId, String idLca) {
-         databaseRef = FirebaseDatabase.getInstance().getReference("contrats").child(userId);
-
-        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+         databaseRef = FirebaseDatabase.getInstance().getReference("contrats");
+        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE "+userId);
+        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE "+idLca);
+        databaseRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.exists()) {
                     // Le contrat existe
                     ModelContract contract = dataSnapshot.getValue(ModelContract.class);
                     if (contract != null && contract.getEstSigne()) {
                         // Afficher le BottomSheet si le contrat existe
-
+                        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE00000000000000000000 "+contract.getEstSigne());
                         showBottomSheet(contract);
                     }
                 }
@@ -621,14 +623,14 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     // REDIRECT ON WEBSITE METHOD
     private void redirectUser(String url) {
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
 // Démarrez l'activité de navigateur pour ouvrir l'URL
-        startActivity(browserIntent);
-        /*Intent intent = new Intent(this, TestActivity.class);
+        startActivity(browserIntent);*/
+        Intent intent = new Intent(this, TestActivity.class);
         intent.putExtra("url", url);
         startActivity(intent);
-        finish();*/
+        finish();
     }
 
     //CLICK ITEMS METHOD

@@ -85,8 +85,6 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="30sp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@+id/ll2"
                     android:orientation="vertical">
                     <!-- TextViews pour le nom, prénom, numéro -->
                     <TextView
@@ -135,11 +133,12 @@
                         android:text="Mois payé : "
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Avance : "
                         android:layout_marginTop="10dp"
+                        android:text="Avance : "
                         android:textSize="14sp"
                         android:textStyle="bold" />
                     <!--<TextView
@@ -302,6 +301,7 @@
                     android:visibility="gone" />
             </RelativeLayout>
 
+<!--
             <RelativeLayout
                 android:id="@+id/re1"
                 android:layout_width="match_parent"
@@ -334,7 +334,9 @@
                     android:src="@drawable/add" />
 
             </RelativeLayout>
+-->
 
+<!--
             <RelativeLayout
                 android:id="@+id/show"
                 android:layout_width="match_parent"
@@ -342,7 +344,7 @@
                 android:layout_below="@+id/re1"
                 android:background="@drawable/new_border"
                 android:padding="5dp"
-                android:visibility="gone">
+                android:visibility="V">
 
                 <EditText
                     android:id="@+id/edit"
@@ -372,6 +374,7 @@
 
 
             </RelativeLayout>
+-->
         </RelativeLayout>
 
     </ScrollView>
