@@ -67,6 +67,7 @@ public class New_ticket extends AppCompatActivity {
     DatabaseReference databaseReference, databaseReference1,databaseReference2;
     int incr,intmontant,intavance;String id_2,lieu,statut;
     AlertPaiement popup;
+    String formatate;
 
     RelativeLayout recuId;
     ImageView qrImageView,retour1;
@@ -124,7 +125,7 @@ public class New_ticket extends AppCompatActivity {
         debut.setText(dateFormatted);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
         String previousMonth = dateFormat.format(calendar.getTime());
 
         if (checkPermissionBoolean()) {
@@ -171,6 +172,11 @@ public class New_ticket extends AppCompatActivity {
         lieu = intent.getStringExtra("lieu");
         statut = intent.getStringExtra("statut");
 
+        String[] dateParts = date_.split("-");
+        String month = dateParts[1];
+        String year = dateParts[2];
+        numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
+         formatate = month + " " + year;
 
         if (statut.equals("payé")){
             recuId.setVisibility(View.GONE);
@@ -192,47 +198,56 @@ public class New_ticket extends AppCompatActivity {
                 }
             });
         }else {
-            databaseReference.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
+            if (isDateOlder(formatate, previousMonth)) {
+                databaseReference.child(idAdmin).child(id_2).addValueEventListener(new ValueEventListener() {
 
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean previousMonthExists = false;
-                    String somme = "";
-                    if (snapshot.exists()){
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean previousMonthExists = false;
+                        String somme = "";
+                        if (snapshot.exists()){
 
-                        for (DataSnapshot autherSnap :snapshot.getChildren()){
-                            Model_ticket tenant = autherSnap.getValue(Model_ticket.class);
-                            if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
-                                verifie="retard";
-                                previousMonthExists = true;
+                            for (DataSnapshot autherSnap :snapshot.getChildren()){
+                                Model_ticket tenant = autherSnap.getValue(Model_ticket.class);
+                                if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
+                                    verifie="retard";
+                                    previousMonthExists = true;
 
-                                VoirLeRecus();
-                                somme= tenant.getMontant();
-                                Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
-                                break;
+
+                                    VoirLeRecus();
+                                    somme= tenant.getMontant();
+                                    Toast.makeText(getApplicationContext(), "Paiement en retard", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }else {
+
+                                }
+                                if (!previousMonthExists) {
+
+                                    recuId.setVisibility(View.GONE);
+                                    methodePayerRetard(previousMonth,prix);
+                                }
                             }
-                            if (!previousMonthExists) {
+                        }else {
 
-                                recuId.setVisibility(View.GONE);
-                                methodePayerRetard(previousMonth,prix);
-                            }
+                            VoirLeRecus();
                         }
-                    }else {
 
-                        VoirLeRecus();
                     }
 
-                }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Gérer les erreurs
+                    }
+                });
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Gérer les erreurs
-                }
-            });
+            }else if(formatate.equals(previousMonth)){
+                VoirLeRecus();
+            }else {
+                VoirLeRecus();
+            }
 
         }
-        numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
 
         intmontant = Integer.parseInt(prix);
         intavance =Integer.parseInt(avances);
@@ -245,7 +260,7 @@ public class New_ticket extends AppCompatActivity {
             avance.setText(avances+ " FCFA");
         }
 
-        buttonSendReceipt.setOnClickListener(new View.OnClickListener() {anch
+        buttonSendReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (verifie !=null){
@@ -295,7 +310,7 @@ public class New_ticket extends AppCompatActivity {
                         }
                     });
                 }
-                String formattedNumber = numero.startsWith("+") ? numero : "+225" + numero; // Remplacer par votre indicatif
+                //String = numero;
 
                 try {
                     String message = "Bonjour"+nom+" "+prenom+",\n\nVotre reçu de loyer est maintenant disponible sur l'application. Veuillez vous connecter pour le consulter.\n\nCordialement.";
@@ -305,9 +320,9 @@ public class New_ticket extends AppCompatActivity {
 
                     // Ouvre WhatsApp avec le numéro de téléphone fourni et un message préécrit
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    String url = "https://api.whatsapp.com/send?phone=" + formattedNumber + "&text=" + encodedMessage;
+                    String url = "https://api.whatsapp.com/send?phone=" + numero + "&text=" + encodedMessage;
                     intent.setData(Uri.parse(url));
-                    intent.setPackage("com.whatsapp"); // pour s'assurer que cela s'ouvre avec WhatsApp
+                    intent.setPackage("com.whatsapp");
                     startActivity(intent);
                 } catch (Exception e) {
                     // Si WhatsApp n'est pas installé, informez l'utilisateur
@@ -351,22 +366,73 @@ public class New_ticket extends AppCompatActivity {
 
     }
 
-    //METHODE DE
-    private void VoirLeRecus() {
+    private boolean isDateOlder(String dateToCompare, String previousMonth) {
+        String[] datePartsToCompare = dateToCompare.split(" ");
+        String[] previousMonthParts = previousMonth.split(" ");
 
-        s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
-        montantChiffre=s_chiffre.getText().toString();
-        userNom.setText(nom);
-        userPrenom.setText(prenom);
-        number.setText(numero);
-        montant1.setText(prix+ " FCFA");
-        type.setText(type_de_maison);
-        debut.setText(dateFormatted);
+        // Extraire le mois et l'année
+        String monthToCompare = datePartsToCompare[0];
+        String yearToCompare = datePartsToCompare[1];
+        String monthPrevious = previousMonthParts[0];
+        String yearPrevious = previousMonthParts[1];
 
-        // Générez le code QR à partir du contenu
-        generateQRCode(id_2);
-
+        // Comparaison des années
+        if (yearToCompare.equals(yearPrevious)) {
+            // Si c'est la même année, comparer les mois
+            return getMonthNumber(monthToCompare) < getMonthNumber(monthPrevious);
+        } else {
+            // Comparer les années
+            return Integer.parseInt(yearToCompare) < Integer.parseInt(yearPrevious);
+        }
     }
+
+    // Fonction pour obtenir le numéro du mois
+    private int getMonthNumber(String month) {
+        switch (month.toLowerCase()) {
+            case "janvier":
+                return 1;
+            case "février":
+                return 2;
+            case "mars":
+                return 3;
+            case "avril":
+                return 4;
+            case "mai":
+                return 5;
+            case "juin":
+                return 6;
+            case "juillet":
+                return 7;
+            case "août":
+                return 8;
+            case "septembre":
+                return 9;
+            case "octobre":
+                return 10;
+            case "novembre":
+                return 11;
+            case "décembre":
+                return 12;
+            default:
+                return 0; // Mois invalide
+        }
+    }
+
+    //METHODE DE
+        private void VoirLeRecus() {
+            s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
+            montantChiffre=s_chiffre.getText().toString();
+            userNom.setText(nom);
+            userPrenom.setText(prenom);
+            number.setText(numero);
+            montant1.setText(prix+ " FCFA");
+            type.setText(type_de_maison);
+            debut.setText(dateFormatted);
+
+            // Générez le code QR à partir du contenu
+            generateQRCode(id_2);
+
+        }
 
     // METHODE DE PAIEMENT EN RETARD
     private void methodePayerRetard(String date, String montant) {
@@ -524,8 +590,8 @@ public class New_ticket extends AppCompatActivity {
             outputStream.close();
 
             // Envoyer le PDF via WhatsApp
-            String phoneNumberWithCountryCode=number.getText().toString();
-            sendPdfViaWhatsApp(pdfFile, phoneNumberWithCountryCode);
+           /* String phoneNumberWithCountryCode=number.getText().toString();
+            sendPdfViaWhatsApp(pdfFile, phoneNumberWithCountryCode);*/
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -535,6 +601,7 @@ public class New_ticket extends AppCompatActivity {
     }
 
     //METHODE DE LENVOIE DE RECU VIA WHATSAPP
+/*
     private void sendPdfViaWhatsApp(File pdfFile, String phoneNumberWithCountryCode) {
         if (pdfFile.exists()) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -553,6 +620,7 @@ public class New_ticket extends AppCompatActivity {
             Toast.makeText(this, "Fichier PDF introuvable", Toast.LENGTH_SHORT).show();
         }
     }
+*/
 
 
     //METHODE DE PERMISSION

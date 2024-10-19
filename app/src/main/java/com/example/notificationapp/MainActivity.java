@@ -67,25 +67,19 @@ public class MainActivity extends AppCompatActivity {
         rlt2=findViewById(R.id.rlt2);
         r2=findViewById(R.id.r2);
         TextView foot=findViewById(R.id.foot);
-
-        SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
-        idAdmin = donnes.getString("id", "");
-
-        if (!idAdmin.isEmpty()){
-            Intent intent = new Intent(getApplicationContext(), MainBroadcastReceiver.class);
-            intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
-            //RappelPlaning.schedulepaiement(this);
-            RappelPlaning.scheduleChaquefindumois(this);
-            RappelPlaning.scheduleTest(this);
-        }
-
         sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);
 
         String messageparseconde = sharedPreferences1.getString("messageparseconde", "");
         String listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
 
-        if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
-             recipients = recupererNumeros(listedesnumeros);
+        SharedPreferences donnes = getSharedPreferences("Admin", Context.MODE_PRIVATE);
+        idAdmin = donnes.getString("id", "");
+
+        if (!messageparseconde.isEmpty() || !listedesnumeros.isEmpty()){
+            Intent intent = new Intent(getApplicationContext(), MainBroadcastReceiver.class);
+            intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
+            RappelPlaning.scheduleTest(this);
+
         }
 
 
@@ -140,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private List<String> recupererNumeros(String listedesnumeros) {
+    /*private List<String> recupererNumeros(String listedesnumeros) {
         String[] numerosArray = listedesnumeros.split(",");
 
         List<String> result = new ArrayList<>();
@@ -148,32 +142,7 @@ public class MainActivity extends AppCompatActivity {
             result.add(numero.trim());
         }
         return result;
-    }
-
-
-
-    private int getJourSemaineCalendrier(String jourSemaine) {
-        switch (jourSemaine) {
-            case "Lundi":
-                return Calendar.MONDAY;
-            case "Mardi":
-                return Calendar.TUESDAY;
-            case "Mercredi":
-                return Calendar.WEDNESDAY;
-            case "Jeudi":
-                return Calendar.THURSDAY;
-            case "Vendredi":
-                return Calendar.FRIDAY;
-            case "Samedi":
-                return Calendar.SATURDAY;
-            case "Dimanche":
-                return Calendar.SUNDAY;
-            default:
-                return -1;
-        }
-    }
-
-
+    }*/
 
     private void requestPermission() {
         // requesting permissions if not provided.
@@ -187,16 +156,6 @@ public class MainActivity extends AppCompatActivity {
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            // Demander la permission d'envoyer des SMS
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_CODE);
-        } else {
-            // Si les autorisations sont déjà accordées, envoyer un SMS
-            sendSMS();
-        }
-    }
-
     // Méthode pour gérer la réponse de l'utilisateur à la demande d'autorisation
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -204,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Si l'utilisateur accorde la permission, envoyer le SMS
-                sendSMS();
             } else {
                 // Si l'utilisateur refuse la permission, afficher un message
                 Toast.makeText(getApplicationContext(), "Permission refusée pour envoyer des SMS.", Toast.LENGTH_SHORT).show();
@@ -228,11 +186,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Méthode pour envoyer un SMS
-    private void sendSMS() {
+   /* private void sendSMS() {
         List<String> phoneNumbers = new ArrayList<>();
         phoneNumbers.add("+2250504389406");
         phoneNumbers.add("+2250504463805");
         phoneNumbers.add("+2250576155481");
+        System.out.println("XNNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "+phoneNumbers);
 
         String message = "En cette fin de mois, nous tenions à vous rappeler que le loyer pour ce mois est dû d'ici le 10 du mois prochain.Afin d'éviter tout retard.En cas de difficultés financières ou pour discuter de modalités de paiement alternatives, n'hésitez pas à nous contacter dès que possible. La transparence et la communication sont essentielles pour maintenir une relation locataire-propriétaire harmonieuse.";
         try {
@@ -256,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             sendSMS(); // Appeler la méthode pour envoyer le SMS
             handler.postDelayed(this, INTERVAL_MS); // Programmer le prochain envoi
         }
-    };
+    };*/
     @Override
     public void onBackPressed() {
         incr++;

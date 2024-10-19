@@ -186,15 +186,16 @@
             android:textColor="@color/white"
             android:text="0" />
 
-        <ImageView
+        <TextView
             android:id="@+id/numberOK"
             style="@style/NumberInPasscode"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/number7"
+            android:text="Oublié"
+            android:textSize="14dp"
+            android:textStyle="bold"
             android:scaleType="centerInside"
-            android:layout_marginStart="15dp"
-            app:tint="#FF8A8A8A"
-            app:srcCompat="@drawable/ic_check_bold_24dp"/>
+            android:layout_marginStart="15dp"/>
 
     </RelativeLayout>
 

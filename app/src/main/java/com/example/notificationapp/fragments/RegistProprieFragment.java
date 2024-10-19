@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.notificationapp.Creat_new_tenant;
 import com.example.notificationapp.LoginAdmin;
 import com.example.notificationapp.MainActivity;
 import com.example.notificationapp.PopupAbonnement;
@@ -94,29 +95,33 @@ public class RegistProprieFragment  extends Fragment {
                         // checking if the text fields are empty or not.
                         Toast.makeText(getContext(), "Veuillez saisir vos identifiants..", Toast.LENGTH_SHORT).show();
                     }else {
+                        if (numeros.contains("+225")){
+                            popusCostum = new PopusCostum(getActivity());
+                            popusCostum.setCancelable(false);
+                            popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            popusCostum.show();
+                            popusCostum.getComf().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    popusCostum.cancel();
+                                    popup = new PopupRegister(getActivity());
+                                    popup.setCancelable(false);
+                                    popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    popup.show();
+                                    addAdmin(userNames,userPrenom,numeros,pwd);
+                                }
+                            });
 
-                        popusCostum = new PopusCostum(getActivity());
-                        popusCostum.setCancelable(false);
-                        popusCostum.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        popusCostum.show();
-                        popusCostum.getComf().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                popusCostum.cancel();
-                                popup = new PopupRegister(getActivity());
-                                popup.setCancelable(false);
-                                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                popup.show();
-                                addAdmin(userNames,userPrenom,numeros,pwd);
-                            }
-                        });
+                            popusCostum.getRetour().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    popusCostum.cancel();
+                                }
+                            });
+                        }else{
+                            Toast.makeText(getContext(), "Votre numero manque l'indicatif de votre pays", Toast.LENGTH_SHORT).show();
+                        }
 
-                        popusCostum.getRetour().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                popusCostum.cancel();
-                            }
-                        });
                     }
                 }
             }

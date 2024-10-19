@@ -140,6 +140,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                 resultatstatus(tokenData);
 
             }
+            // INFOS DE LA REQUETTE
         client =new ClientData(200,type,idLca,numero,prenom,"https://www.moneyfusion.net/dashboard/history");
 
         if (!idLca.isEmpty()){
@@ -214,8 +215,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
     // METHODE POUR VERIFIER LE CONTRAT DE BAIL SIL EXISTE
     private void checkIfContractExists(String userId, String idLca) {
          databaseRef = FirebaseDatabase.getInstance().getReference("contrats");
-        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE "+userId);
-        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE "+idLca);
         databaseRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -225,7 +224,6 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                     ModelContract contract = dataSnapshot.getValue(ModelContract.class);
                     if (contract != null && contract.getEstSigne()) {
                         // Afficher le BottomSheet si le contrat existe
-                        System.out.println("ZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE00000000000000000000 "+contract.getEstSigne());
                         showBottomSheet(contract);
                     }
                 }
@@ -435,7 +433,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
         String previousMonth = dateFormat.format(calendar.getTime());
 
         databaseReference2.child(idAdm).child(idLca).addValueEventListener(new ValueEventListener() {
@@ -450,6 +448,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
 
                         if (tenant != null && tenant.getDate() != null && tenant.getDate().equals(previousMonth)) {
                             previousMonthExists = true;
+                            System.out.println("C4EST ICICICICICICICICICICICICICICICICICICICICIC");
                             methodePourPayer();
                             break;
                         }
@@ -457,13 +456,13 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                         if (!previousMonthExists) {
                             editorToken.putString("dateR", previousMonth);
                             editorToken.apply();
+                            System.out.println("C4EST PASPAPAPSPASPASPSAPASPSAPAPPASPASPAPASPSPSPASAA");
                             methodePayerRetard(previousMonth);
                         }
                     }
                 }else {
                     methodePourPayer();
                 }
-
             }
 
             @Override

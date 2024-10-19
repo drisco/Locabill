@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5BC0EB"
     android:id="@+id/ll1"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -12,15 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="@drawable/bg_rect"
-        android:layout_marginTop="-20dp"
-        android:backgroundTint="#03A9F4">
+        android:layout_marginTop="-30dp"
+        android:backgroundTint="#5BC0EB">
 
         <ImageView
             android:id="@+id/profil"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:paddingTop="1dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/menus"

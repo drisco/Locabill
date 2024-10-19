@@ -40,6 +40,7 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
     DatabaseReference databaseReference,databaseReference2,dtabaseMessage;
     Model_tenant tenant;
     Message tenant1;
+    SharedPreferences.Editor editor;
 
 
 
@@ -51,6 +52,7 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         sharedPreferences1 = context.getSharedPreferences("rappel", Context.MODE_PRIVATE);
+        editor = sharedPreferences1.edit();
 
          messageparseconde = sharedPreferences1.getString("messageparseconde", "");
          listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
@@ -104,28 +106,6 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
 
     //methode de text
     private void messageDeRappel(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "notification_channel";
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle("Service")
-                    .setContentText("messageparseconde")
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText("messageparseconde"))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            // Créer une intention pour ouvrir l'activité appropriée lors de la clic de la notification
-            Intent intent = new Intent(context, Login.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-            builder.setContentIntent(pendingIntent);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-            // Construire la notification
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            int NOTIFICATION_ID = 123;
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
-        }
 
          if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
             recipients = recupererNumeros(listedesnumeros);
@@ -134,6 +114,8 @@ public class MainBroadcastReceiver extends BroadcastReceiver {
                 smsManager.sendTextMessage(recipient, null, messageparseconde, null, null);
             }
           }
+         editor.clear();
+         editor.apply();
 
     }
 

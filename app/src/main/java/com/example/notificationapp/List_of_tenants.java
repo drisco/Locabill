@@ -177,7 +177,6 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
             SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
             String dateFormatted = sdf.format(dates);
 
-
             Intent intent =new Intent(List_of_tenants.this,New_ticket.class);
             intent.putExtra("id", user.getId());
             intent.putExtra("nom", user.getNom());

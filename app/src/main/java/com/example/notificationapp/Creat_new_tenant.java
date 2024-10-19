@@ -137,7 +137,11 @@ public class Creat_new_tenant extends AppCompatActivity {
                 ||debutLoca.isEmpty()||caution.isEmpty()||avance.isEmpty()){
                     Toast.makeText(Creat_new_tenant.this, "Vérifiez les champs", Toast.LENGTH_SHORT).show();
                 }else {
-                    New_tenant(nom,prenom,prix,numero,commune,typeMaison,debutLoca,caution,avance);
+                    if (editTextNumero.getText().toString().contains("+225")){
+                        New_tenant(nom,prenom,prix,numero,commune,typeMaison,debutLoca,caution,avance);
+                    }else{
+                        Toast.makeText(Creat_new_tenant.this, "Votre numero manque l'indicatif de votre pays", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

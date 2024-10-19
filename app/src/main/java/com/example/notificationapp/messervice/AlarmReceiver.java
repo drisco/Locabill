@@ -37,6 +37,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private final String channelId = "countdown_notification_channel";
     private final  int NOTIFICATION_ID = 123;
     SharedPreferences sharedPreferences;
+    String monmessage;
     String idAdm,idls;
 
     @Override
@@ -47,49 +48,18 @@ public class AlarmReceiver extends BroadcastReceiver {
         idls = sharedPreferences.getString("id", "");
         Bundle extras = intent.getExtras();
         String reference = extras.getString("reference");
-        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+idAdm+reference);
-        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 100");
+
         createNotificationChannel(context);
 
         if (!idls.isEmpty()){
             if (reference !=null){
                 if (reference.equals("chaquelundi")) {
-                    dtabaseMessage.child(idAdm).child("messagesemaine").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            List<Message> tenants = new ArrayList<>();
-                            if (dataSnapshot.exists()){
-                                tenant1 = dataSnapshot.getValue(Message.class);
-                                tenants.add(tenant1);
-                                messagedulundi(context,tenant1);
-                            }
-
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Gérer les erreurs
-                        }
-                    });
+                    monmessage="Bonjour monsieur,\nJ'espère que vous avez passé un excellent week-end ! Je tenais à vous souhaiter un bon début de semaine. Si vous avez des questions ou des préoccupations concernant votre logement, n'hésitez pas à me contacter. Je suis là pour vous aider.\nBonne semaine à vous !";
+                    messageParDefaut(context,monmessage);
 
                 }else if (reference.equals("messagemois")) {
-                    dtabaseMessage.child(idAdm).child("messagemois").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            List<Message> tenants = new ArrayList<>();
-
-                            if (dataSnapshot.exists()){
-                                tenant1 = dataSnapshot.getValue(Message.class);
-                                tenants.add(tenant1);
-                                messageDeRappel(context,tenant1);
-
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Gérer les erreurs
-                        }
-                    });
+                    monmessage="Bonjour monsieur,\nNous voilà déjà à la moitié du mois ! Je voulais prendre un moment pour vous rappeler que le loyer est dû à la fin de ce mois. Si vous avez des questions ou des préoccupations, ou si vous avez besoin d'aide pour quoi que ce soit, n'hésitez pas à me faire signe.\nMerci de votre attention et passez une excellente fin de mois !";
+                    messageParDefaut(context,monmessage);
                 } else if (reference.equals("chaqueuneminute")) {
 
 
@@ -102,7 +72,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 tenant1 = dataSnapshot.getValue(Message.class);
                                 tenants.add(tenant1);
                                 messagedulundi(context,tenant1);
-                                Toast.makeText(context, "YES YES", Toast.LENGTH_SHORT).show();
+
                             }
 
                         }
@@ -143,17 +113,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    private void messageDeRappel(Context context, Message tenant) {
+
+
+    private void messagedulundi(Context context, Message tenant) {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channelId)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle("Rappel du jour")
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                    .setSmallIcon(R.drawable.locabill)
+                    .setContentTitle("Rappel de Paiement de Loyer")
                     .setContentText(tenant.getMessage())
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(tenant.getMessage()))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             // Créer une intention pour ouvrir l'activité appropriée lors de la clic de la notification
             Intent intent = new Intent(context, Login.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
             builder.setContentIntent(pendingIntent);
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
@@ -161,27 +134,19 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-
             notificationManager.notify(NOTIFICATION_ID, builder.build());
         }
-        /*if (!listedesnumeros.isEmpty() || !messageparseconde.isEmpty()){
-            recipients = recupererNumeros(listedesnumeros);
-            for (String recipient : recipients) {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(recipient, null, messageparseconde, null, null);
-            }
-        }*/
     }
 
-    private void messagedulundi(Context context, Message tenant) {
+
+    private void messageParDefaut(Context context,String message) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW ADMIN== "+idAdm);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(R.drawable.locabill)
                     .setContentTitle("Rappel de Paiement de Loyer")
-                    .setContentText(tenant.getMessage())
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(tenant.getMessage()))
+                    .setContentText(message)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             // Créer une intention pour ouvrir l'activité appropriée lors de la clic de la notification
             Intent intent = new Intent(context, Login.class);

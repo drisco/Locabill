@@ -80,7 +80,7 @@ public class RappelPlaning {
         // Créer un calendrier pour le prochain lundi à 6h du matin
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 6);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -103,13 +103,13 @@ public class RappelPlaning {
         // Configurez le calendrier pour le 25ème jour du mois actuel à 6h00
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.DAY_OF_MONTH, 25);
-        calendar.set(Calendar.HOUR_OF_DAY, 6);
+        calendar.set(Calendar.DAY_OF_MONTH, 15);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
         // Si la date est déjà passée, avancez d'un mois
-        if (currentDate.get(Calendar.DAY_OF_MONTH) >= 25) {
+        if (currentDate.get(Calendar.DAY_OF_MONTH) >= 15) {
             calendar.add(Calendar.MONTH, 1);
         }
 

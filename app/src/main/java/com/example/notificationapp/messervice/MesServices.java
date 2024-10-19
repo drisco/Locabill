@@ -62,7 +62,6 @@ public class MesServices extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("JE SUIS ICIC ICICICICICICICICICICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCIIIIIIIIIIIIIIIIIII");
         recuRef = FirebaseDatabase.getInstance().getReference("recu");
         sharedPreferences = getSharedPreferences("Admin", Context.MODE_PRIVATE);
         shareControl = getSharedPreferences("shareControl", Context.MODE_PRIVATE);
