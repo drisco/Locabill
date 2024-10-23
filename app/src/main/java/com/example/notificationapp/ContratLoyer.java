@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ import java.io.IOException;
 public class ContratLoyer extends AppCompatActivity {
 
     private ImageView documentImageView,signature;
-    private TextView extractedTextView;
+    private EditText extractedTextView;
     private SignatureView signatureView;
     private Button clearButton,next;
     private Button buttonRetrieveSignature;
@@ -233,9 +234,12 @@ public class ContratLoyer extends AppCompatActivity {
                     // Récupérer le texte extrait
                     StringBuilder extractedText = new StringBuilder();
                     for (Text.TextBlock block : result.getTextBlocks()) {
-                        extractedText.append(block.getText()).append("\n");
+                        // Ajouter chaque bloc de texte avec ses lignes respectives
+                        for (Text.Line line : block.getLines()) {
+                            extractedText.append(line.getText()).append("\n");
+                        }
+                        extractedText.append("\n");
                     }
-                    // Afficher le texte extrait
                     extractedTextView.setText(extractedText.toString());
 
                     // Ajouter la signature et sauvegarder le document

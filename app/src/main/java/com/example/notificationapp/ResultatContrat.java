@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,7 @@ public class ResultatContrat extends AppCompatActivity {
     ImageView imageView;
     Button add;
     String idAdmin;
+    PopupRegister popup;
     int incr;
 
     @SuppressLint("MissingInflatedId")
@@ -61,6 +64,10 @@ public class ResultatContrat extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                popup = new PopupRegister(ResultatContrat.this);
+                popup.setCancelable(false);
+                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popup.show();
                 uploadSignatureAndSaveContract(signatureBitmap,extractedText,idAdmin);
             }
         });
@@ -88,6 +95,7 @@ public class ResultatContrat extends AppCompatActivity {
                 saveContractToFirebase(userId, extractedText, signatureUrl);
             });
         }).addOnFailureListener(e -> {
+            popup.dismiss();
             Log.e("FirebaseStorage", "Erreur lors du téléchargement de la signature", e);
         });
     }
@@ -102,7 +110,7 @@ public class ResultatContrat extends AppCompatActivity {
         databaseRef.child(userId).setValue(contract)
                 .addOnSuccessListener(aVoid -> Log.d("FirebaseDatabase", "Contrat ajouté avec succès"))
                 .addOnFailureListener(e -> Log.e("FirebaseDatabase", "Erreur lors de l'ajout du contrat", e));
-
+        popup.dismiss();
         startActivity(new Intent(ResultatContrat.this, DetailAdmin.class));
         finish();
     }

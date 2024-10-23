@@ -33,13 +33,12 @@
                 android:background="@android:color/darker_gray" />
 
             <!-- TextView pour afficher le texte extrait -->
-            <TextView
+            <EditText
                 android:id="@+id/extractedTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/documentImageView"
                 android:layout_marginTop="20dp"
-                android:text=""
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:background="@android:color/white"

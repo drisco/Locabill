@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +38,7 @@ public class ViewContractActivity extends AppCompatActivity {
     Button add,valide;
     SignatureView signatureView;
     private Bitmap signatureBitmap;
+    PopupRegister popup;
     SharedPreferences sharedPreferences;
     int incr;
     String idAdm,idLca;
@@ -102,6 +105,10 @@ public class ViewContractActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (signatureBitmap != null) {
+                    popup = new PopupRegister(ViewContractActivity.this);
+                    popup.setCancelable(false);
+                    popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popup.show();
                     ajouterSignature(signatureBitmap,idAdm,idLca);
                 }
             }
@@ -132,6 +139,7 @@ public class ViewContractActivity extends AppCompatActivity {
                 saveContractToFirebase(idLca, idAdm, signatureUrl);
             });
         }).addOnFailureListener(e -> {
+            popup.dismiss();
             Log.e("FirebaseStorage", "Erreur lors du téléchargement de la signature", e);
         });
     }
@@ -146,7 +154,7 @@ public class ViewContractActivity extends AppCompatActivity {
         databaseRef.child(idLca).setValue(contract)
                 .addOnSuccessListener(aVoid -> Log.d("FirebaseDatabase", "Contrat ajouté avec succès"))
                 .addOnFailureListener(e -> Log.e("FirebaseDatabase", "Erreur lors de l'ajout du contrat", e));
-
+        popup.dismiss();
         startActivity(new Intent(ViewContractActivity.this, EspaceLocataires.class));
         finish();
     }

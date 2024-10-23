@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal"
+    android:background="@color/white"
     android:id="@+id/ll"
     android:orientation="vertical">
 
@@ -24,7 +24,8 @@
                 android:layout_height="55dp"
                 android:elevation="1dp"
                 android:layout_centerInParent="true"
-                app:srcCompat="@drawable/lock" />
+                app:srcCompat="@drawable/lock"
+                app:tint="#9A111211"/>
             <ImageView
                 android:id="@+id/iv_error"
                 android:layout_width="45dp"
@@ -51,7 +52,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:letterSpacing="0.5"
-            android:textColor="#fff"
+            android:textColor="@color/black"
             android:textSize="24sp" />
     </LinearLayout>
 
@@ -70,7 +71,7 @@
             style="@style/NumberInPasscode"
             android:layout_alignParentLeft="true"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:layout_marginStart="15dp"
             android:textColor="@color/white"
             android:text="1"/>
@@ -80,7 +81,7 @@
             style="@style/NumberInPasscode"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:text="2"/>
 
@@ -89,7 +90,7 @@
             style="@style/NumberInPasscode"
             android:layout_alignParentRight="true"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_marginEnd="15dp"
             android:text="3"/>
@@ -100,7 +101,7 @@
             android:layout_alignParentLeft="true"
             android:background="@drawable/bg_circle"
             android:layout_marginTop="10dp"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_marginStart="15dp"
             android:layout_below="@id/number1"
@@ -112,7 +113,7 @@
             style="@style/NumberInPasscode"
             android:layout_below="@id/number1"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
@@ -124,7 +125,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/number1"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
@@ -134,7 +135,7 @@
             android:id="@+id/number7"
             style="@style/NumberInPasscode"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
@@ -149,7 +150,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_circle"
             android:layout_marginTop="10dp"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:text="8"/>
 
@@ -160,7 +161,7 @@
             android:layout_below="@id/number4"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:layout_marginEnd="15dp"
             android:text="9"/>
@@ -171,7 +172,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/number7"
             android:scaleType="centerInside"
-            app:tint="#FF8A8A8A"
+            app:tint="@color/black"
             android:layout_marginEnd="15dp"
             app:srcCompat="@drawable/iv_bio"/>
 
@@ -181,7 +182,7 @@
             android:layout_below="@id/number7"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_circle"
-            android:backgroundTint="@color/text_black"
+            android:backgroundTint="@color/black"
             android:layout_marginTop="10dp"
             android:textColor="@color/white"
             android:text="0" />
@@ -194,6 +195,7 @@
             android:text="Oublié"
             android:textSize="14dp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:scaleType="centerInside"
             android:layout_marginStart="15dp"/>
 

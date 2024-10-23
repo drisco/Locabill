@@ -327,33 +327,75 @@ public class DetailAdmin extends AppCompatActivity {
                 val.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        popup = new AlertPaiement(DetailAdmin.this);
+                        popup.setCancelable(true);
+                        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         if (editTextJour.getText().toString().isEmpty()){
                             if (edmoistest.getText().toString().isEmpty()||edmoistestnum.getText().toString().isEmpty()){
                                 Toast.makeText(DetailAdmin.this, "Aucun rappel n'est planifié", Toast.LENGTH_SHORT).show();
                                 bottomSheetDialog.dismiss();
                             }else{
-                                editor1.clear();
-                                editor1.apply();
-                                editor1.putString("messageparseconde", edmoistest.getText().toString());
-                                editor1.putString("lesnumeros", edmoistestnum.getText().toString());
-                                editor1.apply();
-                                bottomSheetDialog.dismiss();
+
+                                popup.show();
+                                popup.setTitreText("Reussi avec succes");
+                                popup.setMessageText("Un rappel sera envoyé à vos locataires par SMS. Cliquez sur 'Confirmer' pour procéder à l'envoi.");
+                                popup.setCancelText("Confirmer");
+                                popup.setCancelBackground(R.drawable.bg_circle);
+                                popup.setCancelTextColor(R.color.green);
+                                popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        editor1.clear();
+                                        editor1.apply();
+                                        editor1.putString("messageparseconde", edmoistest.getText().toString());
+                                        editor1.putString("lesnumeros", edmoistestnum.getText().toString());
+                                        editor1.apply();
+                                        popup.dismiss();
+                                        bottomSheetDialog.dismiss();
+                                    }
+                                });
+
                             }
                         }else{
                             if (edmoistest.getText().toString().isEmpty()|| edmoistestnum.getText().toString().isEmpty()){
-                                Message msge=new Message("messagejour",editTextJour.getText().toString());
-                                databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
-                                bottomSheetDialog.dismiss();
+                                popup.show();
+                                popup.setTitreText("Reussi avec succes");
+                                popup.setMessageText("Un rappel sera envoyé à vos locataires via l'application. Cliquez sur 'Confirmer' pour procéder à l'envoi.");
+                                popup.setCancelText("Confirmer");
+                                popup.setCancelBackground(R.drawable.bg_circle);
+                                popup.setCancelTextColor(R.color.green);
+                                popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                        databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
+                                        popup.dismiss();
+                                        bottomSheetDialog.dismiss();
+                                    }
+                                });
+
                             }else{
-                                editor1.clear();
-                                editor1.apply();
-                                editor1.putString("messageparseconde", edmoistest.getText().toString());
-                                editor1.putString("lesnumeros", edmoistestnum.getText().toString());
-                                editor1.apply();
-                                Message msge=new Message("messagejour",editTextJour.getText().toString());
-                                databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
-                                bottomSheetDialog.dismiss();
+                                popup.show();
+                                popup.setTitreText("Reussi avec succes");
+                                popup.setMessageText("Un rappel sera envoyé à vos locataires via l'application et par SMS. Cliquez sur 'Confirmer' pour procéder à l'envoi.");
+                                popup.setCancelText("Confirmer");
+                                popup.setCancelBackground(R.drawable.bg_circle);
+                                popup.setCancelTextColor(R.color.green);
+                                popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        editor1.clear();
+                                        editor1.apply();
+                                        editor1.putString("messageparseconde", edmoistest.getText().toString());
+                                        editor1.putString("lesnumeros", edmoistestnum.getText().toString());
+                                        editor1.apply();
+                                        Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                        databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
+                                        popup.dismiss();
+                                        bottomSheetDialog.dismiss();
+                                    }
+                                });
+
                             }
                         }
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class VoirContrat extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String idAdm,idLca,veri;
     ScrollView contenu;
+    RelativeLayout docvide;
     int incr;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,6 +50,7 @@ public class VoirContrat extends AppCompatActivity {
         idLca = intent.getStringExtra("idLca");
         veri = intent.getStringExtra("veri");
 
+        docvide=findViewById(R.id.docvide);
         contenu=findViewById(R.id.contenu);
         snloca=findViewById(R.id.snloca);
         contrat=findViewById(R.id.contrat);
@@ -74,9 +77,13 @@ public class VoirContrat extends AppCompatActivity {
                         Glide.with(VoirContrat.this).load(contract.getSignatureUrl()).into(signpro);
                         contrat.setText(contract.getContrat());
                         showBottomSheet(contract);
+                    }else {
+                        contenu.setVisibility(View.GONE);
+                        docvide.setVisibility(View.VISIBLE);
                     }
                 }else{
                     contenu.setVisibility(View.GONE);
+                    docvide.setVisibility(View.VISIBLE);
                 }
             }
 
