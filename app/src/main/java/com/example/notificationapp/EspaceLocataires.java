@@ -126,7 +126,7 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
         debutUsage = sharedPreferences.getString("debutUsage", "");
         avance = sharedPreferences.getString("avance", "");
         type = sharedPreferences.getString("type", "");
-        nomEtPrenom.setText("Bonjour,\n "+nom+" "+prenom);
+        nomEtPrenom.setText("Bonjour,"+nom+" "+prenom+"\n "+numero);
 
         // METHODE DE LANCEMENT DE CONTRAT DE BAIL
         checkIfContractExists(idAdm,idLca);
@@ -140,7 +140,8 @@ public class EspaceLocataires extends AppCompatActivity implements PopupMenu.OnM
                 resultatstatus(tokenData);
             }
             // INFOS DE LA REQUETTE
-        client =new ClientData(200,type,idLca,numero,prenom,"https://www.moneyfusion.net/dashboard/history");
+        String redirectUrl = "soutrapp://paiement/succes";
+        client =new ClientData(200,type,idLca,numero,prenom,redirectUrl);
 
         if (!idLca.isEmpty()){
             Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);

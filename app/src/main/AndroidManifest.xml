@@ -60,7 +60,20 @@
             android:exported="false" />
         <activity
             android:name=".EspaceLocataires"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Schéma, hôte, et chemin -->
+                <data
+                    android:scheme="locabill"
+                    android:host="paiement"
+                    android:path="/succes" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".DetailTikets"
             android:exported="false" />
