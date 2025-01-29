@@ -100,7 +100,7 @@ public class Bricefile extends AppCompatActivity {
         String date_ = intent.getStringExtra("date");
         String numberInWords;
         numberInWords = NumberToWords.convertToWords(Integer.parseInt(prix));
-
+System.out.println(("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"+mois));
         s_chiffre.setText("Montant en chiffre : "+numberInWords+ " FCFA");
         userNom.setText(nom);
         userPrenom.setText(prenom);

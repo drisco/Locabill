@@ -58,11 +58,11 @@ public class DetailTikets extends AppCompatActivity {
         String chiffre = intent.getStringExtra("chiffre");
         String heuredate = intent.getStringExtra("debut_de_loca");
 
-        s_chiffre.setText(chiffre);
+        s_chiffre.setText("Montant en chiffre:"+" "+chiffre+" "+" Franc CFA");
         userNom.setText(nom);
         userPrenom.setText(prenom);
         number.setText(numero);
-        montant.setText("Montatnt en chiffre: "+prix+ " FCFA");
+        montant.setText(prix+ " FCFA");
         type.setText(type_de_maison);
         debut.setText(debut_de_loca);
         date.setText(heuredate);

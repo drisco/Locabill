@@ -9,13 +9,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsManager;
@@ -26,15 +24,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notificationapp.messervice.AlarmReceiver;
-import com.example.notificationapp.messervice.MainBroadcastReceiver;
-import com.example.notificationapp.messervice.RappelPlaning;
+import com.example.notificationapp.messervice.MesServices;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     RelativeLayout rl1,rl2,rlt2;
     SharedPreferences sharedPreferences1;
+    SharedPreferences.Editor editor;
     ImageView profil;
     ImageView r2;
     String idAdmin;
@@ -60,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
 
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, MesServices.class));
+        } else {
+            startService(new Intent(this, MesServices.class));
+        }
 
         rl1=findViewById(R.id.rl1);
         profil=findViewById(R.id.profil);
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         r2=findViewById(R.id.r2);
         TextView foot=findViewById(R.id.foot);
         sharedPreferences1 = getSharedPreferences("rappel", Context.MODE_PRIVATE);
-
+        editor = sharedPreferences1.edit();
         String messageparseconde = sharedPreferences1.getString("messageparseconde", "");
         String listedesnumeros = sharedPreferences1.getString("lesnumeros", "");
 
@@ -76,10 +75,15 @@ public class MainActivity extends AppCompatActivity {
         idAdmin = donnes.getString("id", "");
 
         if (!messageparseconde.isEmpty() || !listedesnumeros.isEmpty()){
-            Intent intent = new Intent(getApplicationContext(), MainBroadcastReceiver.class);
-            intent.setAction("com.example.notificationapp.models.ACTION_CUSTOM");
-            RappelPlaning.scheduleTest(this);
 
+            recipients = recupererNumeros(listedesnumeros);
+            for (String recipient : recipients) {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(recipient, null, messageparseconde, null, null);
+            }
+
+            editor.clear();
+            editor.apply();
         }
 
 
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*private List<String> recupererNumeros(String listedesnumeros) {
+    private List<String> recupererNumeros(String listedesnumeros) {
         String[] numerosArray = listedesnumeros.split(",");
 
         List<String> result = new ArrayList<>();
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             result.add(numero.trim());
         }
         return result;
-    }*/
+    }
 
     private void requestPermission() {
         // requesting permissions if not provided.

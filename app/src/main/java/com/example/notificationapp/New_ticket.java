@@ -428,7 +428,7 @@ public class New_ticket extends AppCompatActivity {
             montant1.setText(prix+ " FCFA");
             type.setText(type_de_maison);
             debut.setText(dateFormatted);
-
+            System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+dateFormatted);
             // Générez le code QR à partir du contenu
             generateQRCode(id_2);
 

@@ -225,6 +225,7 @@ public class List_of_tenants extends AppCompatActivity implements ListeTenantAda
 
     @Override
     public void onBackPressed() {
+        popusCostum.cancel();
         incr++;
         if (incr==1){
             super.onBackPressed();

@@ -35,7 +35,7 @@
             android:layout_toEndOf="@+id/profil"
             android:fontFamily="@font/gotham_medium"
             android:text="Nom et prenom salut mec comment "
-            android:textSize="18dp" />
+            android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/editer"

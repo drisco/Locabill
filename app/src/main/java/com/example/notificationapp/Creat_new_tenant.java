@@ -53,7 +53,7 @@ public class Creat_new_tenant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creat_new_tenant);
 
-         databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("localites");
 
         spinnerSites = findViewById(R.id.spinnerSites);
         pick = findViewById(R.id.pick);

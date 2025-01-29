@@ -102,7 +102,7 @@ public class PaiementFragment extends Fragment {
         debutUsage = sharedPreferences.getString("debutUsage", "");
         avance = sharedPreferences.getString("avance", "");
         type = sharedPreferences.getString("type", "");
-         client =new ClientData(200,type,idLca,numero,prenom,"https://mon_lien_de_callback.com");
+         //client =new ClientData(200,type,idLca,numero,prenom,"https://mon_lien_de_callback.com");
 
         popup = new AlertPaiement(getActivity());
         popup.setCancelable(true);

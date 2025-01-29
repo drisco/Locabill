@@ -367,7 +367,7 @@ public class DetailAdmin extends AppCompatActivity {
                                 popup.getRetour().setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                        Message msge=new Message("messagejour",editTextJour.getText().toString(),tvdate.getText().toString(), tvheure.getText().toString());
                                         databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
                                         popup.dismiss();
                                         bottomSheetDialog.dismiss();
@@ -389,7 +389,7 @@ public class DetailAdmin extends AppCompatActivity {
                                         editor1.putString("messageparseconde", edmoistest.getText().toString());
                                         editor1.putString("lesnumeros", edmoistestnum.getText().toString());
                                         editor1.apply();
-                                        Message msge=new Message("messagejour",editTextJour.getText().toString());
+                                        Message msge=new Message("messagejour",editTextJour.getText().toString(),tvdate.getText().toString(), tvheure.getText().toString());
                                         databaseReferenceM.child(idAdmin).child("messagejour").setValue(msge);
                                         popup.dismiss();
                                         bottomSheetDialog.dismiss();
@@ -410,10 +410,26 @@ public class DetailAdmin extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editor.clear();
-                editor.apply();
-                startActivity(new Intent(DetailAdmin.this, LoginAdmin.class));
-                finish();
+
+                popup = new AlertPaiement(DetailAdmin.this);
+                popup.setCancelable(true);
+                popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popup.show();
+                popup.setTitreText("Avertissement");
+                popup.setMessageText("Voullez-vous vraiment vous deconnecter ? si vous oui cliquer sur le bouton  se deconnecter");
+                popup.setCancelText("SE DECONNECTER");
+                popup.setCancelBackground(R.drawable.bg_circle_red);
+                popup.setCancelTextColor(R.color.white);
+                popup.getRetour().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        editor.clear();
+                        editor.apply();
+                        startActivity(new Intent(DetailAdmin.this, LoginAdmin.class));
+                        finish();finish();
+                    }
+                });
+
             }
         });
     }

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retour à Locabill</title>
+
+  <!-- Police moderne pour un look professionnel -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Corps de la page : fond neutre, centrage et alignement */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f7fc; /* Fond clair, professionnel */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Container principal */
+    .container {
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        width: 100%;
+        max-width: 450px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Titre */
+    h1 {
+        color: #333;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    /* Texte */
+    p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    /* Bouton */
+    .back-button {
+        background-color: #0056b3;
+        color: white;
+        font-size: 18px;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-transform: uppercase;
+        margin-top: 20px;
+    }
+
+    .back-button:hover {
+        background-color: #00408f;
+    }
+
+    .back-button:focus {
+        outline: none;
+    }
+
+    .success-image {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        .back-button {
+            padding: 12px 25px;
+            font-size: 16px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <img src="https://w7.pngwing.com/pngs/873/563/png-transparent-computer-icons-icon-design-business-success-miscellaneous-angle-text-thumbnail.png" alt="Succès" class="success-image">
+  <h1>Retour à Locabill</h1>
+  <p>Félicitations ! Votre paiement a été effectué avec succès. Pour revenir à votre espace locataire, cliquez sur le bouton ci-dessous.</p>
+  <button class="back-button" id="backButton">
+    <span class="icon">&#8592;</span> Revenir à l'application
+  </button>
+</div>
+
+<script>
+  // Gérer le clic sur le bouton de retour
+  document.getElementById('backButton').onclick = function () {
+    // Redirection vers l'application Android
+    window.location.href = "locabill://paiement";
+
+    // Supprimer l'entrée actuelle de l'historique
+    history.replaceState(null, "", window.location.href);
+
+    <!--history.pushState(null, "", window.location.href);-->
+  };
+
+  // Empêcher l'utilisateur d'utiliser le bouton retour du navigateur pour revenir
+  window.addEventListener('popstate', function (event) {
+    history.pushState(null, "", window.location.href);
+  });
+
+  // Ajouter une entrée dans l'historique pour bloquer "Retour"
+  history.pushState(null, "", window.location.href);
+</script>
+</body>
+</html>
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retour à Locabill</title>
+
+  &lt;!&ndash; Police moderne pour un look professionnel &ndash;&gt;
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Corps de la page : fond neutre, centrage et alignement */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f7fc; /* Fond clair, professionnel */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Container principal avec un fond blanc, ombre légère, et coins arrondis */
+    .container {
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        width: 100%;
+        max-width: 450px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Titre principal avec une couleur sombre et taille agréable */
+    h1 {
+        color: #333;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    /* Texte d'accompagnement, légèrement gris */
+    p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    /* Style du bouton de retour : bleu avec bordure arrondie */
+    .back-button {
+        background-color: #0056b3; /* Bleu Locabill */
+        color: white;
+        font-size: 18px;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px; /* Bordure arrondie */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-transform: uppercase; /* Mettre le texte en majuscule */
+        margin-top: 20px;
+    }
+
+    /* Effet de survol pour le bouton */
+    .back-button:hover {
+        background-color: #00408f;
+    }
+
+    .back-button:focus {
+        outline: none;
+    }
+
+    /* Ajout d'une image de succès */
+    .success-image {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    /* Styles pour les écrans plus petits */
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        .back-button {
+            padding: 12px 25px;
+            font-size: 16px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+&lt;!&ndash; Conteneur principal pour tout le contenu &ndash;&gt;
+<div class="container">
+  &lt;!&ndash; Image de succès &ndash;&gt;
+  <img src="https://w7.pngwing.com/pngs/873/563/png-transparent-computer-icons-icon-design-business-success-miscellaneous-angle-text-thumbnail.png" alt="Succès" class="success-image">
+
+  <h1>Retour à Locabill</h1>
+  <p>Félicitations ! Votre paiement a été effectué avec succès. Pour revenir à votre espace locataire, cliquez sur le bouton ci-dessous.</p>
+
+  &lt;!&ndash; Bouton stylisé pour redirection vers l'application Android &ndash;&gt;
+  <button class="back-button" id="backButton">
+    <span class="icon">&#8592;</span> Revenir à l'application
+  </button>
+</div>
+
+<script>
+  // Gérer le clic sur le bouton de retour
+  document.getElementById('backButton').onclick = function() {
+      // Redirection vers l'application Android avec le schéma personnalisé
+      window.location.href = "locabill://paiement";  // Schéma personnalisé
+  }
+</script>
+
+</body>
+</html>-->
